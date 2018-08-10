@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24; // experimental ABIEncoderV2
+pragma solidity ^0.4.24; 
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import {HeartBankToken as Kiitos} from "./HeartBankToken.sol";
@@ -322,7 +322,7 @@ contract BoxOffice is Oracle {
     }
      
     function getTotalReceipts() public view returns (uint) {
-        return address(this).balance.mul(getUsdPriceOfWei());
+        return convertToUsd(address(this).balance);
     }
     
     function getTotalFilms() public view returns (uint) {
@@ -387,24 +387,24 @@ contract BoxOffice is Oracle {
     }
     
     function getTicketPrice(uint filmIndex) public view returns (uint) {
-        return films[filmIndex].price.mul(getUsdPriceOfWei());
+        return convertToUsd(films[filmIndex].price);
     }
     
     function getMarketValue(uint filmIndex) public view returns (uint) {
-        return films[filmIndex].price.mul(getTicketSupply(filmIndex)).mul(getUsdPriceOfWei());
+        return convertToUsd(films[filmIndex].price.mul(getTicketSupply(filmIndex)));
     }
     
     function getFundsCollected(uint filmIndex) public view returns (uint) {
-        return films[filmIndex].sales.mul(getUsdPriceOfWei());
+        return convertToUsd(films[filmIndex].sales);
     }
     
     function getFundsWithdrawn(uint filmIndex) public view returns (uint) {
         Film storage film = films[filmIndex];
-        return film.sales.sub(film.fund).mul(getUsdPriceOfWei());
+        return convertToUsd(film.sales.sub(film.fund));
     }
     
     function getFundBalance(uint filmIndex) public view returns (uint) {
-        return films[filmIndex].fund.mul(getUsdPriceOfWei());
+        return convertToUsd(films[filmIndex].fund);
     }
     
     function getTotalWithdraws(uint filmIndex) public view returns (uint) {
@@ -433,3 +433,4 @@ contract BoxOffice is Oracle {
     }
     
 }
+

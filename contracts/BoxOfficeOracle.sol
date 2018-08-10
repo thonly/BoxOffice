@@ -8,8 +8,14 @@ contract BoxOfficeOracle {
     event GetPrice();
     event PriceUpdated(uint price);
     
-    function updatePrice() public {
+    constructor() public {
+        admin = msg.sender;
+        usdPriceOfEth = 354;
+    }
+    
+    function updatePrice() public returns (bool) {
         emit GetPrice();
+        return true;
     }
     
     function setPrice(uint price) public returns (bool) {
@@ -19,8 +25,8 @@ contract BoxOfficeOracle {
         return true;
     }
     
-    function getUsdPriceOfWei() public view returns (uint) {
-        return usdPriceOfEth / 1 ether;
+    function convertToUsd(uint amountInWei) public view returns (uint) {
+        return usdPriceOfEth * amountInWei / 1 ether;
     }
     
 }
