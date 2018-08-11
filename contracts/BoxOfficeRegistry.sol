@@ -8,9 +8,9 @@ contract BoxOfficeRegistry {
     
     event BoxOfficeUpgraded(address newBoxOffice);
 
-    constructor() public {
+    constructor(address boxOffice) public {
         admin = msg.sender;
-        currentBoxOffice = 0x0;
+        currentBoxOffice = boxOffice;
     }
 
     function upgradeBoxOffice(address newBoxOffice) public returns (bool) {

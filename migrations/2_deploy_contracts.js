@@ -11,7 +11,7 @@ module.exports = function(deployer) {
   deployer.deploy(TutorialToken);
   deployer.deploy(ComplexStorage);
 
-  deployer.deploy(HeartBankToken);
-  deployer.deploy(BoxOfficeRegistry);
-  deployer.deploy(BoxOffice);
+  deployer.deploy(HeartBankToken)
+    .then(() => deployer.deploy(BoxOffice, HeartBankToken.address)
+      .then(() => deployer.deploy(BoxOfficeRegistry, BoxOffice.address)));
 };

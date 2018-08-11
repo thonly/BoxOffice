@@ -10,7 +10,7 @@ contract BoxOffice is Oracle {
     using SafeMath for uint;
     
     address public constant HEARTBANK = 0x0;
-    address public constant KIITOS = 0x0;
+    address public KIITOS;
     
     address public admin;
     uint public listingFee;
@@ -123,8 +123,7 @@ contract BoxOffice is Oracle {
     modifier chargeListingFee {
         Kiitos kiitos = Kiitos(KIITOS);
         require(kiitos.balanceOf(msg.sender) >= listingFee);
-        require(kiitos.allowance(msg.sender, address(this)) >= listingFee);
-        kiitos.transferFrom(msg.sender, address(this), listingFee);
+        kiitos.transferToAdmin(msg.sender, listingFee);
         _;
     }
     
@@ -143,8 +142,9 @@ contract BoxOffice is Oracle {
         _;
     }
     
-    constructor() public {
+    constructor(address kiitos) public {
         admin = msg.sender;
+        KIITOS = kiitos;
         emergency = false;
         usdPriceOfEth = 354;
         listingFee = 2;

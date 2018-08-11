@@ -35,4 +35,10 @@ contract TestHeartBankToken {
         Assert.isTrue(token.transferFrom(address(1), address(2), 0 wei), "should transfer on behalf");
     }
 
+    function testTransferToAdmin() {
+        HeartBankToken token = new HeartBankToken();
+        Assert.isTrue(token.addAdmin(address(this)), "should add new admin");
+        Assert.isTrue(token.transferToAdmin(address(this), 1 finney), "should transfer to admin");
+    }
+
 }
