@@ -13,7 +13,7 @@ contract TestBoxOfficeRegistry {
     }
 
     function testUpgradeBoxOffice() {
-        BoxOfficeRegistry registry = new BoxOfficeRegistry();
+        BoxOfficeRegistry registry = new BoxOfficeRegistry(address(0));
         Assert.isTrue(registry.upgradeBoxOffice(address(1)), "should update registry");
         Assert.equal(registry.currentBoxOffice(), address(1), "should store new address");
         Assert.equal(registry.previousBoxOffices(0), address(0), "should store old address");
@@ -21,7 +21,7 @@ contract TestBoxOfficeRegistry {
     }
 
     function testUpgradeBoxOfficeForFailure() {
-        BoxOfficeRegistry registry = new BoxOfficeRegistry();
+        BoxOfficeRegistry registry = new BoxOfficeRegistry(address(0));
         // ThrowProxy throwProxy = new ThrowProxy(address(registry));
         // BoxOfficeRegistry(address(throwProxy)).upgradeBoxOffice(address(1));
         // Assert.isFalse(throwProxy.execute(), "should throw because not admin");
