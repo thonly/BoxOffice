@@ -25,8 +25,7 @@ contract TestBoxOfficeRegistry {
         // ThrowProxy throwProxy = new ThrowProxy(address(registry));
         // BoxOfficeRegistry(address(throwProxy)).upgradeBoxOffice(address(1));
         // Assert.isFalse(throwProxy.execute(), "should throw because not admin");
-        bool result = address(registry).call("upgradeBoxOffice", address(1));
-        Assert.isFalse(result, "should throw because not admin");
+        Assert.isFalse(address(registry).call("upgradeBoxOffice", address(1)), "should throw because not admin");
     }
 
 }

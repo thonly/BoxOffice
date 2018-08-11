@@ -5,7 +5,7 @@ import "../contracts/BoxOfficeOracle.sol";
 
 contract TestBoxOfficeOracle {
 
-   BoxOfficeOracle oracle;
+    BoxOfficeOracle oracle;
 
     function beforeEach() {
        oracle = new BoxOfficeOracle();
