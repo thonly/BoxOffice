@@ -9,7 +9,7 @@ contract HeartBankToken is StandardToken {
     uint8 public constant decimals = 0;
 
     constructor() public {
-        totalSupply_ = 1000000000000000;
+        totalSupply_ = 1 ether;
         balances[msg.sender] = totalSupply_;
     }
 

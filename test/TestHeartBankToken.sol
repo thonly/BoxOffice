@@ -6,6 +6,33 @@ import "../contracts/HeartBankToken.sol";
 
 contract TestHeartBankToken {
 
+    function testTokenDetails() {
+        HeartBankToken token = HeartBankToken(DeployedAddresses.HeartBankToken());
+        Assert.equal(token.name(), "HeartBank Kiitos", "should store token name");
+        Assert.equal(token.symbol(), "H3K", "should store token symbol");
+        Assert.equal(token.totalSupply(), 1 ether, "should store token supply");
+    }
 
+    function testBalanceOf() {
+        HeartBankToken token = HeartBankToken(DeployedAddresses.HeartBankToken());
+        Assert.equal(token.balanceOf(msg.sender), 1 ether, "should return balance");
+    }
+
+    function testAllowance() {
+        HeartBankToken token = HeartBankToken(DeployedAddresses.HeartBankToken());
+        Assert.isTrue(token.approve(address(0), 1 finney), "should approve spender");
+        Assert.equal(token.allowance(address(this), address(0)), 1 finney, "should approve allowance");
+    }
+
+    function testTransfer() {
+        HeartBankToken token = new HeartBankToken();
+        Assert.isTrue(token.transfer(address(1), 1 finney), "should transfer to recipient");
+        Assert.equal(token.balanceOf(address(1)), 1 finney, "should transfer amount");
+    }
+
+    function testTransferFrom() {
+        HeartBankToken token = new HeartBankToken();
+        Assert.isTrue(token.transferFrom(address(1), address(2), 0 wei), "should transfer on behalf");
+    }
 
 }
