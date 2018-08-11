@@ -10,6 +10,7 @@ contract BoxOfficeRegistry {
 
     constructor() public {
         admin = msg.sender;
+        currentBoxOffice = 0x0;
     }
 
     function upgradeBoxOffice(address newBoxOffice) public returns (bool) {
