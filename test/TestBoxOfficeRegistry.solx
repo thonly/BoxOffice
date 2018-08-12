@@ -7,12 +7,12 @@ import "../contracts/BoxOfficeRegistry.sol";
 
 contract TestBoxOfficeRegistry {
 
-    function testAdmin() {
+    function testAdmin() public {
         BoxOfficeRegistry registry = BoxOfficeRegistry(DeployedAddresses.BoxOfficeRegistry());
         Assert.equal(registry.admin(), msg.sender, "should return address of admin");
     }
 
-    function testUpgradeBoxOffice() {
+    function testUpgradeBoxOffice() public {
         BoxOfficeRegistry registry = new BoxOfficeRegistry(address(0));
         Assert.isTrue(registry.upgradeBoxOffice(address(1)), "should update registry");
         Assert.equal(registry.currentBoxOffice(), address(1), "should store new address");
@@ -20,7 +20,7 @@ contract TestBoxOfficeRegistry {
         Assert.isFalse(registry.upgradeBoxOffice(address(1)), "should not store duplicate address");
     }
 
-    function testUpgradeBoxOfficeForFailure() {
+    function testUpgradeBoxOfficeForFailure() public {
         BoxOfficeRegistry registry = new BoxOfficeRegistry(address(0));
         // ThrowProxy throwProxy = new ThrowProxy(address(registry));
         // BoxOfficeRegistry(address(throwProxy)).upgradeBoxOffice(address(1));
