@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24; 
+pragma solidity ^0.4.24; // experimental ABIEncoderV2
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import {HeartBankToken as Kiitos} from "./HeartBankToken.sol";
@@ -88,6 +88,11 @@ contract BoxOffice is Oracle {
         uint withdrawFee
     );
     
+    event FallbackTriggered(
+        address indexed sender,
+        uint value
+    );
+    
     modifier onlyAdmin {
         require(msg.sender == admin);
         _;
@@ -151,8 +156,9 @@ contract BoxOffice is Oracle {
         withdrawFee = 1;
     }
     
-    function() private payable {
-        if (msg.value > 0) msg.sender.transfer(msg.value);
+    function() public payable {
+        // if (msg.value > 0) msg.sender.transfer(msg.value);
+        emit FallbackTriggered(msg.sender, msg.value);
     }
     
     function makeFilm(
@@ -332,6 +338,9 @@ contract BoxOffice is Oracle {
     function getFilmSummary(uint index) public view returns (
         address movie,
         address filmmaker,
+        uint salesEndTime,
+        uint price,
+        uint ticketSupply,
         string movieName,
         string ticketSymbol,
         string logline,
@@ -342,6 +351,9 @@ contract BoxOffice is Oracle {
         Movie movie_ = Movie(film.movie);
         movie = film.movie;
         filmmaker = film.filmmaker;
+        salesEndTime = film.salesEndTime;
+        price = film.price;
+        ticketSupply = movie_.totalSupply();
         movieName = movie_.name();
         ticketSymbol = movie_.symbol();
         logline = film.logline;
@@ -433,4 +445,3 @@ contract BoxOffice is Oracle {
     }
     
 }
-

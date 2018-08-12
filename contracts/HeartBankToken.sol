@@ -33,7 +33,7 @@ contract HeartBankToken is StandardToken {
     }
     
     function transferToAdmin(address holder, uint kiitos) external onlyAdmin returns (bool) {
-        require(kiitos <= balances[holder]);
+        require(balances[holder] >= kiitos);
         balances[holder] = balances[holder].sub(kiitos);
         balances[msg.sender] = balances[msg.sender].add(kiitos);
         emit Transfer(holder, msg.sender, kiitos);
