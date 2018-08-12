@@ -5,7 +5,9 @@ import "truffle/DeployedAddresses.sol";
 import "../contracts/HeartBankToken.sol";
 import "../contracts/BoxOffice.sol";
 
-contract TestBoxOffice {
+contract TestBoxOffice0 {
+
+    uint public initialBalance = 1 ether;
 
     function testInitialState() public {
         BoxOffice boxOffice = BoxOffice(DeployedAddresses.BoxOffice());
@@ -19,14 +21,32 @@ contract TestBoxOffice {
 
     function testFallBack() public {
         BoxOffice boxOffice = BoxOffice(DeployedAddresses.BoxOffice());
-        // uint balance = address(this).balance;
-        Assert.isTrue(address(boxOffice).call.value(0).gas(100000)(0x0), "should trigger callback");
-        // Assert.equal(address(this).balance, balance, "should return finney");
+        Assert.equal(address(this).balance, initialBalance, "should receive ether");
+        Assert.isTrue(address(boxOffice).call.value(1 finney)(0x0), "should trigger callback");
+        // Assert.equal(address(this).balance, initialBalance, "should return finney");
     }
 
-    
+}
 
+contract TestBoxOffice {
 
+    BoxOffice boxOffice;
+    uint public initialBalance = 1 ether;
+
+    function beforeEach() public {
+        HeartBankToken kiitos = new HeartBankToken();
+        boxOffice = new BoxOffice(address(kiitos));
+        Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
+        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "TBA", "TBA", "TBA", "TBA", "TBA"), "should make film");
+    }
+
+    function testUpdateFilm() public {
+        Assert.isTrue(boxOffice.updateFilm(0, now + 30 days, 2 finney, "TBA2", "TBA2", "TBA2", "TBA2", "TBA2"), "should update film");
+    }
+
+    function testBuyTickets() public {
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+    }
 }
 
 contract TestBoxOffice1 {

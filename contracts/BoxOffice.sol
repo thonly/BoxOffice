@@ -67,8 +67,14 @@ contract BoxOffice is Oracle {
     
     event TicketsBought(
         uint indexed filmIndex, 
-        address indexed holder, 
+        address indexed buyer, 
         uint quantity
+    );
+
+    event ExcessPayment(
+        uint indexed filmIndex,
+        address indexed buyer,
+        uint excess
     );
     
     event TicketSpent(
@@ -121,8 +127,9 @@ contract BoxOffice is Oracle {
     
     modifier returnExcessPayment(uint filmIndex, uint quantity) {
         _;
-        if (msg.value > quantity.mul(films[filmIndex].price))
-            msg.sender.transfer(quantity.mul(films[filmIndex].price).sub(msg.value));
+        uint excess = msg.value.sub(quantity.mul(films[filmIndex].price));
+        // if (excess > 0) msg.sender.transfer(excess);
+        if (excess > 0) emit ExcessPayment(filmIndex, msg.sender, excess);
     }
     
     modifier chargeListingFee {
