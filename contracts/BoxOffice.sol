@@ -70,7 +70,7 @@ contract BoxOffice is Oracle {
         address indexed buyer, 
         uint quantity
     );
-
+    
     event ExcessPayment(
         uint indexed filmIndex,
         address indexed buyer,
@@ -125,7 +125,7 @@ contract BoxOffice is Oracle {
         _;
     }
     
-    modifier returnExcessPayment(uint filmIndex, uint quantity) {
+    modifier checkExcessPayment(uint filmIndex, uint quantity) {
         _;
         uint excess = msg.value.sub(quantity.mul(films[filmIndex].price));
         // if (excess > 0) msg.sender.transfer(excess);
@@ -265,7 +265,7 @@ contract BoxOffice is Oracle {
         stopInEmergency
         onlyDuringSalesPeriod(filmIndex)
         checkPaymentAmount(filmIndex, quantity)
-        returnExcessPayment(filmIndex, quantity)
+        checkExcessPayment(filmIndex, quantity)
         returns (bool)
     {
         Film storage film = films[filmIndex];
@@ -443,12 +443,19 @@ contract BoxOffice is Oracle {
         return films[filmIndex].audience[member];
     }
     
-    function toggleEmergency() public onlyAdmin {
-        emergency = !emergency;
+    function returnExcessPayment(address recipient, uint amount) public onlyAdmin returns (bool) {
+        recipient.transfer(amount);
+        return true;
     }
     
-    function shutDownBoxOffice() public onlyInEmergency onlyAdmin {
+    function toggleEmergency() public onlyAdmin returns (bool) {
+        emergency = !emergency;
+        return true;
+    }
+    
+    function shutDownBoxOffice() public onlyInEmergency onlyAdmin returns (bool) {
         selfdestruct(admin);
+        return true;
     }
     
 }
