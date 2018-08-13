@@ -11,8 +11,8 @@ contract TestBoxOfficeOracle {
        oracle = new BoxOfficeOracle();
     }
 
-    function testAdmin() public {
-        Assert.equal(oracle.admin(), address(this), "should return address of admin");
+    function testOwner() public {
+        Assert.equal(oracle.owner(), address(this), "should return address of admin");
     }
 
     function testUsdPriceOfEth() public {

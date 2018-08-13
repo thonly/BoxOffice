@@ -12,11 +12,10 @@ contract TestBoxOffice0 {
     function testInitialState() public {
         BoxOffice boxOffice = BoxOffice(DeployedAddresses.BoxOffice());
         Assert.equal(boxOffice.HEARTBANK(), address(0), "should store HeartBank address");
-        Assert.equal(boxOffice.KIITOS(), DeployedAddresses.HeartBankToken(), "should store Kiitos address");
+        Assert.equal(boxOffice.kiitos(), DeployedAddresses.BoxOfficeOracle(), "should store Kiitos address");
         Assert.equal(boxOffice.admin(), msg.sender, "should store admin");
         Assert.equal(boxOffice.listingFee(), 2, "should store listing fee");
         Assert.equal(boxOffice.withdrawFee(), 1, "should store withdraw fee");
-        Assert.equal(boxOffice.usdPriceOfEth(), 354, "should store price of ether");
     }
 
     function testFallBack() public {
@@ -35,7 +34,7 @@ contract TestBoxOffice {
 
     function beforeEach() public {
         HeartBankToken kiitos = new HeartBankToken();
-        boxOffice = new BoxOffice(address(kiitos));
+        boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "TBA", "TBA", "TBA", "TBA", "TBA"), "should make film");
     }
@@ -53,7 +52,7 @@ contract TestBoxOffice1 {
 
     function testMakeFilm1() public {
         HeartBankToken kiitos = new HeartBankToken();
-        BoxOffice boxOffice = new BoxOffice(address(kiitos));
+        BoxOffice boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
 
         uint salesEndTime = now + 28 days;
         uint price = 1 finney;
@@ -82,7 +81,7 @@ contract TestBoxOffice2 {
 
     function testMakeFilm2() public {
         HeartBankToken kiitos = new HeartBankToken();
-        BoxOffice boxOffice = new BoxOffice(address(kiitos));
+        BoxOffice boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
 
         uint salesEndTime = now + 28 days;
         uint price = 1 finney;
@@ -111,7 +110,7 @@ contract TestBoxOffice3 {
 
     function testMakeFilm3() public {
         HeartBankToken kiitos = new HeartBankToken();
-        BoxOffice boxOffice = new BoxOffice(address(kiitos));
+        BoxOffice boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
 
         uint salesEndTime = now + 28 days;
         uint price = 1 finney;
@@ -140,7 +139,7 @@ contract TestBoxOffice4 {
 
     function testMakeFilm4() public {
         HeartBankToken kiitos = new HeartBankToken();
-        BoxOffice boxOffice = new BoxOffice(address(kiitos));
+        BoxOffice boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
 
         uint salesEndTime = now + 28 days;
         uint price = 1 finney;
@@ -169,7 +168,7 @@ contract TestBoxOffice5 {
 
     function testMakeFilm5() public {
         HeartBankToken kiitos = new HeartBankToken();
-        BoxOffice boxOffice = new BoxOffice(address(kiitos));
+        BoxOffice boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
 
         uint salesEndTime = now + 28 days;
         uint price = 1 finney;

@@ -7,9 +7,9 @@ import "../contracts/BoxOfficeRegistry.sol";
 
 contract TestBoxOfficeRegistry {
 
-    function testAdmin() public {
+    function testOwner() public {
         BoxOfficeRegistry registry = BoxOfficeRegistry(DeployedAddresses.BoxOfficeRegistry());
-        Assert.equal(registry.admin(), msg.sender, "should return address of admin");
+        Assert.equal(registry.owner(), msg.sender, "should return address of admin");
     }
 
     function testUpgradeBoxOffice() public {

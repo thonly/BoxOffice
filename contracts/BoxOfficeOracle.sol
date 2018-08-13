@@ -2,14 +2,14 @@ pragma solidity ^0.4.24;
 
 contract BoxOfficeOracle {
     
-    address public admin;
+    address public owner;
     uint public usdPriceOfEth;
     
     event GetPrice();
     event PriceUpdated(uint price);
     
     constructor() public {
-        admin = msg.sender;
+        owner = msg.sender;
         usdPriceOfEth = 354;
     }
     
@@ -19,7 +19,7 @@ contract BoxOfficeOracle {
     }
     
     function setPrice(uint price) public returns (bool) {
-        require(msg.sender == admin);
+        require(msg.sender == owner);
         usdPriceOfEth = price;
         emit PriceUpdated(price);
         return true;

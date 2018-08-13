@@ -1,21 +1,23 @@
-pragma solidity ^0.4.24; // experimental ABIEncoderV2
+pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import {HeartBankToken as Kiitos} from "./HeartBankToken.sol";
+import {HeartBankTokenInterface as Kiitos} from "./HeartBankTokenInterface.sol";
+import {BoxOfficeOracleInterface as Oracle} from "./BoxOfficeOracleInterface.sol";
 import {BoxOfficeMovie as Movie} from "./BoxOfficeMovie.sol";
-import {BoxOfficeOracle as Oracle} from "./BoxOfficeOracle.sol";
 
-contract BoxOffice is Oracle {
+contract BoxOffice {
     
     using SafeMath for uint;
     
     address public constant HEARTBANK = 0x0;
-    address public KIITOS;
-    
     address public admin;
+    bool private emergency;
+    
+    Oracle public oracle;
+    Kiitos public kiitos;
+    
     uint public listingFee;
     uint public withdrawFee;
-    bool private emergency;
     
     Film[] public films;
     
@@ -133,7 +135,6 @@ contract BoxOffice is Oracle {
     }
     
     modifier chargeListingFee {
-        Kiitos kiitos = Kiitos(KIITOS);
         require(kiitos.balanceOf(msg.sender) >= listingFee);
         kiitos.transferToAdmin(msg.sender, listingFee);
         _;
@@ -154,11 +155,13 @@ contract BoxOffice is Oracle {
         _;
     }
     
-    constructor(address kiitos) public {
+    constructor(address _token, address _oracle) public {
         admin = msg.sender;
-        KIITOS = kiitos;
         emergency = false;
-        usdPriceOfEth = 354;
+        
+        kiitos = Kiitos(_token);
+        oracle = Oracle(_oracle);
+        
         listingFee = 2;
         withdrawFee = 1;
     }
@@ -441,6 +444,10 @@ contract BoxOffice is Oracle {
     
     function isAudienceMember(uint filmIndex, address member) public view returns (bool) {
         return films[filmIndex].audience[member];
+    }
+    
+    function convertToUsd(uint amountInWei) public view returns (uint) {
+        return oracle.convertToUsd(amountInWei);
     }
     
     function returnExcessPayment(address recipient, uint amount) public onlyAdmin returns (bool) {
