@@ -36,16 +36,27 @@ contract TestBoxOffice {
         HeartBankToken kiitos = new HeartBankToken();
         boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
-        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "TBA", "TBA", "TBA", "ipfshash", "ipfshash"), "should make film");
+        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "title", "symbol", "logline", "ipfshash", "ipfshash"), "should make film");
     }
 
     function testUpdateFilm() public {
-        Assert.isTrue(boxOffice.updateFilm(0, now + 30 days, 2 finney, "TBA2", "TBA2", "TBA2", "ipfshash2", "ipfshash2"), "should update film");
+        Assert.isTrue(boxOffice.updateFilm(0, now + 30 days, 2 finney, "title2", "symbol2", "logline2", "ipfshash2", "ipfshash2"), "should update film");
     }
 
     function testBuyTickets() public {
         Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
     }
+
+    function testSpendTicket() public {
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        Assert.isTrue(boxOffice.spendTicket(0), "should spend ticket");
+    }
+
+    function testWithdrawFund() public {
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        Assert.isTrue(boxOffice.withdrawFund(0, address(1), 1 finney, "to pay screenwriter"), "should purchase tickets");
+    }
+
 }
 
 contract TestBoxOffice1 {

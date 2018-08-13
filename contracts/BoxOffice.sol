@@ -302,16 +302,17 @@ contract BoxOffice {
         chargeWithdrawFee(amount)
         returns (bool)
     {
-        Film storage film = films[filmIndex];
+         Film storage film = films[filmIndex];
         require(recipient != address(0));
         require(amount > 0);
-        require(film.fund >= amount);
+        uint total = amount.add(withdrawFee.div(100).mul(amount));
+        require(film.fund >= total);
         require(bytes(expense).length > 0);
         
         film.withdrawals[film.withdraws] = Withdrawal(recipient, amount, expense);
         film.withdraws = film.withdraws.add(1);
-        film.fund = film.fund.sub(amount);
-        film.filmmaker.transfer(uint(100).sub(withdrawFee).div(100).mul(amount));
+        film.fund = film.fund.sub(total);
+        recipient.transfer(amount);
         
         emit FundWithdrawn(filmIndex, recipient, amount, expense);
         return true;
