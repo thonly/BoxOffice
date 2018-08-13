@@ -28,4 +28,9 @@ contract TestBoxOfficeRegistry {
         Assert.isFalse(address(registry).call("upgradeBoxOffice", address(1)), "should throw because not admin");
     }
 
+    function testKill() public {
+        BoxOfficeRegistry registry = new BoxOfficeRegistry(address(0));
+        Assert.isFalse(address(registry).call("kill"), "should self-destruct and throw");
+    }
+
 }

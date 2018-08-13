@@ -28,9 +28,8 @@ contract BoxOfficeRegistry {
         return false;
     }
     
-    function kill() public onlyOwner returns (bool) {
+    function kill() public onlyOwner {
         selfdestruct(owner);
-        return true;
     }
     
 }

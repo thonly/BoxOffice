@@ -8,6 +8,11 @@ contract BoxOfficeOracle {
     event GetPrice();
     event PriceUpdated(uint price);
     
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+    
     constructor() public {
         owner = msg.sender;
         usdPriceOfEth = 354;
@@ -18,8 +23,7 @@ contract BoxOfficeOracle {
         return true;
     }
     
-    function setPrice(uint price) public returns (bool) {
-        require(msg.sender == owner);
+    function setPrice(uint price) public onlyOwner returns (bool) {
         usdPriceOfEth = price;
         emit PriceUpdated(price);
         return true;
@@ -27,6 +31,10 @@ contract BoxOfficeOracle {
     
     function convertToUsd(uint amountInWei) public view returns (uint) {
         return usdPriceOfEth * amountInWei / 1 ether;
+    }
+    
+    function kill() public onlyOwner {
+        selfdestruct(owner);
     }
     
 }

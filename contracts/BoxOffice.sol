@@ -460,9 +460,8 @@ contract BoxOffice {
         return true;
     }
     
-    function shutDownBoxOffice() public onlyInEmergency onlyAdmin returns (bool) {
+    function shutDownBoxOffice() public onlyInEmergency onlyAdmin {
         selfdestruct(admin);
-        return true;
     }
     
 }

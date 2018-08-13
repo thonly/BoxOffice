@@ -32,4 +32,8 @@ contract TestBoxOfficeOracle {
         Assert.equal(oracle.usdPriceOfEth(), 300, "should return new price of ether in USD");
     }
 
+    function testKill() public {
+        Assert.isFalse(address(oracle).call("kill"), "should self-destruct and throw");
+    }
+
 }
