@@ -19,11 +19,12 @@ contract TestBoxOfficeOracle {
     }
 
     function testUsdPriceOfEth() public {
-        Assert.equal(oracle.usdPriceOfEth(), 354, "should return price of ether in USD");
+        Assert.isZero(oracle.usdPriceOfEth(), "should return price of ether in USD");
     }
 
     function testConvertToUsd() public {
-        Assert.equal(oracle.convertToUsd(1 ether), 354, "should convert wei to USD");
+        Assert.isTrue(oracle.setPrice(300), "should set new price of ether in USD");
+        Assert.equal(oracle.convertToUsd(1 ether), 300, "should convert wei to USD");
     }
 
     function testUpdatePrice() public {

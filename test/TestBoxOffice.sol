@@ -36,11 +36,11 @@ contract TestBoxOffice {
         HeartBankToken kiitos = new HeartBankToken();
         boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
-        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "TBA", "TBA", "TBA", "TBA", "TBA"), "should make film");
+        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "TBA", "TBA", "TBA", "ipfshash", "ipfshash"), "should make film");
     }
 
     function testUpdateFilm() public {
-        Assert.isTrue(boxOffice.updateFilm(0, now + 30 days, 2 finney, "TBA2", "TBA2", "TBA2", "TBA2", "TBA2"), "should update film");
+        Assert.isTrue(boxOffice.updateFilm(0, now + 30 days, 2 finney, "TBA2", "TBA2", "TBA2", "ipfshash2", "ipfshash2"), "should update film");
     }
 
     function testBuyTickets() public {
@@ -60,8 +60,8 @@ contract TestBoxOffice1 {
         string memory movieName = "Casablanca";
         string memory ticketSymbol = "CSBC";
         string memory logline = "Set in unoccupied Africa during the early days of World War II: An American expatriate meets a former lover, with unforeseen complications.";
-        string memory poster = "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg";
-        string memory trailer = "https://www.imdb.com/title/tt0034583";
+        string memory poster = "ipfshash";
+        string memory trailer = "ipfshash";
         
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer), "should make film");
@@ -89,8 +89,8 @@ contract TestBoxOffice2 {
         string memory movieName = "Casablanca";
         string memory ticketSymbol = "CSBC";
         string memory logline = "Set in unoccupied Africa during the early days of World War II: An American expatriate meets a former lover, with unforeseen complications.";
-        string memory poster = "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg";
-        string memory trailer = "https://www.imdb.com/title/tt0034583";
+        string memory poster = "ipfshash";
+        string memory trailer = "ipfshash";
         
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer), "should make film");
@@ -118,8 +118,8 @@ contract TestBoxOffice3 {
         string memory movieName = "Casablanca";
         string memory ticketSymbol = "CSBC";
         string memory logline = "Set in unoccupied Africa during the early days of World War II: An American expatriate meets a former lover, with unforeseen complications.";
-        string memory poster = "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg";
-        string memory trailer = "https://www.imdb.com/title/tt0034583";
+        string memory poster = "ipfshash";
+        string memory trailer = "ipfshash";
         
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer), "should make film");
@@ -147,8 +147,8 @@ contract TestBoxOffice4 {
         string memory movieName = "Casablanca";
         string memory ticketSymbol = "CSBC";
         string memory logline = "Set in unoccupied Africa during the early days of World War II: An American expatriate meets a former lover, with unforeseen complications.";
-        string memory poster = "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg";
-        string memory trailer = "https://www.imdb.com/title/tt0034583";
+        string memory poster = "ipfshash";
+        string memory trailer = "ipfshash";
         
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer), "should make film");
@@ -176,8 +176,8 @@ contract TestBoxOffice5 {
         string memory movieName = "Casablanca";
         string memory ticketSymbol = "CSBC";
         string memory logline = "Set in unoccupied Africa during the early days of World War II: An American expatriate meets a former lover, with unforeseen complications.";
-        string memory poster = "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg";
-        string memory trailer = "https://www.imdb.com/title/tt0034583";
+        string memory poster = "ipfshash";
+        string memory trailer = "ipfshash";
         
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer), "should make film");

@@ -22,7 +22,7 @@ contract BoxOfficeOracle {
         oracle = oracleStorage;
     }
     
-    function updatePrice() public returns (bool) {
+    function updatePrice() public onlyOwner returns (bool) {
         emit GetPrice();
         return true;
     }

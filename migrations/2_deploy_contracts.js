@@ -1,15 +1,17 @@
-var SimpleStorage = artifacts.require("SimpleStorage");
-var TutorialToken = artifacts.require("TutorialToken");
-var ComplexStorage = artifacts.require("ComplexStorage");
+const axios = require('axios');
 
-var HeartBankToken = artifacts.require("HeartBankToken");
-var BoxOfficeOracleStorage = artifacts.require("BoxOfficeOracleStorage");
-var BoxOfficeOracleLibrary = artifacts.require("BoxOfficeOracleLibrary");
-var BoxOfficeOracle = artifacts.require("BoxOfficeOracle");
-var BoxOffice = artifacts.require("BoxOffice");
-var BoxOfficeRegistry = artifacts.require("BoxOfficeRegistry");
+const SimpleStorage = artifacts.require("SimpleStorage");
+const TutorialToken = artifacts.require("TutorialToken");
+const ComplexStorage = artifacts.require("ComplexStorage");
 
-module.exports = function(deployer, network, accounts) {
+const HeartBankToken = artifacts.require("HeartBankToken");
+const BoxOfficeOracleStorage = artifacts.require("BoxOfficeOracleStorage");
+const BoxOfficeOracleLibrary = artifacts.require("BoxOfficeOracleLibrary");
+const BoxOfficeOracle = artifacts.require("BoxOfficeOracle");
+const BoxOffice = artifacts.require("BoxOffice");
+const BoxOfficeRegistry = artifacts.require("BoxOfficeRegistry");
+
+module.exports = (deployer, network, accounts) => {
   deployer.deploy(SimpleStorage);
   deployer.deploy(TutorialToken);
   deployer.deploy(ComplexStorage);
@@ -22,5 +24,10 @@ module.exports = function(deployer, network, accounts) {
     .then(() => deployer.deploy(BoxOfficeOracle, BoxOfficeOracleStorage.address))
     .then(() => deployer.deploy(BoxOffice, HeartBankToken.address, BoxOfficeOracle.address))
     .then(() => deployer.deploy(BoxOfficeRegistry, BoxOfficeOracle.address))
-    .then(() => BoxOfficeOracleStorage.deployed().then(instance => instance.addAdmin(BoxOfficeOracle.address)));
+    .then(() => BoxOfficeOracleStorage.deployed().then(instance => instance.addAdmin(BoxOfficeOracle.address)))
+    .then(() => axios.get('https://api.coinbase.com/v2/exchange-rates?currency=ETH'))
+    .then(response => response.data.data.rates.USD)
+    .then(price => BoxOfficeOracle.deployed().then(instance => instance.setPrice(parseInt(price))))
+    .then(() => BoxOfficeOracle.deployed().then(instance => instance.usdPriceOfEth()))
+    .then(price => console.log(price > 0));
 };
