@@ -1,9 +1,13 @@
 pragma solidity ^0.4.24;
 
+import {BoxOfficeOracleLibrary as Library} from "./BoxOfficeOracleLibrary.sol";
+
 contract BoxOfficeOracle {
     
+    using Library for address;
+    
     address public owner;
-    uint public usdPriceOfEth;
+    address public oracle;
     
     event GetPrice();
     event PriceUpdated(uint price);
@@ -13,9 +17,9 @@ contract BoxOfficeOracle {
         _;
     }
     
-    constructor() public {
+    constructor(address oracleStorage) public {
         owner = msg.sender;
-        usdPriceOfEth = 354;
+        oracle = oracleStorage;
     }
     
     function updatePrice() public returns (bool) {
@@ -24,13 +28,17 @@ contract BoxOfficeOracle {
     }
     
     function setPrice(uint price) public onlyOwner returns (bool) {
-        usdPriceOfEth = price;
+        oracle.usdPriceOfEth(price);
         emit PriceUpdated(price);
         return true;
     }
     
+    function usdPriceOfEth() public view returns (uint) {
+        return oracle.usdPriceOfEth();
+    }
+    
     function convertToUsd(uint amountInWei) public view returns (uint) {
-        return usdPriceOfEth * amountInWei / 1 ether;
+        return usdPriceOfEth() * amountInWei / 1 ether;
     }
     
     function kill() public onlyOwner {

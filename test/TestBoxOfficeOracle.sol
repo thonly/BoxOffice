@@ -1,6 +1,8 @@
 pragma solidity ^0.4.24;
 
 import "truffle/Assert.sol";
+import "truffle/DeployedAddresses.sol";
+import "../contracts/BoxOfficeOracleStorage.sol";
 import "../contracts/BoxOfficeOracle.sol";
 
 contract TestBoxOfficeOracle {
@@ -8,11 +10,12 @@ contract TestBoxOfficeOracle {
     BoxOfficeOracle oracle;
 
     function beforeEach() public {
-       oracle = new BoxOfficeOracle();
+        //oracle = new BoxOfficeOracle(DeployedAddresses.BoxOfficeOracleStorage());
+        oracle = BoxOfficeOracle(DeployedAddresses.BoxOfficeOracle());
     }
 
     function testOwner() public {
-        Assert.equal(oracle.owner(), address(this), "should return address of admin");
+        Assert.equal(oracle.owner(), msg.sender, "should return address of admin");
     }
 
     function testUsdPriceOfEth() public {
@@ -20,7 +23,7 @@ contract TestBoxOfficeOracle {
     }
 
     function testConvertToUsd() public {
-        Assert.equal(oracle.convertToUsd(1 ether), 354, "should convert Wei to USD");
+        Assert.equal(oracle.convertToUsd(1 ether), 354, "should convert wei to USD");
     }
 
     function testUpdatePrice() public {
