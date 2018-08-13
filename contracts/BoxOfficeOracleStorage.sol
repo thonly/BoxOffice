@@ -19,7 +19,7 @@ contract BoxOfficeOracleStorage {
     
     constructor() public {
         owner = msg.sender;
-        usdPriceOfEth = 0;
+        usdPriceOfEth = 1;
     }
     
     function addAdmin(address admin) public onlyOwner returns (bool) {

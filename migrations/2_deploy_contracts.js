@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 const SimpleStorage = artifacts.require("SimpleStorage");
 const TutorialToken = artifacts.require("TutorialToken");
 const ComplexStorage = artifacts.require("ComplexStorage");
@@ -15,8 +13,8 @@ module.exports = (deployer, network, accounts) => {
   deployer.deploy(SimpleStorage);
   deployer.deploy(TutorialToken);
   deployer.deploy(ComplexStorage);
+
   deployer.deploy(BoxOfficeOracleLibrary);
-  
   deployer.deploy(BoxOfficeOracleStorage);    
   deployer.link(BoxOfficeOracleLibrary, BoxOfficeOracle);
 
@@ -24,10 +22,5 @@ module.exports = (deployer, network, accounts) => {
     .then(() => deployer.deploy(BoxOfficeOracle, BoxOfficeOracleStorage.address))
     .then(() => deployer.deploy(BoxOffice, HeartBankToken.address, BoxOfficeOracle.address))
     .then(() => deployer.deploy(BoxOfficeRegistry, BoxOfficeOracle.address))
-    .then(() => BoxOfficeOracleStorage.deployed().then(instance => instance.addAdmin(BoxOfficeOracle.address)))
-    .then(() => axios.get('https://api.coinbase.com/v2/exchange-rates?currency=ETH'))
-    .then(response => response.data.data.rates.USD)
-    .then(price => BoxOfficeOracle.deployed().then(instance => instance.setPrice(parseInt(price))))
-    .then(() => BoxOfficeOracle.deployed().then(instance => instance.usdPriceOfEth()))
-    .then(price => console.log(price > 0));
+    .then(() => BoxOfficeOracleStorage.deployed().then(instance => instance.addAdmin(BoxOfficeOracle.address)));
 };

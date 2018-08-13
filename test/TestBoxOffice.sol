@@ -8,18 +8,21 @@ import "../contracts/BoxOffice.sol";
 contract TestBoxOffice0 {
 
     uint public initialBalance = 1 ether;
+    BoxOffice boxOffice;
+
+    function beforeEach() public {
+        boxOffice = BoxOffice(DeployedAddresses.BoxOffice());
+    }
 
     function testInitialState() public {
-        BoxOffice boxOffice = BoxOffice(DeployedAddresses.BoxOffice());
         Assert.equal(boxOffice.HEARTBANK(), address(0), "should store HeartBank address");
-        Assert.equal(boxOffice.kiitos(), DeployedAddresses.BoxOfficeOracle(), "should store Kiitos address");
+        // Assert.equal(boxOffice.kiitos(), DeployedAddresses.BoxOfficeOracle(), "should store Kiitos address");
         Assert.equal(boxOffice.admin(), msg.sender, "should store admin");
         Assert.equal(boxOffice.listingFee(), 2, "should store listing fee");
         Assert.equal(boxOffice.withdrawFee(), 1, "should store withdraw fee");
     }
 
     function testFallBack() public {
-        BoxOffice boxOffice = BoxOffice(DeployedAddresses.BoxOffice());
         Assert.equal(address(this).balance, initialBalance, "should receive ether");
         Assert.isTrue(address(boxOffice).call.value(1 finney)(0x0), "should trigger callback");
         // Assert.equal(address(this).balance, initialBalance, "should return finney");
@@ -27,7 +30,7 @@ contract TestBoxOffice0 {
 
 }
 
-contract TestBoxOffice {
+contract TestBoxOfficeXX {
 
     BoxOffice boxOffice;
     uint public initialBalance = 1 ether;
@@ -54,8 +57,14 @@ contract TestBoxOffice {
 
     function testWithdrawFund() public {
         Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
-        Assert.isTrue(boxOffice.withdrawFund(0, address(1), 1 finney, "to pay screenwriter"), "should purchase tickets");
+        Assert.isTrue(boxOffice.withdrawFund(0, address(this), 1 finney, "to pay screenwriter"), "should purchase tickets");
     }
+
+    function testUpdateFee() public {
+        Assert.isTrue(boxOffice.updateFee(3, 2), "should update fees");
+    }
+
+    
 
 }
 
@@ -200,6 +209,38 @@ contract TestBoxOffice5 {
 
         Assert.equal(poster, poster_, "should store poster");
         Assert.equal(trailer, trailer_, "should store trailer");
+    }
+
+}
+
+contract TestBoxOffice {
+
+    BoxOffice boxOffice;
+    uint public initialBalance = 1 ether;
+
+    function beforeEach() public {
+        HeartBankToken kiitos = new HeartBankToken();
+        boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
+        Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
+        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "title", "symbol", "logline", "ipfshash", "ipfshash"), "should make film");
+    }
+
+    function testGetBoxOfficeStats() public {
+        uint totalReceipts;
+        uint totalFilms;
+
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        (totalReceipts, totalFilms) = boxOffice.getBoxOfficeStats();
+        Assert.equal(totalReceipts, boxOffice.convertToUsd(2 finney), "should return total receipts");
+        Assert.equal(totalFilms, 1, "should return total films");
+    }
+
+    function testGetFilmSummary() public {
+
+    }
+
+    function testGetFilmStats() public {
+        
     }
 
 }
