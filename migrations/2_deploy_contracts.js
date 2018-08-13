@@ -9,19 +9,18 @@ var BoxOfficeOracle = artifacts.require("BoxOfficeOracle");
 var BoxOffice = artifacts.require("BoxOffice");
 var BoxOfficeRegistry = artifacts.require("BoxOfficeRegistry");
 
-module.exports = function(deployer) {
+module.exports = function(deployer, network, accounts) {
   deployer.deploy(SimpleStorage);
   deployer.deploy(TutorialToken);
   deployer.deploy(ComplexStorage);
+  deployer.deploy(BoxOfficeOracleLibrary);
+  
+  deployer.deploy(BoxOfficeOracleStorage);    
+  deployer.link(BoxOfficeOracleLibrary, BoxOfficeOracle);
 
   deployer.deploy(HeartBankToken)
-    .then(() => {
-      deployer.deploy(BoxOfficeOracleLibrary);
-      deployer.link(BoxOfficeOracleLibrary, BoxOfficeOracle);
-    })
-    .then(() => deployer.deploy(BoxOfficeOracleStorage, BoxOfficeOracleLibrary.address)
-    .then(() => deployer.deploy(BoxOfficeOracle, BoxOfficeOracleStorage.address)
-    .then(() => deployer.deploy(BoxOffice, HeartBankToken.address, BoxOfficeOracle.address)
-    .then(() => deployer.deploy(BoxOfficeRegistry, BoxOfficeOracle.address)
-  ))));
+    .then(() => deployer.deploy(BoxOfficeOracle, BoxOfficeOracleStorage.address))
+    .then(() => deployer.deploy(BoxOffice, HeartBankToken.address, BoxOfficeOracle.address))
+    .then(() => deployer.deploy(BoxOfficeRegistry, BoxOfficeOracle.address))
+    .then(() => BoxOfficeOracleStorage.deployed().then(instance => instance.addAdmin(BoxOfficeOracle.address)));
 };

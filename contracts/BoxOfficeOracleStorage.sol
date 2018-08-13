@@ -17,9 +17,8 @@ contract BoxOfficeOracleStorage {
         _;
     }
     
-    constructor(address admin) public {
+    constructor() public {
         owner = msg.sender;
-        admins[admin] = true;
         usdPriceOfEth = 354;
     }
     
