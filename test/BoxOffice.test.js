@@ -3,9 +3,13 @@ const BoxOffice = artifacts.require("BoxOffice.sol");
 contract('BoxOffice', accounts => {
 
   const owner = accounts[0];
+  let boxOffice;
 
-  it("should store initial states", async() => {
-    const boxOffice = await BoxOffice.deployed();
+  beforeEach(async () => {
+    boxOffice = await BoxOffice.deployed();
+  });
+
+  it("should store initial states", async () => {
     const HEARTBANK = await boxOffice.HEARTBANK.call();
     const admin = await boxOffice.admin.call();
     const listingFee = await boxOffice.listingFee.call();
@@ -17,26 +21,35 @@ contract('BoxOffice', accounts => {
     assert.equal(withdrawFee, 1);
   });
 
-  it("should create a film and movie tickets", async() => {
-    const salesEndTime = Date.now() + 28*60*60*24;
-    const price = web3.toWei(1, "finney");
-    const ticketSupply = web3.toWei(1, "ether");
-    const movieName = "Casablanca";
-    const ticketSymbol = "CSBC";
-    const logline = "Set in unoccupied Africa during the early days of World War II: An American expatriate meets a former lover, with unforeseen complications.";
-    const poster = "ipfs hash";
-    const trailer = "ipfs hash";
+  it("should create film and movie tickets", async () => {
+    const salesEndTime_ = Date.now() + 28*60*60*24;
+    const price_ = web3.toWei(1, "finney");
+    const ticketSupply_ = web3.toWei(1, "ether");
+    const movieName_ = "Casablanca";
+    const ticketSymbol_ = "CSBC";
+    const logline_ = "An American expatriate meets a former lover, with unforeseen complications.";
+    const poster_ = "ipfs hash";
+    const trailer_ = "ipfs hash";
 
-    const boxOffice = await BoxOffice.deployed();
-    const event = boxOffice.FilmCreated();
-
-    let filmIndex;
-
-    await event.watch((err, res) => {
-      assert.equal(res.args.filmIndex, 0);
-      
+    // let filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer;
+   
+    boxOffice.FilmCreated().watch((err, res) => {
+      ({filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer} = res.args);
     });
-    await boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer, {from: owner});
+
+    await boxOffice.makeFilm(salesEndTime_, price_, ticketSupply_, movieName_, ticketSymbol_, logline_, poster_, trailer_, {from: owner});
+    
+    assert.equal(filmIndex, 0);
+    assert.equal(salesEndTime, salesEndTime_);
+    assert.equal(price, price_);
+    assert.equal(ticketSupply, ticketSupply_);
+    assert.equal(movieName, movieName_);
+    assert.equal(ticketSymbol, ticketSymbol_);
+    assert.equal(logline, logline_);
+    assert.equal(poster, poster_);
+    assert.equal(trailer, trailer_);
   });
+
+  
 
 });
