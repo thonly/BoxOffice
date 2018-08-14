@@ -91,7 +91,7 @@ contract BoxOffice {
         string expense
     );
     
-    event FeeUpdated(
+    event FeesUpdated(
         uint listingFee,
         uint withdrawFee
     );
@@ -318,7 +318,7 @@ contract BoxOffice {
         return true;
     }
     
-    function updateFee(uint _listingFee, uint _withdrawFee)
+    function updateFees(uint _listingFee, uint _withdrawFee)
         public
         stopInEmergency
         onlyAdmin
@@ -326,7 +326,7 @@ contract BoxOffice {
     {
         listingFee = _listingFee;
         withdrawFee = _withdrawFee;
-        emit FeeUpdated(listingFee, withdrawFee);
+        emit FeesUpdated(listingFee, withdrawFee);
         return true;
     }
     

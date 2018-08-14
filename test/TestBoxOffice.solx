@@ -60,8 +60,8 @@ contract TestBoxOffice {
         Assert.isTrue(boxOffice.withdrawFund(0, msg.sender, 1 finney, "to pay screenwriter"), "should withdraw from fund");
     }
 
-    function testUpdateFee() public {
-        Assert.isTrue(boxOffice.updateFee(3, 2), "should update fees");
+    function testUpdateFees() public {
+        Assert.isTrue(boxOffice.updateFees(3, 2), "should update fees");
     }
 
     function testReturnExcessPayment() public {
