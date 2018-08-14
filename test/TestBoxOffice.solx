@@ -296,7 +296,7 @@ contract TestBoxOffice7 {
 
     function testShutDownBoxOffice() public {
         Assert.isTrue(boxOffice.toggleEmergency(), "should toggle emergency state");
-        Assert.isTrue(address(boxOffice).call(bytes4(keccak256("shutDownBoxOffice()"))), "should self-destruct and throw");
+        Assert.isTrue(address(boxOffice).call(bytes4(keccak256("shutDownBoxOffice()"))), "should self-destruct");
     }
 
 }

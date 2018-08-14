@@ -1,17 +1,18 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+const BoxOffice = artifacts.require("BoxOffice.sol");
 
-contract.skip('SimpleStorage', function(accounts) {
+contract('BoxOffice', accounts => {
 
-  it("...should store the value 89.", function() {
-    return SimpleStorage.deployed().then(function(instance) {
-      simpleStorageInstance = instance;
+  it("should store initial states", async () => {
+    const instance = await BoxOffice.deployed();
+    const HEARTBANK = await instance.HEARTBANK.call();
+    const admin = await instance.admin.call();
+    const listingFee = await instance.listingFee.call();
+    const withdrawFee = await instance.withdrawFee.call();
 
-      return simpleStorageInstance.set(89, {from: accounts[0]});
-    }).then(function() {
-      return simpleStorageInstance.storedData.call();
-    }).then(function(storedData) {
-      assert.equal(storedData, 89, "The value 89 was not stored.");
-    });
+    assert.equal(HEARTBANK, 0x0);
+    assert.equal(admin, accounts[0]);
+    assert.equal(listingFee, 2);
+    assert.equal(withdrawFee, 1);
   });
 
 });
