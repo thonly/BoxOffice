@@ -141,8 +141,8 @@ contract BoxOffice {
     }
     
     modifier chargeWithdrawFee(uint amount) {
-        _;
         HEARTBANK.transfer(withdrawFee.div(100).mul(amount));
+        _;
     }
     
     modifier stopInEmergency { 
