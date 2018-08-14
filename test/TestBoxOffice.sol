@@ -30,7 +30,7 @@ contract TestBoxOffice0 {
 
 }
 
-contract TestBoxOfficeXX {
+contract TestBoxOffice {
 
     BoxOffice boxOffice;
     uint public initialBalance = 1 ether;
@@ -57,14 +57,17 @@ contract TestBoxOfficeXX {
 
     function testWithdrawFund() public {
         Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
-        Assert.isTrue(boxOffice.withdrawFund(0, address(this), 1 finney, "to pay screenwriter"), "should purchase tickets");
+        Assert.isTrue(boxOffice.withdrawFund(0, msg.sender, 1 finney, "to pay screenwriter"), "should purchase tickets");
     }
 
     function testUpdateFee() public {
         Assert.isTrue(boxOffice.updateFee(3, 2), "should update fees");
     }
 
-    
+    function testReturnExcessPayment() public {
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        Assert.isTrue(boxOffice.returnExcessPayment(msg.sender, 1 finney), "should return excess payment");
+    }
 
 }
 
@@ -213,7 +216,7 @@ contract TestBoxOffice5 {
 
 }
 
-contract TestBoxOffice {
+contract TestBoxOffice6 {
 
     BoxOffice boxOffice;
     uint public initialBalance = 1 ether;
@@ -223,6 +226,46 @@ contract TestBoxOffice {
         boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
         Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
         Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "title", "symbol", "logline", "ipfshash", "ipfshash"), "should make film");
+    }
+
+    function testGetAudienceMembers() public {
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        Assert.isTrue(boxOffice.spendTicket(0), "should spend ticket");
+        address[] memory members = boxOffice.getAudienceMembers(0);
+        Assert.equal(members[0], address(this), "should store audience member");
+    }
+
+    function testIsAudienceMember() public {
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        Assert.isTrue(boxOffice.spendTicket(0), "should spend ticket");
+        Assert.isTrue(boxOffice.isAudienceMember(0, address(this)), "should store audience member");
+    }
+
+}
+
+contract TestBoxOffice7 {
+
+    BoxOffice boxOffice;
+    uint public initialBalance = 1 ether;
+
+    function beforeEach() public {
+        HeartBankToken kiitos = new HeartBankToken();
+        boxOffice = new BoxOffice(address(kiitos), DeployedAddresses.BoxOfficeOracle());
+        Assert.isTrue(kiitos.addAdmin(address(boxOffice)), "should add admin");
+        Assert.isTrue(boxOffice.makeFilm(now + 28 days, 1 finney, 1 ether, "title", "symbol", "logline", "ipfshash", "ipfshash"), "should make film");
+    }
+
+    function testGetWithdrawal() public {
+        address recipient;
+        uint amount;
+        string memory expense;
+
+        Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
+        Assert.isTrue(boxOffice.withdrawFund(0, address(this), 1 finney, "to pay screenwriter"), "should purchase tickets");
+        (recipient, amount, expense) = boxOffice.getWithdrawal(0, 0);
+        Assert.equal(recipient, address(this), "should store recipient");
+        Assert.equal(amount, 1 finney, "should store amount");
+        Assert.equal(expense, "to pay screenwriter", "should store expense");
     }
 
     function testGetBoxOfficeStats() public {
@@ -235,12 +278,25 @@ contract TestBoxOffice {
         Assert.equal(totalFilms, 1, "should return total films");
     }
 
-    function testGetFilmSummary() public {
+    function testGetFilmStats() public {
+        uint price;
+        uint audience;
+        uint withdraws;
+        // uint ticketSupply;
+        // uint ticketsAvailable;
+        // uint ticketsSold;
+        // uint filmMarketValue;
+        // uint fundsCollected;
+        // uint fundsWithdrawn;
+        // uint fundBalance;
 
+        (price, audience, withdraws, , , , , , , ) = boxOffice.getFilmStats(0);
+        Assert.equal(audience, 0, "should return total audience members");
     }
 
-    function testGetFilmStats() public {
-        
+    function testShutDownBoxOffice() public {
+        Assert.isTrue(boxOffice.toggleEmergency(), "should toggle emergency state");
+        Assert.isTrue(address(boxOffice).call(bytes4(keccak256("shutDownBoxOffice()"))), "should self-destruct and throw");
     }
 
 }

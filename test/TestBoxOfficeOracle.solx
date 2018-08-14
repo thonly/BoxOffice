@@ -37,7 +37,7 @@ contract TestBoxOfficeOracle {
     }
 
     function testKill() public {
-        Assert.isFalse(address(oracle).call("kill"), "should self-destruct and throw");
+        Assert.isTrue(address(oracle).call(bytes4(keccak256("kill()"))), "should self-destruct and throw");
     }
 
 }

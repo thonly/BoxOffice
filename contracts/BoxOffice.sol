@@ -312,7 +312,7 @@ contract BoxOffice {
         film.withdrawals[film.withdraws] = Withdrawal(recipient, amount, expense);
         film.withdraws = film.withdraws.add(1);
         film.fund = film.fund.sub(total);
-        //recipient.transfer(amount);
+        recipient.transfer(amount);
         
         emit FundWithdrawn(filmIndex, recipient, amount, expense);
         return true;
