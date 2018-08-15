@@ -80,17 +80,6 @@ contract('BoxOffice Film', accounts => {
     await boxOffice.spendTicket(0);
   });
 
-  it("should spend movie ticket 2", async () => {
-    boxOffice.TicketSpent((err, res) => {
-      const {filmIndex, holder} = res.args;
-      
-      assert.equal(filmIndex, 0);
-      assert.equal(holder, owner);
-    });
-    await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
-    await boxOffice.spendTicket(0);
-  });
-
   it("should withdraw from fund", async () => {
     boxOffice.FundWithdrawn((err, res) => {
       const {filmIndex, recipient, amount, expense} = res.args;
