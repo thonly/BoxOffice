@@ -130,8 +130,8 @@ contract BoxOffice {
     modifier checkExcessPayment(uint filmIndex, uint quantity) {
         _;
         uint excess = msg.value.sub(quantity.mul(films[filmIndex].price));
-        // if (excess > 0) msg.sender.transfer(excess);
         if (excess > 0) emit ExcessPayment(filmIndex, msg.sender, excess);
+        // if (excess > 0) msg.sender.transfer(excess);
     }
     
     modifier chargeListingFee {
