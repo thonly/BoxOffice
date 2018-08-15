@@ -1,11 +1,11 @@
 const BoxOffice = artifacts.require("BoxOffice.sol");
 
-contract.skip('BoxOffice', accounts => {
+contract('BoxOffice', accounts => {
 
   const owner = accounts[0];
   let boxOffice;
 
-  beforeEach(async () => {
+  before(async () => {
     boxOffice = await BoxOffice.deployed();
   });
 
@@ -35,7 +35,7 @@ contract.skip('BoxOffice', accounts => {
       const {filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer} = res.args;
 
       assert.equal(filmIndex, 0);
-      assert.equal(salesEndTime, salesEndTime_);
+      assert.equal(salesEndTime.toNumber(), salesEndTime_);
       assert.equal(price, price_);
       assert.equal(ticketSupply, ticketSupply_);
       assert.equal(movieName, movieName_);
