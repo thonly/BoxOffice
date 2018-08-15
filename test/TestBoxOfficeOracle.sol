@@ -19,7 +19,7 @@ contract TestBoxOfficeOracle {
     }
 
     function testUsdPriceOfEth() public {
-        Assert.isAbove(oracle.usdPriceOfEth(), 1, "should return price of ether in USD");
+        Assert.equal(oracle.usdPriceOfEth(), 1, "should return price of ether in USD");
     }
 
     function testConvertToUsd() public {

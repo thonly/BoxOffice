@@ -2,6 +2,7 @@ const BoxOffice = artifacts.require("BoxOffice.sol");
 
 contract('BoxOffice', accounts => {
 
+  const SALES_END_TIME = Date.now()/1000 + 28*60*60*24 | 0;
   const owner = accounts[0];
   let boxOffice;
 
@@ -22,7 +23,7 @@ contract('BoxOffice', accounts => {
   });
 
   it("should create film and movie tickets", async () => {
-    const salesEndTime_ = Date.now() + 28*60*60*24;
+    const salesEndTime_ = SALES_END_TIME;
     const price_ = web3.toWei(1, "finney");
     const ticketSupply_ = web3.toWei(1, "ether");
     const movieName_ = "Casablanca";
@@ -35,7 +36,7 @@ contract('BoxOffice', accounts => {
       const {filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer} = res.args;
 
       assert.equal(filmIndex, 0);
-      assert.equal(salesEndTime.toNumber(), salesEndTime_);
+      assert.equal(salesEndTime, salesEndTime_);
       assert.equal(price, price_);
       assert.equal(ticketSupply, ticketSupply_);
       assert.equal(movieName, movieName_);
@@ -62,7 +63,7 @@ contract('BoxOffice', accounts => {
   it("should return excess payment", async () => {
     await boxOffice.send(web3.toWei(1, "finney"));
     await boxOffice.returnExcessPayment(owner, web3.toWei(1, "finney"));
-    assert.equal(await web3.eth.getBalance(boxOffice.address).toNumber(), 0);
+    assert.equal(await web3.eth.getBalance(boxOffice.address), 0);
   });
 
   it("should receive plain ether transfer and trigger callback", async () => {

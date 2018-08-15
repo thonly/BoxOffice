@@ -2,11 +2,12 @@ const BoxOffice = artifacts.require("BoxOffice.sol");
 
 contract('BoxOffice Film', accounts => {
 
+  const SALES_END_TIME = Date.now()/1000 + 28*60*60*24 | 0;
   const owner = accounts[0];
   let boxOffice;
 
   before(async () => {
-    const salesEndTime = Date.now() + 28*60*60*24;
+    const salesEndTime = SALES_END_TIME;
     const price = web3.toWei(1, "finney");
     const ticketSupply = web3.toWei(1, "ether");
     const movieName = "Casablanca";
@@ -20,7 +21,7 @@ contract('BoxOffice Film', accounts => {
   });
 
   it("should update film and token", async () => {
-    const salesEndTime_ = Date.now() + 28*60*60*24;
+    const salesEndTime_ = SALES_END_TIME;
     const price_ = web3.toWei(1, "finney");
     const movieName_ = "Casablanca";
     const ticketSymbol_ = "CSBC";
@@ -108,7 +109,7 @@ contract('BoxOffice Film', accounts => {
     const [movie, filmmaker, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer] = await boxOffice.getFilmSummary(0);
     assert.ok(movie);
     assert.equal(filmmaker, owner);
-    assert.isBelow(salesEndTime.toNumber(), Date.now() + 28*60*60*24);
+    assert.equal(salesEndTime, SALES_END_TIME);
     assert.equal(price, web3.toWei(1, "finney"));
     assert.equal(ticketSupply, web3.toWei(1, "ether"));
     assert.equal(movieName, "Casablanca");
