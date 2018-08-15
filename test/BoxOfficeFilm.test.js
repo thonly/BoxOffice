@@ -16,7 +16,7 @@ contract('BoxOffice Film', accounts => {
     const trailer = "ipfs hash";
 
     boxOffice = await BoxOffice.deployed();
-    await boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer, {from: owner});
+    await boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer);
   });
 
   it("should update film and token", async () => {
@@ -27,14 +27,12 @@ contract('BoxOffice Film', accounts => {
     const logline_ = "An American expatriate meets a former lover, with unforeseen complications.";
     const poster_ = "ipfs hash";
     const trailer_ = "ipfs hash";
-
-    // let filmIndex, salesEndTime, price, movieName, ticketSymbol, logline, poster, trailer;
    
     boxOffice.FilmUpdated().watch((err, res) => {
       ({filmIndex, salesEndTime, price, movieName, ticketSymbol, logline, poster, trailer} = res.args);
     });
 
-    await boxOffice.updateFilm(0, salesEndTime_, price_, movieName_, ticketSymbol_, logline_, poster_, trailer_, {from: owner});
+    await boxOffice.updateFilm(0, salesEndTime_, price_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
     
     assert.equal(filmIndex, 0);
     assert.equal(salesEndTime, salesEndTime_);
@@ -44,6 +42,42 @@ contract('BoxOffice Film', accounts => {
     assert.equal(logline, logline_);
     assert.equal(poster, poster_);
     assert.equal(trailer, trailer_);
+  });
+
+  it("should purchase movie tickets", async () => {
+   
+  });
+
+  it("should spend movie ticket", async () => {
+   
+  });
+
+  it("should withdraw from fund", async () => {
+   
+  });
+
+  it("should get audience members", async () => {
+   
+  });
+
+  it("should authenticate audience member", async () => {
+   
+  });
+
+  it("should get withdrawal", async () => {
+   
+  });
+
+  it("should get film summary", async () => {
+   
+  });
+
+  it("should get film stats", async () => {
+   
+  });
+
+  it("should get box office stats", async () => {
+   
   });
 
 });

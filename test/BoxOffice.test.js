@@ -10,10 +10,10 @@ contract('BoxOffice', accounts => {
   });
 
   it("should store initial states", async () => {
-    const HEARTBANK = await boxOffice.HEARTBANK.call();
-    const admin = await boxOffice.admin.call();
-    const listingFee = await boxOffice.listingFee.call();
-    const withdrawFee = await boxOffice.withdrawFee.call();
+    const HEARTBANK = await boxOffice.HEARTBANK();
+    const admin = await boxOffice.admin();
+    const listingFee = await boxOffice.listingFee();
+    const withdrawFee = await boxOffice.withdrawFee();
 
     assert.equal(HEARTBANK, 0x0);
     assert.equal(admin, accounts[0]);
@@ -37,7 +37,7 @@ contract('BoxOffice', accounts => {
       ({filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer} = res.args);
     });
 
-    await boxOffice.makeFilm(salesEndTime_, price_, ticketSupply_, movieName_, ticketSymbol_, logline_, poster_, trailer_, {from: owner});
+    await boxOffice.makeFilm(salesEndTime_, price_, ticketSupply_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
     
     assert.equal(filmIndex, 0);
     assert.equal(salesEndTime, salesEndTime_);
@@ -50,6 +50,32 @@ contract('BoxOffice', accounts => {
     assert.equal(trailer, trailer_);
   });
 
-  
+  it("should update fees", async () => {
+   
+  });
 
+  it("should return excess payment", async () => {
+   
+  });
+
+  it("should receive plain ether transfer and trigger callback", async () => {
+    boxOffice.FallbackTriggered().watch((err, res) => {
+      ({sender, value} = res.args);
+    });
+
+    const balanceBefore = await web3.eth.getBalance(owner).toNumber();
+    await boxOffice.send(web3.toWei(1, "finney"));
+    const balanceAfter = await web3.eth.getBalance(owner).toNumber();
+    const balance = await web3.eth.getBalance(boxOffice.address).toNumber();
+
+    assert.equal(sender, owner);
+    assert.equal(value, web3.toWei(1, "finney"));
+    assert.isBelow(balanceAfter, balanceBefore - web3.toWei(1, "finney"));
+    assert.equal(balance, web3.toWei(1, "finney"));
+  });
+
+  it("should shut down box office and self-destruct", async () => {
+    assert.ok(await boxOffice.toggleEmergency());
+    assert.ok(await boxOffice.shutDownBoxOffice());
+  });
 });
