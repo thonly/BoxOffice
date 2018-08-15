@@ -1,6 +1,6 @@
 const BoxOffice = artifacts.require("BoxOffice.sol");
 
-contract('BoxOffice', accounts => {
+contract.skip('BoxOffice', accounts => {
 
   const owner = accounts[0];
   let boxOffice;
@@ -55,7 +55,7 @@ contract('BoxOffice', accounts => {
       assert.equal(listingFee, 3);
       assert.equal(withdrawFee, 2);
     });
-    
+
     await boxOffice.updateFees(3, 2);
   });
 

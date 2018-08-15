@@ -95,23 +95,59 @@ contract('BoxOffice Film', accounts => {
   });
 
   it("should get audience members", async () => {
-   
+    await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
+    await boxOffice.spendTicket(0);
+
+    const members = await boxOffice.getAudienceMembers(0);
+    assert.equal(members[0], owner);
   });
 
   it("should authenticate audience member", async () => {
-   
+    await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
+    await boxOffice.spendTicket(0);
+    assert.ok(await boxOffice.isAudienceMember(0, owner));
   });
 
   it("should get withdrawal", async () => {
-   
+    await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
+    await boxOffice.withdrawFund(0, owner, web3.toWei(1, "finney"), "to pay screenwriter");
+
+    const [recipient, amount, expense] = await boxOffice.getWithdrawal(0, 0);
+    assert.equal(recipient, owner);
+    assert.equal(amount, web3.toWei(1, "finney"));
+    assert.equal(expense, "to pay screenwriter");
   });
 
   it("should get film summary", async () => {
-   
+    const [movie, filmmaker, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer] = await boxOffice.getFilmSummary(0);
+    assert.ok(movie);
+    assert.equal(filmmaker, owner);
+    assert.isBelow(salesEndTime.toNumber(), Date.now() + 28*60*60*24);
+    assert.equal(price, web3.toWei(1, "finney"));
+    assert.equal(ticketSupply, web3.toWei(1, "ether"));
+    assert.equal(movieName, "Casablanca");
+    assert.equal(ticketSymbol, "CSBC");
+    assert.equal(logline, "An American expatriate meets a former lover, with unforeseen complications.");
+    assert.equal(poster, "ipfs hash");
+    assert.equal(trailer, "ipfs hash");
   });
 
   it("should get film stats", async () => {
-   
+    await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
+    await boxOffice.spendTicket(0);
+    await boxOffice.withdrawFund(0, owner, web3.toWei(1, "finney"), "to pay screenwriter");
+
+    const [price, audience, withdraws, ticketSupply, ticketsAvailable, ticketsSold, filmMarketValue, fundsCollected, fundsWithdrawn, fundBalance] = await boxOffice.getFilmStats(0);
+    assert.deepEqual(price, await boxOffice.convertToUsd(web3.toWei(1, "finney")));
+    assert.equal(audience, 1);
+    assert.equal(withdraws, 1);
+    assert.equal(ticketSupply, web3.toWei(1, "ether"));
+    assert.equal(ticketsAvailable, web3.toWei(1, "ether") - 1);
+    assert.equal(ticketsSold, 1);
+    assert.deepEqual(filmMarketValue, await boxOffice.convertToUsd(web3.toWei(1, "finney") * web3.toWei(1, "ether")));
+    assert.deepEqual(fundsCollected, await boxOffice.convertToUsd(web3.toWei(2, "finney")));
+    assert.deepEqual(fundsWithdrawn, await boxOffice.convertToUsd(web3.toWei(1, "finney")));
+    assert.deepEqual(fundBalance, await boxOffice.convertToUsd(web3.toWei(1, "finney")));
   });
 
   it("should get box office stats", async () => {
