@@ -28,48 +28,62 @@ contract('BoxOffice Film', accounts => {
     const poster_ = "ipfs hash";
     const trailer_ = "ipfs hash";
    
-    boxOffice.FilmUpdated((err, res) => 
-      ({filmIndex, salesEndTime, price, movieName, ticketSymbol, logline, poster, trailer} = res.args));
+    boxOffice.FilmUpdated((err, res) => {
+      const {filmIndex, salesEndTime, price, movieName, ticketSymbol, logline, poster, trailer} = res.args;
+      
+      assert.equal(filmIndex, 0);
+      assert.equal(salesEndTime, salesEndTime_);
+      assert.equal(price, price_);
+      assert.equal(movieName, movieName_);
+      assert.equal(ticketSymbol, ticketSymbol_);
+      assert.equal(logline, logline_);
+      assert.equal(poster, poster_);
+      assert.equal(trailer, trailer_);
+    });
 
     await boxOffice.updateFilm(0, salesEndTime_, price_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
-    
-    assert.equal(filmIndex, 0);
-    assert.equal(salesEndTime, salesEndTime_);
-    assert.equal(price, price_);
-    assert.equal(movieName, movieName_);
-    assert.equal(ticketSymbol, ticketSymbol_);
-    assert.equal(logline, logline_);
-    assert.equal(poster, poster_);
-    assert.equal(trailer, trailer_);
   });
 
   it("should purchase movie tickets", async () => {
-    boxOffice.TicketsBought((err, res) => ({filmIndex, buyer, quantity} = res.args));
+    boxOffice.TicketsBought((err, res) => {
+      const {filmIndex, buyer, quantity} = res.args;
+      
+      assert.equal(filmIndex, 0);
+      assert.equal(buyer, owner);
+      assert.equal(quantity, 2);
+    });
+
     await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
-    assert.equal(filmIndex, 0);
-    assert.equal(buyer, owner);
-    assert.equal(quantity, 2);
   });
 
   it("should purchase movie tickets with excess payment", async () => {
-    boxOffice.ExcessPayment((err, res) => ({filmIndex, buyer, excess} = res.args));
+    boxOffice.ExcessPayment((err, res) => {
+      const {filmIndex, buyer, excess} = res.args;
+      
+      assert.equal(filmIndex, 0);
+      assert.equal(buyer, owner);
+      assert.equal(excess, web3.toWei(1, "finney"));
+    });
+
     await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
-    assert.equal(filmIndex, 0);
-    assert.equal(buyer, owner);
-    assert.equal(excess, web3.toWei(1, "finney"));
   });
 
   it("should spend movie ticket", async () => {
-    boxOffice.TicketSpent((err, res) => ({filmIndex, holder} = res.args));
+    boxOffice.TicketSpent((err, res) => {
+      const {filmIndex, holder} = res.args;
+      
+      assert.equal(filmIndex, 0);
+      assert.equal(holder, owner);
+    });
+
     await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
     await boxOffice.spendTicket(0);
-    assert.equal(filmIndex, 0);
-    assert.equal(holder, owner);
   });
 
   it("should spend movie ticket 2", async () => {
     boxOffice.TicketSpent((err, res) => {
-      let {filmIndex, holder} = res.args;
+      const {filmIndex, holder} = res.args;
+      
       assert.equal(filmIndex, 0);
       assert.equal(holder, owner);
     });
@@ -78,13 +92,17 @@ contract('BoxOffice Film', accounts => {
   });
 
   it("should withdraw from fund", async () => {
-    boxOffice.FundWithdrawn((err, res) => ({filmIndex, recipient, amount, expense} = res.args));
+    boxOffice.FundWithdrawn((err, res) => {
+      const {filmIndex, recipient, amount, expense} = res.args;
+      
+      assert.equal(filmIndex, 0);
+      assert.equal(recipient, owner);
+      assert.equal(amount, web3.toWei(1, "finney"));
+      assert.equal(expense, "to pay screenwriter");
+    });
+    
     await boxOffice.buyTickets(0, 2, {value: web3.toWei(3, "finney")});
     await boxOffice.withdrawFund(0, owner, web3.toWei(1, "finney"), "to pay screenwriter");
-    assert.equal(filmIndex, 0);
-    assert.equal(recipient, owner);
-    assert.equal(amount, web3.toWei(1, "finney"));
-    assert.equal(expense, "to pay screenwriter");
   });
 
   it("should get audience members", async () => {
