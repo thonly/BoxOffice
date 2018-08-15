@@ -33,9 +33,8 @@ contract('BoxOffice', accounts => {
 
     // let filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer;
    
-    boxOffice.FilmCreated().watch((err, res) => {
-      ({filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer} = res.args);
-    });
+    boxOffice.FilmCreated().watch((err, res) => 
+      ({filmIndex, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer} = res.args));
 
     await boxOffice.makeFilm(salesEndTime_, price_, ticketSupply_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
     
@@ -51,17 +50,20 @@ contract('BoxOffice', accounts => {
   });
 
   it("should update fees", async () => {
-   
+    boxOffice.FeesUpdated().watch((err, res) => ({listingFee, withdrawFee} = res.args));
+    await boxOffice.updateFees(3, 2);
+    assert.equal(listingFee, 3);
+    assert.equal(withdrawFee, 2);
   });
 
   it("should return excess payment", async () => {
-   
+    await boxOffice.send(web3.toWei(1, "finney"));
+    await boxOffice.returnExcessPayment(owner, web3.toWei(1, "finney"));
+    assert.equal(await web3.eth.getBalance(boxOffice.address).toNumber(), 0);
   });
 
   it("should receive plain ether transfer and trigger callback", async () => {
-    boxOffice.FallbackTriggered().watch((err, res) => {
-      ({sender, value} = res.args);
-    });
+    boxOffice.FallbackTriggered().watch((err, res) => ({sender, value} = res.args));
 
     const balanceBefore = await web3.eth.getBalance(owner).toNumber();
     await boxOffice.send(web3.toWei(1, "finney"));

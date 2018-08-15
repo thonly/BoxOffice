@@ -28,9 +28,8 @@ contract('BoxOffice Film', accounts => {
     const poster_ = "ipfs hash";
     const trailer_ = "ipfs hash";
    
-    boxOffice.FilmUpdated().watch((err, res) => {
-      ({filmIndex, salesEndTime, price, movieName, ticketSymbol, logline, poster, trailer} = res.args);
-    });
+    boxOffice.FilmUpdated().watch((err, res) => 
+      ({filmIndex, salesEndTime, price, movieName, ticketSymbol, logline, poster, trailer} = res.args));
 
     await boxOffice.updateFilm(0, salesEndTime_, price_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
     
