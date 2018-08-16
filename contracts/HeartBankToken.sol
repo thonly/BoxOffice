@@ -4,8 +4,8 @@ import "openzeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
 contract HeartBankToken is StandardToken {
 
-    string public constant name = "HeartBank Kiitos";
-    string public constant symbol = "H3K";
+    string public constant name = "HeartBank";
+    string public constant symbol = "Kiitos";
     uint8 public constant decimals = 0;
     
     address private owner;
