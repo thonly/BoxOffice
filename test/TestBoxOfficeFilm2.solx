@@ -56,9 +56,4 @@ contract TestBoxOffice8 {
         Assert.equal(audience, 0, "should return total audience members");
     }
 
-    function testShutDownBoxOffice() public {
-        Assert.isTrue(boxOffice.toggleEmergency(), "should toggle emergency state");
-        Assert.isTrue(address(boxOffice).call(bytes4(keccak256("shutDownBoxOffice()"))), "should self-destruct");
-    }
-
 }
