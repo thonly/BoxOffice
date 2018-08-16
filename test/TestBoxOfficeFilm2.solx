@@ -36,7 +36,7 @@ contract TestBoxOffice8 {
 
         Assert.isTrue(boxOffice.buyTickets.value(3 finney)(0, 2), "should purchase tickets");
         (totalReceipts, totalFilms) = boxOffice.getBoxOfficeStats();
-        Assert.equal(totalReceipts, boxOffice.convertToUsd(2 finney), "should return total receipts");
+        Assert.equal(totalReceipts, 2 finney, "should return total receipts");
         Assert.equal(totalFilms, 1, "should return total films");
     }
 

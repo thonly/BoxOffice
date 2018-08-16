@@ -7,13 +7,13 @@ const BoxOfficeRegistry = artifacts.require("BoxOfficeRegistry");
 
 module.exports = (deployer, network, accounts) => {
   deployer.deploy(BoxOfficeOracleLibrary);
-  deployer.deploy(BoxOfficeOracleStorage);    
   deployer.link(BoxOfficeOracleLibrary, BoxOfficeOracle);
 
   deployer.deploy(HeartBankToken)
+    .then(() => deployer.deploy(BoxOfficeOracleStorage))
     .then(() => deployer.deploy(BoxOfficeOracle, BoxOfficeOracleStorage.address))
-    .then(() => deployer.deploy(BoxOffice, HeartBankToken.address, BoxOfficeOracle.address))
     .then(() => deployer.deploy(BoxOfficeRegistry, BoxOfficeOracle.address))
+    .then(() => deployer.deploy(BoxOffice, HeartBankToken.address))
     .then(() => HeartBankToken.deployed().then(instance => instance.addAdmin(BoxOffice.address)))
     .then(() => BoxOfficeOracleStorage.deployed().then(instance => instance.addAdmin(BoxOfficeOracle.address)));
 };
