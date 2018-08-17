@@ -5,13 +5,20 @@
   "main": "index.js",
   "dependencies": {
     "axios": "^0.18.0",
-    "openzeppelin-solidity": "^1.12.0"
+    "babel-runtime": "^6.26.0",
+    "next": "^6.1.1",
+    "openzeppelin-solidity": "^1.12.0",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "truffle-contract": "^3.0.6",
+    "web3": "^1.0.0-beta.34"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "",
-    "dev": "node server.js",
-    "build": "next build"
+    "dev": "next",
+    "test": "jest test/pages",
+    "build": "next build",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
