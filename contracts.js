@@ -2,18 +2,16 @@ import Web3 from "web3";
 
 const contract = require("truffle-contract");
 const kiitos = require("./build/contracts/HeartBankToken.json");
+const boxOffice = require("./build/contracts/BoxOffice.json");
+const registrar = require("./build/contracts/BoxOfficeRegistrar.json");
+const oracle = require("./build/contracts/BoxOfficeOracle.json");
 
-let provider;
+const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ?
+    window.web3.currentProvider : new Web3.providers.HttpProvider("http://localhost:9545"); // https://rinkeby.infura.io/DPHGLx2mBJeWsuDv1jFV
 
-if (typeof window !== "undefined" && typeof window.web3 !== "undefined") {
-    provider = window.web3.currentProvider
-} else {
-    provider = new Web3.providers.HttpProvider("http://localhost:9545");
-    // provider = new Web3.providers.HttpProvider("https://rinkeby.infura.io/DPHGLx2mBJeWsuDv1jFV");
-}
-
-const Kiitos = contract(kiitos);
-Kiitos.setProvider(provider);
+const Kiitos = contract(kiitos).setProvider(provider);
+const BoxOffice = contract(boxOffice).setProvider(provider);
+const Oracle = contract(oracle).setProvider(provider);
 
 export default new Web3(provider);
-export { Kiitos };
+export { Kiitos, BoxOffice, Oracle };
