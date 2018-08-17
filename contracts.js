@@ -13,18 +13,16 @@ const provider = typeof window !== "undefined" && typeof window.web3 !== "undefi
 const Kiitos = contract(kiitos);
 const BoxOffice = contract(boxOffice);
 const Registry = contract(registry);
-let Oracle = contract(oracle);
+const Oracle = contract(oracle);
 
 Kiitos.setProvider(provider);
 BoxOffice.setProvider(provider);
 Registry.setProvider(provider);
 Oracle.setProvider(provider);
 
-const getCurrentOracle = async (Oracle) => {
-    const registry = await Registry.deployed();
-    const oracle = await registry.currentOracle();
-    return Oracle.at(oracle);
-}
+const currentOracle = Registry.deployed()
+    .then(registry => registry.currentOracle())
+    .then(oracle => Oracle.at(oracle));
 
 export default new Web3(provider);
-export { Kiitos, BoxOffice, Oracle, getCurrentOracle };
+export { Kiitos, BoxOffice, currentOracle };
