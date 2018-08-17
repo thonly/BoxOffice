@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import web3, { Kiitos } from "../contracts";
+import web3, { Kiitos, BoxOffice, Oracle, getCurrentOracle } from "../contracts";
 
-class BoxOffice extends Component {
+class TicketBooth extends Component {
     async componentDidMount() {
         const kiitos = await Kiitos.deployed();
         const supply = await kiitos.totalSupply();
-        console.log(supply.toNumber());
+        const oracle = await getCurrentOracle(Oracle);
+        const usdPriceOfEth = await oracle.usdPriceOfEth();
+        console.log(supply.toNumber(), usdPriceOfEth.toNumber());
     }
 
     render() {
@@ -13,4 +15,4 @@ class BoxOffice extends Component {
     }
 }
 
-export default BoxOffice;
+export default TicketBooth;
