@@ -2,16 +2,19 @@ import React, { Component } from "react";
 import web3, { Kiitos, BoxOffice, currentOracle } from "../contracts";
 
 class TicketBooth extends Component {
-    async componentDidMount() {
+    static async getInitialProps() {
         const kiitos = await Kiitos.deployed();
         const supply = await kiitos.totalSupply();
+        const boxOffice = await BoxOffice.deployed();
+        const listingFee = await boxOffice.listingFee();
         const oracle = await currentOracle;
         const usdPriceOfEth = await oracle.usdPriceOfEth();
-        console.log(supply.toNumber(), usdPriceOfEth.toNumber());
+
+        return {supply: supply.toNumber(), listingFee: listingFee.toNumber(), usdPriceOfEth: usdPriceOfEth.toNumber()};
     }
 
     render() {
-        return <div>Homepage!</div>;
+        return <div>{this.props.supply} {this.props.listingFee} {this.props.usdPriceOfEth}</div>;
     }
 }
 

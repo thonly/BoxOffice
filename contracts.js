@@ -6,19 +6,31 @@ const boxOffice = require("./build/contracts/BoxOffice.json");
 const registry = require("./build/contracts/BoxOfficeRegistry.json");
 const oracle = require("./build/contracts/BoxOfficeOracle.json");
 
-const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? 
-    window.web3.currentProvider : new Web3.providers.HttpProvider("http://localhost:9545"); 
-    // https://rinkeby.infura.io/DPHGLx2mBJeWsuDv1jFV
+const endpoint = process.env.NODE_ENV !== "production" ? "http://localhost:9545" : "https://rinkeby.infura.io/DPHGLx2mBJeWsuDv1jFV";
+const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(endpoint);
 
-const Kiitos = contract(kiitos);
-const BoxOffice = contract(boxOffice);
-const Registry = contract(registry);
-const Oracle = contract(oracle);
+const fixTruffleContractCompatibilityIssue = contract => {
+    if (typeof contract.currentProvider.sendAsync !== "function")
+        contract.currentProvider.sendAsync = function() {
+            return contract.currentProvider.send.apply(contract.currentProvider, arguments);
+        };
+    return contract;
+};
+
+let Kiitos = contract(kiitos);
+let BoxOffice = contract(boxOffice);
+let Registry = contract(registry);
+let Oracle = contract(oracle);
 
 Kiitos.setProvider(provider);
 BoxOffice.setProvider(provider);
 Registry.setProvider(provider);
 Oracle.setProvider(provider);
+
+Kiitos = fixTruffleContractCompatibilityIssue(Kiitos);
+BoxOffice = fixTruffleContractCompatibilityIssue(BoxOffice);
+Registry = fixTruffleContractCompatibilityIssue(Registry);
+Oracle = fixTruffleContractCompatibilityIssue(Oracle);
 
 const currentOracle = Registry.deployed()
     .then(registry => registry.currentOracle())
