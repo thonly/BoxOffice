@@ -13,6 +13,10 @@ class TicketBooth extends Component {
         return {supply: supply.toNumber(), listingFee: listingFee.toNumber(), usdPriceOfEth: usdPriceOfEth.toNumber()};
     }
 
+    renderFilms() {
+
+    }
+
     render() {
         return <div>{this.props.supply} {this.props.listingFee} {this.props.usdPriceOfEth}</div>;
     }
