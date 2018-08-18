@@ -3,5 +3,5 @@ if (process.env.NODE_ENV === "production") {
         ENDPOINT: process.env.INFURA 
     };
 } else {
-    module.exports = require("./keys");
+    module.exports = require("./dev");
 }

@@ -6,7 +6,7 @@ const boxOffice = require("./build/contracts/BoxOffice.json");
 const registry = require("./build/contracts/BoxOfficeRegistry.json");
 const oracle = require("./build/contracts/BoxOfficeOracle.json");
 
-const env = require("./config/env");
+const env = require("../config/env");
 const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(env.ENDPOINT);
 
 const fixTruffleContractCompatibilityIssue = contract => {

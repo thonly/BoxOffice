@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import web3, { Kiitos, BoxOffice, currentOracle } from "../contracts";
+import web3, { Kiitos, BoxOffice, currentOracle } from "../scripts/contracts";
 
 class TicketBooth extends Component {
     static async getInitialProps() {
