@@ -6,8 +6,8 @@ const boxOffice = require("./build/contracts/BoxOffice.json");
 const registry = require("./build/contracts/BoxOfficeRegistry.json");
 const oracle = require("./build/contracts/BoxOfficeOracle.json");
 
-const endpoint = process.env.NODE_ENV !== "production" ? "http://localhost:9545" : "https://rinkeby.infura.io/DPHGLx2mBJeWsuDv1jFV";
-const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(endpoint);
+const env = require("./config/env");
+const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(env.ENDPOINT);
 
 const fixTruffleContractCompatibilityIssue = contract => {
     if (typeof contract.currentProvider.sendAsync !== "function")

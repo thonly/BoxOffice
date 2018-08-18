@@ -1,4 +1,5 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
+const env = require("./config/keys");
 
 module.exports = {
   migrations_directory: "./migrations",
@@ -9,7 +10,7 @@ module.exports = {
       network_id: "*"
     },
     rinkeby: {
-      provider: () => new HDWalletProvider("pepper stable ripple enrich provide business ankle tank net lumber acquire earn", "https://rinkeby.infura.io/DPHGLx2mBJeWsuDv1jFV"),
+      provider: () => new HDWalletProvider(env.MNEMONIC, env.INFURA),
       network_id: 4
       // gas: 30000000
     }
