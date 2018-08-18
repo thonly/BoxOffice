@@ -1,13 +1,13 @@
 import Web3 from "web3";
 
 const contract = require("truffle-contract");
-const kiitos = require("./build/contracts/HeartBankToken.json");
-const boxOffice = require("./build/contracts/BoxOffice.json");
-const registry = require("./build/contracts/BoxOfficeRegistry.json");
-const oracle = require("./build/contracts/BoxOfficeOracle.json");
+const kiitos = require("../build/contracts/HeartBankToken.json");
+const boxOffice = require("../build/contracts/BoxOffice.json");
+const registry = require("../build/contracts/BoxOfficeRegistry.json");
+const oracle = require("../build/contracts/BoxOfficeOracle.json");
 
-const env = require("../config/env");
-const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(env.ENDPOINT);
+const { ENDPOINT } = require("../config/env");
+const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(ENDPOINT);
 
 const fixTruffleContractCompatibilityIssue = contract => {
     if (typeof contract.currentProvider.sendAsync !== "function")
