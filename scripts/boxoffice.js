@@ -10,6 +10,13 @@ const logline = "An American expatriate meets a former lover, with unforeseen co
 const poster = "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg";
 const trailer = "https://www.imdb.com/title/tt0034583";
 
+const movies = [
+    {}, // Casablanca
+    {}, // Titanic
+    {}, // Avatar
+    {} // Finding Nemo
+];
+
 module.exports = callback => {
     BoxOffice.deployed().then(boxOffice => boxOffice.makeFilm(salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer))
     .then(tx => console.log(tx));
