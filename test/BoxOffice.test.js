@@ -46,6 +46,9 @@ contract('BoxOffice', accounts => {
       assert.equal(trailer, trailer_);
     });
 
+    const gas = await boxOffice.makeFilm.estimateGas(salesEndTime_, price_, ticketSupply_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
+    assert.isBelow(gas, 8003877);
+
     await boxOffice.makeFilm(salesEndTime_, price_, ticketSupply_, movieName_, ticketSymbol_, logline_, poster_, trailer_);
   });
 
