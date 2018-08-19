@@ -1,5 +1,14 @@
-import React from "react";
+import React, { Component } from "react";
+import Layout from "../../components/Layout";
 
-export default () => {
-    return <h1>Make a movie!</h1>;
-};
+class MakeFilm extends Component {
+    render() {
+        return (
+            <Layout>
+                <h1>hi</h1>
+            </Layout>
+        );
+    }
+}
+
+export default MakeFilm;
