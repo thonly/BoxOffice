@@ -1,13 +1,10 @@
-import Web3 from "web3";
+import { clientProvider as provider } from "./web3";
 
 const contract = require("truffle-contract");
 const kiitos = require("../build/contracts/HeartBankToken.json");
 const boxOffice = require("../build/contracts/BoxOffice.json");
 const registry = require("../build/contracts/BoxOfficeRegistry.json");
 const oracle = require("../build/contracts/BoxOfficeOracle.json");
-
-const { ENDPOINT } = require("../config/env");
-const provider = typeof window !== "undefined" && typeof window.web3 !== "undefined" ? window.web3.currentProvider : new Web3.providers.HttpProvider(ENDPOINT);
 
 const fixTruffleContractCompatibilityIssue = contract => {
     if (typeof contract.currentProvider.sendAsync !== "function")
@@ -36,5 +33,5 @@ const currentOracle = Registry.deployed()
     .then(registry => registry.currentOracle())
     .then(oracle => Oracle.at(oracle));
 
-export default new Web3(provider);
-export { Kiitos, BoxOffice, currentOracle };
+export default currentOracle;
+export { Kiitos, BoxOffice};
