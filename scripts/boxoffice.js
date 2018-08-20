@@ -46,14 +46,15 @@ const movies = [
     } // Finding Nemo
 ];
 
-module.exports = callback => {
+module.exports = async callback => {
 
-    // movies.map(movie => BoxOffice.deployed().then(boxOffice => boxOffice.makeFilm(movie.salesEndTime, movie.price, movie.ticketSupply, movie.movieName, movie.ticketSymbol, movie.logline, movie.poster, movie.trailer))
+    // await movies.map(movie => BoxOffice.deployed().then(boxOffice => boxOffice.makeFilm(movie.salesEndTime, movie.price, movie.ticketSupply, movie.movieName, movie.ticketSymbol, movie.logline, movie.poster, movie.trailer))
     // .then(tx => console.log(tx)));
 
-    BoxOffice.deployed().then(boxOffice => boxOffice.makeFilm(movies[0].salesEndTime, movies[0].price, movies[0].ticketSupply, movies[0].movieName, movies[0].ticketSymbol, movies[0].logline, movies[0].poster, movies[0].trailer))
+    await BoxOffice.deployed().then(boxOffice => boxOffice.makeFilm(movies[0].salesEndTime, movies[0].price, movies[0].ticketSupply, movies[0].movieName, movies[0].ticketSymbol, movies[0].logline, movies[0].poster, movies[0].trailer))
        .then(tx => console.log(tx));
 
-    // BoxOffice.deployed().then(boxOffice => boxOffice.films(0)).then(film => console.log(film));
+    // await BoxOffice.deployed().then(boxOffice => boxOffice.films(0)).then(film => console.log(film));
 
+    callback();
 };

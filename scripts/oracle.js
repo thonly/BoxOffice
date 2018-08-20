@@ -2,7 +2,7 @@ const axios = require('axios');
 const Oracle = artifacts.require("BoxOfficeOracle");
 
 module.exports = async callback => {
-    /*Oracle.deployed().then(oracle => {
+    /* await Oracle.deployed().then(async oracle => {
         const priceUpdated = oracle.PriceUpdated();
         priceUpdated.watch((err, res) => {
             console.log(res.args.price.toNumber());
@@ -15,7 +15,7 @@ module.exports = async callback => {
             .then(price => oracle.setPrice(parseInt(price)))
             .then(tx => getPrice.stopWatching()));
 
-        oracle.updatePrice();
+        await oracle.updatePrice();
     });*/
 
     const oracle = await Oracle.deployed();
