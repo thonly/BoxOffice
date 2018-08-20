@@ -10,8 +10,8 @@ module.exports = {
     },
     rinkeby: {
       provider: adminProvider,
-      network_id: 4
-      // gas: 30000000
+      network_id: 4,
+      gas: 3000000
     }
   },
   solc: {

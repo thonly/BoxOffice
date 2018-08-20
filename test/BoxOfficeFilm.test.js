@@ -1,6 +1,6 @@
 const BoxOffice = artifacts.require("BoxOffice.sol");
 
-contract('BoxOffice Film', accounts => {
+contract.skip('BoxOffice Film', accounts => {
 
   const SALES_END_TIME = Date.now()/1000 + 28*60*60*24 | 0;
   const owner = accounts[0];
