@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import currentOracle, { Kiitos, BoxOffice } from "../scripts/contracts";
+import currentOracle, { Kiitos, BoxOffice } from "../../scripts/contracts";
+import Layout from "../../components/Layout";
 
-class TicketBooth extends Component {
+class BoxOfficeMovie extends Component {
     static async getInitialProps() {
         const kiitos = await Kiitos.deployed();
         const supply = await kiitos.totalSupply();
@@ -28,8 +29,12 @@ class TicketBooth extends Component {
     renderWithdrawals() {}
 
     render() {
-        return <div>{this.props.supply} {this.props.listingFee} {this.props.usdPriceOfEth}</div>;
+        return (
+            <Layout>
+                <h3>Movie!</h3>
+            </Layout>
+        );
     }
 }
 
-export default TicketBooth;
+export default BoxOfficeMovie;

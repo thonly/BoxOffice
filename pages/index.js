@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import currentOracle, { Kiitos, BoxOffice } from "../scripts/contracts";
 import { Card, Button } from "semantic-ui-react";
+import { Link } from "../routes";
 import Layout from "../components/Layout";
 
 class TicketBooth extends Component {
@@ -12,10 +13,9 @@ class TicketBooth extends Component {
         const oracle = await currentOracle;
         const usdPriceOfEth = await oracle.usdPriceOfEth();
 
+        const films = await boxOffice.getFilms();
 
-        const totalFilms = await boxOffice.getTotalFilms();
-
-        return {films: [...Array(totalFilms).keys()]};
+        return { films };
     }
 
     airDropButton() {} // render kiitos token summary!
@@ -31,10 +31,15 @@ class TicketBooth extends Component {
     renderBoxOfficeStats() {}
 
     renderBoxOfficeMovies() {
-        const items = this.props.films.map(filmIndex => {
+        const items = this.props.films.map(address => {
             return {
-                header: filmIndex,
-                description: "hello"
+                header: address,
+                description: (
+                    <Link route={`/movie/${address}`}>
+                        <a>View Movie</a>
+                    </Link>
+                ),
+                fluid: true
             }
         });
 
@@ -46,12 +51,16 @@ class TicketBooth extends Component {
             <Layout>
                 <div>
                     <h3>Open Movies</h3>
-                    <Button 
-                        content="Create Movie"
-                        icon="add circle"
-                        floated="right"
-                        primary
-                    />
+                    <Link route="/movie/make">
+                        <a>
+                            <Button 
+                                content="Create Movie"
+                                icon="add circle"
+                                floated="right"
+                                primary
+                            />
+                        </a>
+                    </Link>
                     {this.renderBoxOfficeMovies()}
                 </div>
             </Layout>

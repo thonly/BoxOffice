@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Router } from "../../routes";
 import { Form, Input, Button, Message } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import { clientWeb3 as web3 } from "../../scripts/web3";
@@ -39,6 +40,7 @@ class MakeFilm extends Component {
             // await movie.updateFilm(this.state.salesEndTime, this.state.price, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
             
             await boxOffice.makeFilm(this.state.salesEndTime, this.state.price, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+            Router.pushRoute("/");
         } catch (error) {
             this.setState({ error: error.message });
         }
