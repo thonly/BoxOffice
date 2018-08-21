@@ -25,15 +25,15 @@ class MakeFilm extends Component {
         
         // const balance = await kiitos.balanceOf(accounts[0]);
         // console.log(balance.toNumber());
-        const film = await boxOffice.films(0);
-        const movie = await Movie.at(film);
-
-        console.log(movie);
 
         // await oracle.setPrice(400, {from: accounts[0]});
-        //await boxOffice.updateFees(2, 3, {from: accounts[0]});
-        await movie.updateFilm(this.state.salesEndTime, this.state.price, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
-        //await boxOffice.makeFilm(this.state.salesEndTime, this.state.price, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+        // await boxOffice.updateFees(2, 3, {from: accounts[0]});
+
+        // const film = await boxOffice.films(0);
+        // const movie = await Movie.at(film);
+        // await movie.updateFilm(this.state.salesEndTime, this.state.price, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+
+        await boxOffice.makeFilm(this.state.salesEndTime, this.state.price, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
     };
 
     render() {

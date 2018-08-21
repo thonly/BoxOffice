@@ -2761,23 +2761,15 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {
-    "4": {
-      "events": {},
-      "links": {
-        "BoxOfficeOracleLibrary": "0x9669b1879e57b5b1f4391a83cd14f0891494117e"
-      },
-      "address": "0x53dcabf6b4d450cb49aa8656907359f9d8c664e8",
-      "transactionHash": "0x7d47c170ccb67ba6af7a621a5ff0a456a6f8237dd844e77222b2d94cadae90fc"
-    },
     "4447": {
       "events": {},
       "links": {
-        "BoxOfficeOracleLibrary": "0x7d50ad3dde49fd30976fb899182acaa1ad2dca22"
+        "BoxOfficeOracleLibrary": "0xf12b5dd4ead5f743c6baa640b0216200e89b60da"
       },
-      "address": "0xf6cbbf2d063e05851674e8bea0479b1b90a4f4d3",
-      "transactionHash": "0x44699db088666ef90462176c0655bd587cdf9931e9e7d25da658ac899f1ae549"
+      "address": "0x8f0483125fcb9aaaefa9209d8e9d7b9c8b9fb90f",
+      "transactionHash": "0x454a8f8e98a1c7a98545b0f8393e5894326affd0ab46465305569d2c8c3acd62"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-21T01:14:48.349Z"
+  "updatedAt": "2018-08-21T03:46:31.840Z"
 }

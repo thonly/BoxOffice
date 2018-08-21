@@ -1,11 +1,12 @@
+const { HOST, CHAIN } = require("./config");
 const { adminProvider } = require("./scripts/web3");
 
 module.exports = {
   migrations_directory: "./migrations",
   networks: {
     development: {
-      host: "localhost",
-      port: 9545,
+      host: HOST,
+      port: CHAIN,
       network_id: "*"
     },
     rinkeby: {
