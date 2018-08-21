@@ -7,12 +7,14 @@ module.exports = {
     development: {
       host: HOST,
       port: CHAIN,
-      network_id: "*"
+      network_id: "*",
+      gas: 8003877,
+      gasPrice: 2300000000
     },
     rinkeby: {
       provider: adminProvider,
       network_id: 4,
-      gas: 3000000
+      gas: 8003877
     }
   },
   solc: {
