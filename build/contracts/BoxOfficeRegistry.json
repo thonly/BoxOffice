@@ -2043,13 +2043,19 @@
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
   "networks": {
+    "4": {
+      "events": {},
+      "links": {},
+      "address": "0xa750f60bf9c2061b69bbbde5e98af8079716ded4",
+      "transactionHash": "0x939d782fe18bbcaa7f46d2e23f1a7f7173a71c80d889e0e471134dfb5dbfc59b"
+    },
     "4447": {
       "events": {},
       "links": {},
-      "address": "0x699d70ab94ba4fd15c0edef58144a9c1a2227ca7",
-      "transactionHash": "0x97f0721da8e915793ae9d3c81ac00d0c0b78b6c7c95f191e084f4f6c4f114bfe"
+      "address": "0x5e70a420373d6bcb1ca3d08feeb78a2f80727b29",
+      "transactionHash": "0xa010f5fdf47d9df2438d42793f45fafdda0a1b9bc65403227a15f072fd839d0e"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-20T18:25:26.443Z"
+  "updatedAt": "2018-08-21T01:14:48.282Z"
 }

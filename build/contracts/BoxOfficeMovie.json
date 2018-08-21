@@ -711,10 +711,10 @@
           }
         ],
         "contractDependencies": [
-          2210,
+          1963,
           1888,
           1931,
-          1963
+          2210
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -6726,10 +6726,10 @@
           }
         ],
         "contractDependencies": [
-          2210,
+          1963,
           1888,
           1931,
-          1963
+          2210
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -12693,5 +12693,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-20T18:25:21.710Z"
+  "updatedAt": "2018-08-21T01:10:43.114Z"
 }
