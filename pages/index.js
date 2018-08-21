@@ -18,7 +18,7 @@ class TicketBooth extends Component {
         return { films };
     }
 
-    airDropButton() {} // render kiitos token summary!
+    
 
     shutDownBoxOfficeButton() {}
 

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import currentOracle, { Kiitos, BoxOffice } from "../../scripts/contracts";
+import { Card } from "semantic-ui-react";
+import currentOracle, { Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import Layout from "../../components/Layout";
 
 class BoxOfficeMovie extends Component {
-    static async getInitialProps() {
+    static async getInitialProps(props) {
         const kiitos = await Kiitos.deployed();
         const supply = await kiitos.totalSupply();
         const boxOffice = await BoxOffice.deployed();
@@ -11,7 +12,13 @@ class BoxOfficeMovie extends Component {
         const oracle = await currentOracle;
         const usdPriceOfEth = await oracle.usdPriceOfEth();
 
-        return {supply: supply.toNumber(), listingFee: listingFee.toNumber(), usdPriceOfEth: usdPriceOfEth.toNumber()};
+        const movie = await Movie.at(props.query.address);
+        const title = await movie.name();  
+        const filmmaker = await movie.filmmaker();  
+        const logline = await movie.logline();  
+        const poster = await movie.poster();        
+
+        return { title, filmmaker, logline, poster };
     }
 
     spendTicketButton() {}
@@ -24,14 +31,24 @@ class BoxOfficeMovie extends Component {
 
     withdrawFundModal() {}
 
-    renderMovieSummary() {}
+    renderMovieSummary() {
+        
+    }
+
+    renderMovieToken() {}
 
     renderWithdrawals() {}
 
     render() {
         return (
             <Layout>
-                <h3>Movie!</h3>
+                <Card
+                    image={this.props.poster}
+                    header={this.props.title}
+                    meta={this.props.filmmaker}
+                    description={this.props.logline}
+                    fluid
+                />
             </Layout>
         );
     }

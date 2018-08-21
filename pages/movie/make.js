@@ -28,9 +28,6 @@ class MakeFilm extends Component {
             const oracle = await currentOracle;
             const boxOffice = await BoxOffice.deployed();
             const kiitos = await Kiitos.deployed();
-            
-            // const balance = await kiitos.balanceOf(accounts[0]);
-            // console.log(balance.toNumber());
 
             // await oracle.setPrice(400, {from: accounts[0]});
             // await boxOffice.updateFees(2, 3, {from: accounts[0]});
