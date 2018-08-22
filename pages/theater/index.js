@@ -13,7 +13,9 @@ class TicketBooth extends Component {
         return {supply: supply.toNumber(), listingFee: listingFee.toNumber(), usdPriceOfEth: usdPriceOfEth.toNumber()};
     }
 
-    renderStageScreen() {}
+    spendTicketButton() {}
+
+    renderStageScreen() {} // show trailer // button goes to dark background with movie clip
 
     renderAudienceMembers() {}
 

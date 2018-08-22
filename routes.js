@@ -2,8 +2,8 @@ const routes = require("next-routes")();
 
 routes
     .add("/movie/make", "/movie/make")
-    .add("/movie/:address/update", "/movie/update")
-    .add("/movie/:address", "/movie/index")
-    .add("/theater/:address", "/theater/index");
+    .add("/movie/:movie/update", "/movie/update")
+    .add("/movie/:movie", "/movie/index")
+    .add("/theater/:movie", "/theater/index");
 
 module.exports = routes;
