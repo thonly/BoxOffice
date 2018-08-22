@@ -3,6 +3,7 @@ import { Router } from "../../routes";
 import { Form, Input, Button, Message } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import ipfs from "../../scripts/ipfs";
 
 class MakeFilm extends Component {
     state = {
@@ -14,8 +15,30 @@ class MakeFilm extends Component {
         logline: "An American expatriate meets a former lover, with unforeseen complications.",
         poster: "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg",
         trailer: "https://www.imdb.com/title/tt0034583",
+        buffer: null,
+        ipfsHash: "",
         loading: false,
         error: ""
+    };
+
+    captureImage = event => {
+        event.preventDefault();
+        const image = event.target.files[0];
+        const reader = new window.FileReader();
+        reader.readAsArrayBuffer(image);
+        reader.onloadend = () => this.setState({ buffer: Buffer(reader.result) });
+    };
+
+    submitToInfura = event => {
+        event.preventDefault();
+        ipfs.files.add(this.state.buffer, (err, res) => {
+            if (err) {
+                console.log(err.message);
+            } else {
+                this.setState({ ipfsHash: res[0].hash });
+                console.log(this.state.ipfsHash);
+            }
+        });
     };
 
     onSubmit = async event => {
@@ -48,6 +71,11 @@ class MakeFilm extends Component {
         return (
             <Layout>
                 <h3>Create Movie and Tickets!</h3>
+                <img width={500} src={`https://ipfs.infura.io/ipfs/${this.state.ipfsHash}`} />
+                <form onSubmit={this.submitToInfura} >
+                    <input type="file" onChange={this.captureImage} />
+                    <input type="submit" />
+                </form>
                 <Form onSubmit={this.onSubmit} error={!!this.state.error}>
                     <Form.Field>
                         <label>Ticket Price</label>
