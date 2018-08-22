@@ -26,9 +26,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "boxoffice": "truffle exec scripts/boxoffice.js --network development",
+    "boxoffice": "truffle exec scripts/boxoffice.js --network ganache",
     "boxoffice-rinkeby": "truffle exec scripts/boxoffice.js --network rinkeby",
-    "oracle": "truffle exec scripts/oracle.js --network development",
+    "oracle": "truffle exec scripts/oracle.js --network ganache",
     "oracle-rinkeby": "truffle exec scripts/oracle.js --network rinkeby",
     "dev": "node server.js",
     "test": "jest scripts/test.js",
