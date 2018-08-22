@@ -12,7 +12,6 @@
     "openzeppelin-solidity": "^1.12.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.2",
     "truffle-contract": "^3.0.6",
     "truffle-hdwallet-provider": "0.0.6",

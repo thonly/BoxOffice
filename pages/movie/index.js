@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Card } from "semantic-ui-react";
-import currentOracle, { Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import { Card, Grid } from "semantic-ui-react";
+import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import Layout from "../../components/Layout";
+import BuyTickets from "../../components/forms/BuyTickets";
 
 class BoxOfficeMovie extends Component {
     static async getInitialProps(props) {
@@ -16,9 +17,12 @@ class BoxOfficeMovie extends Component {
         const title = await movie.name();  
         const filmmaker = await movie.filmmaker();  
         const logline = await movie.logline();  
-        const poster = await movie.poster();        
+        const poster = await movie.poster(); 
+        
+        const accounts = await web3.eth.getAccounts();
+        const tickets = await movie.balanceOf(accounts[0]);
 
-        return { title, filmmaker, logline, poster };
+        return { movie: props.query.address, title, filmmaker, logline, poster, tickets: tickets.toNumber() };
     }
 
     spendTicketButton() {}
@@ -42,13 +46,23 @@ class BoxOfficeMovie extends Component {
     render() {
         return (
             <Layout>
-                <Card
-                    image={this.props.poster}
-                    header={this.props.title}
-                    meta={this.props.filmmaker}
-                    description={this.props.logline}
-                    fluid
-                />
+                <Grid>
+                    <Grid.Column width={10}>
+                        <Card
+                            image={this.props.poster}
+                            header={this.props.title}
+                            meta={this.props.filmmaker}
+                            description={this.props.logline}
+                            fluid
+                        />
+                    </Grid.Column>
+                    <Grid.Column withd={6}>
+                        <h3>Movie Token Details</h3>
+                        <span>Tickets: {this.props.tickets}</span>
+                        <BuyTickets movie={this.props.movie}/>
+                    </Grid.Column>    
+                </Grid>
+                <h3>Withdraw History</h3>
             </Layout>
         );
     }

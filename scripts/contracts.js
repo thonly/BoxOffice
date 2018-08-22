@@ -1,4 +1,4 @@
-import { clientProvider as provider } from "./web3";
+import { clientWeb3 as web3, clientProvider as provider } from "./web3";
 
 const contract = require("truffle-contract");
 const kiitos = require("../build/contracts/HeartBankToken.json");
@@ -37,5 +37,5 @@ const currentOracle = Registry.deployed()
     .then(registry => registry.currentOracle())
     .then(oracle => Oracle.at(oracle));
 
-export default currentOracle;
-export { Kiitos, BoxOffice, Movie };
+export default web3;
+export { currentOracle, Kiitos, BoxOffice, Movie };

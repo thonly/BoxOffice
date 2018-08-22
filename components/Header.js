@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Menu } from "semantic-ui-react";
 import { Link } from "../routes";
-import { clientWeb3 as web3 } from "../scripts/web3";
-import { Kiitos } from "../scripts/contracts";
+import web3, { Kiitos } from "../scripts/contracts";
 
 class Header extends Component {
     constructor(props) {

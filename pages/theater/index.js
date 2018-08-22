@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import currentOracle, { Kiitos, BoxOffice } from "../scripts/contracts";
+import { currentOracle, Kiitos, BoxOffice } from "../scripts/contracts";
 
 class TicketBooth extends Component {
     static async getInitialProps() {

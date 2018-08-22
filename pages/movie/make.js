@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Router } from "../../routes";
 import { Form, Input, Button, Message } from "semantic-ui-react";
 import Layout from "../../components/Layout";
-import { clientWeb3 as web3 } from "../../scripts/web3";
-import currentOracle, { Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 
 class MakeFilm extends Component {
     state = {

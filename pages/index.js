@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import currentOracle, { Kiitos, BoxOffice } from "../scripts/contracts";
+import { currentOracle, Kiitos, BoxOffice } from "../scripts/contracts";
 import { Card, Button } from "semantic-ui-react";
 import { Link } from "../routes";
 import Layout from "../components/Layout";
@@ -20,7 +20,7 @@ class TicketBooth extends Component {
 
     
 
-    shutDownBoxOfficeButton() {}
+    shutDownBoxOfficeButton() {} // show dark background modal to verify
 
     makeFilmPage() {}
 
