@@ -27,14 +27,14 @@ class BoxOfficeTheater extends Component {
     render() {
         return (
             <Layout page="theater">
-                <Embed hd id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" style={{ marginTop: "25px" }} />
+                <Embed hd id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" style={{ marginTop: "30px" }} />
                 
                 <List horizontal floated="right" style={{ marginTop: "8px" }}>
                     <List.Item><Label color="teal" tag>New</Label></List.Item>
                     <List.Item><Label color='orange' tag>Upcoming</Label></List.Item>
                     <List.Item><Label color='red' tag>Featured</Label></List.Item>
                 </List>
-                <Segment raised piled style={{ marginTop: "50px" }}>
+                <Segment padded raised piled style={{ marginTop: "50px" }}>
                     {this.renderAudienceMembers()}
                 </Segment>
             </Layout>
