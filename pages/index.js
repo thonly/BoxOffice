@@ -4,7 +4,7 @@ import { Card, Button, Grid, Icon, Header, Statistic, Sticky, List, Label, Segme
 import { Link } from "../routes";
 import Layout from "../components/Layout";
 
-class TicketBooth extends Component {
+class HeartBankStudio extends Component {
     static async getInitialProps() {
         const kiitos = await Kiitos.deployed();
         const supply = await kiitos.totalSupply();
@@ -108,4 +108,4 @@ class TicketBooth extends Component {
     }
 }
 
-export default TicketBooth;
+export default HeartBankStudio;

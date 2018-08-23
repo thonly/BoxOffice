@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { currentOracle, Kiitos, BoxOffice } from "../scripts/contracts";
+import { Embed, Segment, Header } from "semantic-ui-react";
+import { currentOracle, Kiitos, BoxOffice } from "../../scripts/contracts";
+import Layout from "../../components/Layout";
 
-class TicketBooth extends Component {
+class BoxOfficeTheater extends Component {
     static async getInitialProps() {
         const kiitos = await Kiitos.deployed();
         const supply = await kiitos.totalSupply();
@@ -17,11 +19,19 @@ class TicketBooth extends Component {
 
     renderStageScreen() {} // show trailer // button goes to dark background with movie clip
 
-    renderAudienceMembers() {}
+    renderAudienceMembers() {} 
 
     render() {
-        return <div>{this.props.supply} {this.props.listingFee} {this.props.usdPriceOfEth}</div>;
+        return (
+            <Layout page="theater">
+                <Embed hd id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" style={{ marginTop: "25px" }} />
+                <Header>Audience Members</Header>
+                <Segment>
+                    0x
+                </Segment>
+            </Layout>
+        );
     }
 }
 
-export default TicketBooth;
+export default BoxOfficeTheater;

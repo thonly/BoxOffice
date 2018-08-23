@@ -40,7 +40,7 @@ class Header extends Component {
                 <Menu.Menu position="right">
                     <Popup trigger={<Menu.Item><strong>{this.state.balance} Kiitos</strong></Menu.Item>} content={<span><strong>Your Kiitos coin balance</strong>: {this.state.balance}</span>} />
                     <Popup trigger={<Menu.Item>FREE Airdrop</Menu.Item>} content="Get 100 Kiitos coins for FREE from HeartBank!" />
-                    <Popup trigger={<Menu.Item active><Icon name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
+                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
                 </Menu.Menu>
             );
         } else if (this.props.page === "movie") {
@@ -49,19 +49,39 @@ class Header extends Component {
                     <Menu.Item>Update Movie</Menu.Item>
                     <Menu.Item>Withdraw Fund</Menu.Item>
                     <Popup trigger={<Menu.Item><strong>32 Tickets</strong></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
-                    <Popup trigger={<Menu.Item active><Icon name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
+                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
                 </Menu.Menu>
             );
         } else if (this.props.page === "theater") {
-
+            return (
+                <Menu.Menu position="right">
+                    <Menu.Item color="teal">Spend Ticket</Menu.Item>
+                    <Menu.Item>Watch Movie</Menu.Item>
+                    <Popup trigger={<Menu.Item><strong>32 Tickets</strong></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
+                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
+                </Menu.Menu>
+            );
         }
+    }
+
+    renderStyle() {
+        return <style>
+            {`.rotate {
+                -webkit-transform: rotate(45deg);
+                -moz-transform: rotate(45deg);
+                -o-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                transform: rotate(45deg);
+            }`}
+        </style>;
     }
 
     render() {
         return (
             <Menu style={{marginTop: "20px"}}>
+                {this.renderStyle()}
                 <Menu.Menu position="left">
-                    <Popup trigger={<Menu.Item><Icon name="github alternate" fitted /></Menu.Item>} content="Help contribute to our open source project!" />
+                    <Popup trigger={<Menu.Item><Icon className="rotate" color="red" name="heart" fitted /></Menu.Item>} content="Help contribute to this open source project on GitHub!" />
                     <Link route="/"><a className="item active" title="Go to home page"><h4>HeartBank Studio</h4></a></Link>
                 </Menu.Menu>
                 {this.renderMenu()}
