@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Progress, Grid, Statistic, List, Button, Segment } from "semantic-ui-react";
+import { Progress, Grid, Statistic, List, Button, Segment, Icon } from "semantic-ui-react";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import Layout from "../../components/Layout";
 import BuyTickets from "../../components/forms/BuyTickets";
@@ -71,12 +71,10 @@ class BoxOfficeMovie extends Component {
 
                             <Button.Group fluid style={{ marginTop: "30px"}}>
                                 <BuyTickets movie={this.props.movie}/>
-                                <Button>Watch Movie</Button>
-                                
-                                
+                                <Button color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button>
                             </Button.Group>
                             
-                            <Segment>
+                            <Segment style={{ margin: "20px 0" }}>
                                 <List size="small" horizontal relaxed>
                                     <List.Item>
                                         <List.Content>

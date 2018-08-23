@@ -12,7 +12,7 @@ class Withdrawals extends Component {
 
     async componentDidMount() {
         const boxOffice = await BoxOffice.deployed();
-        boxOffice.FundWithdrawn(null, { fromBlock: 0, toBlock: "latest" }, (err, res) => this.setState({ withdrawals: [...this.state.withdrawals, res.args] }));
+        boxOffice.FundWithdrawn(null, { fromBlock: 0, toBlock: "latest" }, (err, res) => this.setState({ withdrawals: [res.args, ...this.state.withdrawals] }));
     }
 
     renderWithdrawals() {
@@ -31,15 +31,15 @@ class Withdrawals extends Component {
     render() {
         return (
             <div>
-            <Button content="Balance" active label={{ content: "$34,234" }} labelPosition="right" floated="right" />
+                <Button content="Fund Balance" active label={{ content: "$34,234" }} labelPosition="right" floated="right" style={{ marginTop: "-10px" }} />
                 <Header>Withdrawal History</Header>
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Date</Table.HeaderCell>
                             <Table.HeaderCell>Recipient</Table.HeaderCell>
-                            <Table.HeaderCell>Amount</Table.HeaderCell>
-                            <Table.HeaderCell>Expense</Table.HeaderCell>
+                            <Table.HeaderCell>Amount in Ether</Table.HeaderCell>
+                            <Table.HeaderCell>Description of Expense</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>

@@ -51,7 +51,7 @@ class TicketBooth extends Component {
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={10}>
-                            <Header>Film Projects in Development<Label color="teal" horizontal>2</Label></Header>
+                            <Header>Film Projects in Development<Label color="brown" horizontal>2</Label></Header>
                             
                             {this.renderBoxOfficeMovies()}
                         </Grid.Column>
@@ -68,15 +68,15 @@ class TicketBooth extends Component {
                                     <Statistic.Label>Tickets Pre-Sold</Statistic.Label>
                                 </Statistic>
                             </Statistic.Group>
-                            <Statistic.Group widths={1} style={{ marginTop: "20px" }}>
-                                <Statistic color="pink" size="small">
+                            <Statistic.Group widths={1} size="small" style={{ marginTop: "20px" }}>
+                                <Statistic color="pink">
                                     <Statistic.Value>$2,334</Statistic.Value>
                                     <Statistic.Label>Donated to Charity</Statistic.Label>
                                 </Statistic>
                             </Statistic.Group>
 
                             <Segment style={{ margin: "30px 0" }}>
-                            <List divided size="large" relaxed="very" horizontal>
+                            <List size="large" relaxed="very" horizontal>
                                 <List.Item>
                                     <List.Content>
                                         <List.Header>Listing Fee</List.Header>
@@ -97,7 +97,7 @@ class TicketBooth extends Component {
                             </Segment>
                             <Sticky>
                                 <Link route="/movie/make">
-                                    <Button labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="add circle" />Create ERC20 Movie Tickets for your Film!</Button>
+                                    <Button labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Movie Tickets for your Film!</Button>
                                 </Link>
                             </Sticky>
                         </Grid.Column>
