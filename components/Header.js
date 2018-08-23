@@ -34,6 +34,29 @@ class Header extends Component {
     
     airDropButton() {} 
 
+    renderMenu() {
+        if (this.props.page === "studio") {
+            return (
+                <Menu.Menu position="right">
+                    <Popup trigger={<Menu.Item><strong>{this.state.balance} Kiitos</strong></Menu.Item>} content={<span><strong>Your Kiitos coin balance</strong>: {this.state.balance}</span>} />
+                    <Popup trigger={<Menu.Item>FREE Airdrop</Menu.Item>} content="Get 100 Kiitos coins for FREE from HeartBank!" />
+                    <Popup trigger={<Menu.Item active><Icon name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
+                </Menu.Menu>
+            );
+        } else if (this.props.page === "movie") {
+            return (
+                <Menu.Menu position="right">
+                    <Menu.Item>Update Movie</Menu.Item>
+                    <Menu.Item>Withdraw Fund</Menu.Item>
+                    <Popup trigger={<Menu.Item><strong>32 Tickets</strong></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
+                    <Popup trigger={<Menu.Item active><Icon name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
+                </Menu.Menu>
+            );
+        } else if (this.props.page === "theater") {
+
+        }
+    }
+
     render() {
         return (
             <Menu style={{marginTop: "20px"}}>
@@ -41,11 +64,7 @@ class Header extends Component {
                     <Popup trigger={<Menu.Item><Icon name="github alternate" fitted /></Menu.Item>} content="Help contribute to our open source project!" />
                     <Link route="/"><a className="item active" title="Go to home page"><h4>HeartBank Studio</h4></a></Link>
                 </Menu.Menu>
-                <Menu.Menu position="right">
-                    <Popup trigger={<Menu.Item><strong>Kiitos</strong>: {this.state.balance}</Menu.Item>} content={<span><strong>Your Kiitos coin balance</strong>: {this.state.balance}</span>} />
-                    <Popup trigger={<Menu.Item>FREE Airdrop</Menu.Item>} content="Get 100 Kiitos coins for FREE from HeartBank!" />
-                    <Popup trigger={<Menu.Item active><Icon name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
-                </Menu.Menu>
+                {this.renderMenu()}
                 <Modal open={!!this.state.error} basic size="small" centered>
                     <h2>Please install Metamask and connect to the Rinkeby network.</h2>
                     <Modal.Content style={{textAlign: "center"}}>

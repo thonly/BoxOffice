@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Form, Button, Message, Input } from "semantic-ui-react";
+import { Modal, Form, Button, Message, Input, Icon } from "semantic-ui-react";
 import { Router } from "../../routes";
 import web3, { BoxOffice } from "../../scripts/contracts";
 
@@ -37,7 +37,7 @@ class WithdrawFund extends Component {
 
     render() {
         return (
-            <Modal open={this.state.open} trigger={<Button color="green" onClick={event => this.setState({open: true})}>Withdraw Fund!</Button>}>
+            <Modal open={this.state.open} trigger={<Button icon labelPosition="left" color="green" onClick={event => this.setState({open: true})}><Icon name="dollar sign" />Withdraw Fund</Button>}>
                 <Modal.Header>Withdraw Fund!</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>

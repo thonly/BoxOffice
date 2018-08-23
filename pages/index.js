@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { currentOracle, Kiitos, BoxOffice } from "../scripts/contracts";
-import { Card, Button, Grid, Icon, Header, Statistic, Sticky, List } from "semantic-ui-react";
+import { Card, Button, Grid, Icon, Header, Statistic, Sticky, List, Label, Segment } from "semantic-ui-react";
 import { Link } from "../routes";
 import Layout from "../components/Layout";
 
@@ -29,35 +29,30 @@ class TicketBooth extends Component {
     renderBoxOfficeStats() {}
 
     renderBoxOfficeMovies() {
-        const items = this.props.films.map((address, index) => {
-            return {
-                header: <Header color="brown"><Icon name="film" /> {address}</Header>,
-                meta: "ERC20 Token Address",
-                description: "Movie tickets are ERC20 compatible!",
-                extra: (
-                    <Link route={`/movie/${address}`}>
-                        <a><Icon name="ticket" /> Buy Movie Tickets</a>
-                    </Link>
-                ),
-                fluid: true,
-                raised: true,
-                color: "brown",
-                key: index
-                // link: true,
-                // href: "",
-            }
-        });
+        const items = this.props.films.map((address, index) => 
+            <Card color="brown" fluid raised>
+                <Card.Content>
+                    <Label color="brown" ribbon="right">Featured</Label>
+                    <Card.Header style={{ marginTop: "-25px"}}><Header color="brown"><Icon name="film" /> {address}</Header></Card.Header>
+                    <Card.Meta>ERC20 Token Address</Card.Meta>
+                    <Card.Description>Movie tickets are ERC20 compatible!</Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                    <Link route={`/movie/${address}`}><a><Icon name="ticket" /> Buy Movie Tickets</a></Link>
+                </Card.Content>
+            </Card>);
 
-        return <Card.Group items={items} />;
+        return <Card.Group>{items}</Card.Group>;
     }
 
     render() {
         return (
-            <Layout>
+            <Layout page="studio">
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={10}>
-                            <h3>Film Projects in Development (2)</h3>
+                            <Header>Film Projects in Development<Label color="teal" horizontal>2</Label></Header>
+                            
                             {this.renderBoxOfficeMovies()}
                         </Grid.Column>
                         <Grid.Column width={6} textAlign="center" style={{ marginTop: "10px" }}>
@@ -80,7 +75,8 @@ class TicketBooth extends Component {
                                 </Statistic>
                             </Statistic.Group>
 
-                            <List animated size="large" relaxed="very" horizontal style={{ margin: "30px 0" }}>
+                            <Segment style={{ margin: "30px 0" }}>
+                            <List divided size="large" relaxed="very" horizontal>
                                 <List.Item>
                                     <List.Content>
                                         <List.Header>Listing Fee</List.Header>
@@ -98,10 +94,10 @@ class TicketBooth extends Component {
                                     </List.Content>
                                 </List.Item>
                             </List>
-
+                            </Segment>
                             <Sticky>
                                 <Link route="/movie/make">
-                                    <Button size="medium" fluid color="green" as="a" content={<h4>Create ERC20 Movie Tickets for your Film!</h4>} />
+                                    <Button labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="add circle" />Create ERC20 Movie Tickets for your Film!</Button>
                                 </Link>
                             </Sticky>
                         </Grid.Column>

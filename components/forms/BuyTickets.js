@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Form, Input, Message, Button } from "semantic-ui-react";
+import { Modal, Form, Input, Message, Button, Icon } from "semantic-ui-react";
 import { Router } from "../../routes";
 import web3, { BoxOffice } from "../../scripts/contracts";
 
@@ -31,7 +31,7 @@ class BuyTickets extends Component {
 
     render() {
         return (
-            <Modal open={this.state.open} trigger={<Button color="green" onClick={event => this.setState({open: true})}>Buy Tickets!</Button>}>
+            <Modal open={this.state.open} trigger={<Button icon color="green" labelPosition="left" onClick={event => this.setState({open: true})}><Icon name="ticket" />Buy Tickets</Button>}>
                 <Modal.Header>Buy Tickets!</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>

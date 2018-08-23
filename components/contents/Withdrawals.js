@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table } from "semantic-ui-react";
+import { Table, Button, Header } from "semantic-ui-react";
 import web3, { BoxOffice } from "../../scripts/contracts";
 
 class Withdrawals extends Component {
@@ -29,22 +29,22 @@ class Withdrawals extends Component {
     }
 
     render() {
-        const { Header, Row, HeaderCell, Body } = Table;
         return (
             <div>
-                <h3>Withdrawal History (Balance: $34,034)</h3>
-                <Table>
-                    <Header>
-                        <Row>
-                            <HeaderCell>Date</HeaderCell>
-                            <HeaderCell>Recipient</HeaderCell>
-                            <HeaderCell>Amount</HeaderCell>
-                            <HeaderCell>Expense</HeaderCell>
-                        </Row>
-                    </Header>
-                    <Body>
+            <Button content="Balance" active label={{ content: "$34,234" }} labelPosition="right" floated="right" />
+                <Header>Withdrawal History</Header>
+                <Table celled>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Date</Table.HeaderCell>
+                            <Table.HeaderCell>Recipient</Table.HeaderCell>
+                            <Table.HeaderCell>Amount</Table.HeaderCell>
+                            <Table.HeaderCell>Expense</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
                         {this.renderWithdrawals()}
-                    </Body>
+                    </Table.Body>
                 </Table>
             </div>
         );
