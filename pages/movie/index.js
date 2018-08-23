@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Card, Grid } from "semantic-ui-react";
+import { Progress, Grid, Statistic, List } from "semantic-ui-react";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import Layout from "../../components/Layout";
 import BuyTickets from "../../components/forms/BuyTickets";
@@ -34,11 +34,61 @@ class BoxOfficeMovie extends Component {
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={10}>
+                            
                             <MovieDetails {...this.props} />
+                            
+
+                            <List animated size="small" horizontal>
+                                <List.Item>
+                                    <List.Content>
+                                        <List.Header>Listing Fee</List.Header>
+                                        <List.Description>
+                                            2 Kiitos
+                                        </List.Description>
+                                    </List.Content>
+                                </List.Item>
+                                <List.Item>
+                                    <List.Content>
+                                        <List.Header>Total Ticket Supply</List.Header>
+                                        <List.Description>
+                                            {this.props.tickets}
+                                        </List.Description>
+                                    </List.Content>
+                                </List.Item>
+                            </List>
+                            <Progress color="yellow" percent={44} progress />
+
                         </Grid.Column>
-                        <Grid.Column width={6}>
-                            <h3>Token Details</h3>
-                            <span>Tickets: {this.props.tickets}</span>
+                        <Grid.Column width={6} textAlign="center">
+                        <Statistic.Group size="small" widths={2}>
+                            <Statistic color="blue" size="small">
+                                <Statistic.Value>$43,000</Statistic.Value>
+                                <Statistic.Label>Crowd Funded</Statistic.Label>
+                            </Statistic>
+                            <Statistic color="orange">
+                                <Statistic.Value>1,300</Statistic.Value>
+                                <Statistic.Label>Tickets Pre-Sold</Statistic.Label>
+                            </Statistic>
+                            </Statistic.Group>
+                            <Statistic.Group size="tiny" widths={2}>
+                            <Statistic color="purple" style={{ marginTop: "20px" }}>
+                                <Statistic.Value>$2</Statistic.Value>
+                                <Statistic.Label>Ticket Price</Statistic.Label>
+                            </Statistic>
+                            <Statistic color="olive" style={{ marginTop: "20px" }}>
+                                <Statistic.Value>425</Statistic.Value>
+                                <Statistic.Label>Tickets Available</Statistic.Label>
+                            </Statistic>
+                            </Statistic.Group>
+                            <Statistic.Group size="small" widths={1}>
+                            <Statistic color="red" style={{ marginTop: "20px" }}>
+                                <Statistic.Value>Dec 18</Statistic.Value>
+                                <Statistic.Label>Sales Ends On</Statistic.Label>
+                            </Statistic>
+                            </Statistic.Group>
+
+                            
+
                         </Grid.Column>   
                     </Grid.Row> 
                     <Grid.Row>

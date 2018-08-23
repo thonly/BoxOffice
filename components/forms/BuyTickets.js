@@ -31,7 +31,7 @@ class BuyTickets extends Component {
 
     render() {
         return (
-            <Modal open={this.state.open} trigger={<Button onClick={event => this.setState({open: true})}>Buy Tickets!</Button>}>
+            <Modal open={this.state.open} trigger={<Button color="green" onClick={event => this.setState({open: true})}>Buy Tickets!</Button>}>
                 <Modal.Header>Buy Tickets!</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>

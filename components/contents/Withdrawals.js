@@ -32,7 +32,7 @@ class Withdrawals extends Component {
         const { Header, Row, HeaderCell, Body } = Table;
         return (
             <div>
-                <h3>Withdrawal History</h3>
+                <h3>Withdrawal History (Balance: $34,034)</h3>
                 <Table>
                     <Header>
                         <Row>

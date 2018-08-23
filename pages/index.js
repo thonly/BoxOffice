@@ -61,18 +61,25 @@ class TicketBooth extends Component {
                             {this.renderBoxOfficeMovies()}
                         </Grid.Column>
                         <Grid.Column width={6} textAlign="center" style={{ marginTop: "10px" }}>
-                            <Statistic color="blue">
-                                <Statistic.Value>$133,000</Statistic.Value>
-                                <Statistic.Label>Crowd Funded</Statistic.Label>
-                            </Statistic>
-                            <Statistic color="orange">
-                                <Statistic.Value>31,200</Statistic.Value>
-                                <Statistic.Label>Tickets Pre-Sold</Statistic.Label>
-                            </Statistic>
-                            <Statistic color="pink" size="small" style={{ marginTop: "20px" }}>
-                                <Statistic.Value>$2,334</Statistic.Value>
-                                <Statistic.Label>Donated to Charity</Statistic.Label>
-                            </Statistic>
+                            <Statistic.Group widths={1}>
+                                <Statistic color="blue">
+                                    <Statistic.Value>$133,000</Statistic.Value>
+                                    <Statistic.Label>Crowd Funded</Statistic.Label>
+                                </Statistic>
+                            </Statistic.Group>
+                            <Statistic.Group widths={1} style={{ marginTop: "20px" }}>
+                                <Statistic color="orange">
+                                    <Statistic.Value>31,200</Statistic.Value>
+                                    <Statistic.Label>Tickets Pre-Sold</Statistic.Label>
+                                </Statistic>
+                            </Statistic.Group>
+                            <Statistic.Group widths={1} style={{ marginTop: "20px" }}>
+                                <Statistic color="pink" size="small">
+                                    <Statistic.Value>$2,334</Statistic.Value>
+                                    <Statistic.Label>Donated to Charity</Statistic.Label>
+                                </Statistic>
+                            </Statistic.Group>
+
                             <List animated size="large" relaxed="very" horizontal style={{ margin: "30px 0" }}>
                                 <List.Item>
                                     <List.Content>
