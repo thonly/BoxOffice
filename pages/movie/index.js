@@ -74,7 +74,7 @@ class BoxOfficeMovie extends Component {
                                 <Button color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button>
                             </Button.Group>
                             
-                            <Segment style={{ margin: "20px 0" }}>
+                            <Segment piled raised style={{ margin: "30px 0" }}>
                                 <List size="small" horizontal relaxed>
                                     <List.Item>
                                         <List.Content>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Icon, Popup, Modal, Button } from "semantic-ui-react";
+import { Menu, Icon, Popup, Modal, Button, Embed, Label } from "semantic-ui-react";
 import { Link } from "../routes";
 import web3, { Kiitos } from "../scripts/contracts";
 
@@ -39,7 +39,7 @@ class Header extends Component {
             return (
                 <Menu.Menu position="right">
                     <Popup trigger={<Menu.Item><strong>{this.state.balance} Kiitos</strong></Menu.Item>} content={<span><strong>Your Kiitos coin balance</strong>: {this.state.balance}</span>} />
-                    <Popup trigger={<Menu.Item>FREE Airdrop</Menu.Item>} content="Get 100 Kiitos coins for FREE from HeartBank!" />
+                    <Popup trigger={<Menu.Item><Icon name="fly" /> FREE Airdrop<Label color="purple" floating>100</Label></Menu.Item>} content="Get 100 Kiitos coins for FREE from HeartBank!" />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
                 </Menu.Menu>
             );
@@ -48,7 +48,7 @@ class Header extends Component {
                 <Menu.Menu position="right">
                     <Menu.Item>Update Movie</Menu.Item>
                     <Menu.Item>Withdraw Fund</Menu.Item>
-                    <Popup trigger={<Menu.Item><strong>32 Tickets</strong></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
+                    <Popup trigger={<Menu.Item><Icon name="ticket" /> CSB Tickets<Label color="purple" floating>22</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
                 </Menu.Menu>
             );
@@ -56,8 +56,12 @@ class Header extends Component {
             return (
                 <Menu.Menu position="right">
                     <Menu.Item color="teal">Spend Ticket</Menu.Item>
-                    <Menu.Item>Watch Movie</Menu.Item>
-                    <Popup trigger={<Menu.Item><strong>32 Tickets</strong></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
+
+                    <Modal trigger={<Menu.Item>Watch Movie</Menu.Item>} size="fullscreen" dimmer="blurring" basic centered>
+                        <Modal.Content><Embed hd autoplay id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" /></Modal.Content>
+                    </Modal>
+
+                    <Popup trigger={<Menu.Item><Icon name="users" /> Audience<Label color="purple" floating>22</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address on {this.state.network} network</strong>: {this.state.account}</span>} />
                 </Menu.Menu>
             );

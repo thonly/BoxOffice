@@ -75,7 +75,7 @@ class HeartBankStudio extends Component {
                                 </Statistic>
                             </Statistic.Group>
 
-                            <Segment style={{ margin: "30px 0" }}>
+                            <Segment raised piled style={{ margin: "30px 0" }}>
                             <List size="large" relaxed="very" horizontal>
                                 <List.Item>
                                     <List.Content>
@@ -97,7 +97,7 @@ class HeartBankStudio extends Component {
                             </Segment>
                             <Sticky>
                                 <Link route="/movie/make">
-                                    <Button labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Movie Tickets for your Film!</Button>
+                                    <Button labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Tickets for your Film!</Button>
                                 </Link>
                             </Sticky>
                         </Grid.Column>
