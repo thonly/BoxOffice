@@ -15,7 +15,12 @@ class HeartBankStudio extends Component {
         const oracle = await currentOracle;
         const usdPriceOfEth = await oracle.usdPriceOfEth();
 
+        //const balance = await kiitos.balanceOf(accounts[0]);
+        //this.setState({ account: accounts[0], balance: balance.toNumber().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") });
+
         const films = await boxOffice.getFilms();
+
+        //todo: try catch to show empty page if not connected to right network bc no deployed contracts!!
 
         return { films };
     }
@@ -28,7 +33,7 @@ class HeartBankStudio extends Component {
 
     render() {
         return (
-            <Layout page="studio">
+            <Layout page="studio" movie={null}>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={10}>

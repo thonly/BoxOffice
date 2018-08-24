@@ -10,7 +10,7 @@ export default props => {
             <Head>
                 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css"></link>
             </Head>
-            <Header page={props.page} />
+            <Header {...props} />
             {props.children}
             <Footer/>
         </Container>

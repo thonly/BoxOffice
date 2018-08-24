@@ -8,7 +8,7 @@ export default ({ movie, filmmaker, title, logline, poster }) =>
             <Label color="brown" corner="left"><Icon name="hotjar" /></Label>
             <Card.Header><Header color="brown">{title}</Header></Card.Header>
             <Card.Meta>{movie}</Card.Meta>
-            <Card.Description><em>{logline}</em><p style={{ fontSize: "x-small", marginTop: "10px" }}>{filmmaker}</p></Card.Description>
+            <Card.Description><em>{logline}</em><p style={{ fontSize: "x-small", marginTop: "15px" }}>{filmmaker}</p></Card.Description>
         </Card.Content>
         <Card.Content extra>
             <strong>Crowd Saled On</strong>: June 2, 2018

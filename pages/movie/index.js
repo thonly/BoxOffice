@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Progress, Grid, Button, Icon } from "semantic-ui-react";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import { Link } from "../../routes";
 import Layout from "../../components/Layout";
 import MovieDetails from "../../components/contents/MovieDetails";
 import MovieStats from "../../components/contents/MovieStats";
@@ -42,7 +43,7 @@ class BoxOfficeMovie extends Component {
 
     render() {
         return (
-            <Layout page="movie">
+            <Layout page="movie" movie={this.props.movie}>
                 <Grid style={{ marginTop: "20px" }}>
                     <Grid.Row>
                         <Grid.Column width={7}>   
@@ -52,7 +53,7 @@ class BoxOfficeMovie extends Component {
                             <MovieStats />
                             <Button.Group fluid style={{ marginTop: "30px"}}>
                                 <BuyTickets movie={this.props.movie}/>
-                                <Button color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button>
+                                <Link route={`/theater/${this.props.movie}`}><Button color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
                             </Button.Group>
                             <TokenDetails />
                             <Progress color="yellow" percent={34} progress />
