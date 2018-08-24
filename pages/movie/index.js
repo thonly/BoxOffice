@@ -34,10 +34,10 @@ class BoxOfficeMovie extends Component {
 
     state = {
         withdrawals: [],
-        loading: false
+        dimmed: false
     };
 
-    dimPage = () => this.setState({ loading: true });
+    dimPage = () => this.setState({ dimmed: true });
 
     async componentDidMount() {
         const boxOffice = await BoxOffice.deployed();
@@ -46,9 +46,9 @@ class BoxOfficeMovie extends Component {
 
     render() {
         return (
-            <Dimmer.Dimmable blurring={this.state.loading} dimmed>
+            <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
                 <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage}>
-                    <Dimmer active={this.state.loading} page>
+                    <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Page loading</Loader>
                     </Dimmer>
                     <Grid style={{ marginTop: "20px" }}>

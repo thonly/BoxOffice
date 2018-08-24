@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Router } from "../../routes";
-import { Form, Input, Button, Message } from "semantic-ui-react";
+import { Form, Input, Button, Message, Dimmer, Loader, Step, Icon } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import ipfs from "../../scripts/ipfs";
@@ -18,8 +18,11 @@ class MakeFilm extends Component {
         buffer: null,
         ipfsHash: "",
         loading: false,
-        error: ""
+        error: "",
+        dimmed: false
     };
+
+    dimPage = () => this.setState({ dimmed: true });
 
     captureImage = event => {
         event.preventDefault();
@@ -69,27 +72,57 @@ class MakeFilm extends Component {
 
     render() {
         return (
-            <Layout>
-                <h3>Create Movie and Tickets!</h3>
-                <img width={500} src={`https://ipfs.infura.io/ipfs/${this.state.ipfsHash}`} />
-                <form onSubmit={this.submitToInfura} >
-                    <input type="file" onChange={this.captureImage} />
-                    <input type="submit" />
-                </form>
-                <Form onSubmit={this.onSubmit} error={!!this.state.error}>
-                    <Form.Field>
-                        <label>Ticket Price</label>
-                        <Input 
-                            label="wei" 
-                            labelPosition="right" 
-                            value={this.props.price}
-                            onChange={event => this.setState({ price: event.target.value })}
-                        />
-                        <Message error header="Oops!" content={this.state.error} />
-                        <Button loading={this.state.loading} primary >Create!</Button>
-                    </Form.Field>
-                </Form>
-            </Layout>
+            <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
+                <Layout page="studio" movie={null} dimPage={this.dimPage}>
+                    <Dimmer active={this.state.dimmed} page>
+                        <Loader size="massive" >Page loading</Loader>
+                    </Dimmer>
+
+                    <Step.Group fluid>
+                        <Step active>
+                        <Icon name='truck' />
+                        <Step.Content>
+                            <Step.Title>Support HeartBank</Step.Title>
+                            <Step.Description>Get Kiitos Coins</Step.Description>
+                        </Step.Content>
+                        </Step>
+                        <Step>
+                        <Icon name='payment' />
+                        <Step.Content>
+                            <Step.Title>Describe Film Project</Step.Title>
+                            <Step.Description>Enter Film Project Info</Step.Description>
+                        </Step.Content>
+                        </Step>
+                        <Step>
+                        <Icon name='info' />
+                        <Step.Content>
+                            <Step.Title>Create Movie Tickets</Step.Title>
+                            <Step.Description>Enter ERC20 Token Info</Step.Description>
+                        </Step.Content>
+                        </Step>
+                    </Step.Group>
+
+                    <h3>Create Movie and Tickets!</h3>
+                    <img width={500} src={`https://ipfs.infura.io/ipfs/${this.state.ipfsHash}`} />
+                    <form onSubmit={this.submitToInfura} >
+                        <input type="file" onChange={this.captureImage} />
+                        <input type="submit" />
+                    </form>
+                    <Form onSubmit={this.onSubmit} error={!!this.state.error}>
+                        <Form.Field>
+                            <label>Ticket Price</label>
+                            <Input 
+                                label="wei" 
+                                labelPosition="right" 
+                                value={this.props.price}
+                                onChange={event => this.setState({ price: event.target.value })}
+                            />
+                            <Message error header="Oops!" content={this.state.error} />
+                            <Button loading={this.state.loading} primary >Create!</Button>
+                        </Form.Field>
+                    </Form>
+                </Layout>
+            </Dimmer.Dimmable>
         );
     }
 }

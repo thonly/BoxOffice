@@ -26,16 +26,16 @@ class HeartBankStudio extends Component {
     }
     
     state = {
-        loading: false
+        dimmed: false
     };
 
-    dimPage = () => this.setState({ loading: true });
+    dimPage = () => this.setState({ dimmed: true });
 
     render() {
         return (
-            <Dimmer.Dimmable blurring={this.state.loading} dimmed>
+            <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
                 <Layout page="studio" movie={null} dimPage={this.dimPage}>
-                    <Dimmer active={this.state.loading} page>
+                    <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Page loading</Loader>
                     </Dimmer>
                     <Grid>
