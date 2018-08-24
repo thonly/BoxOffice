@@ -16,7 +16,7 @@ const renderFilms = films => {
                 </Card.Content>
             </Card>);
         return <Card.Group>{items}</Card.Group>;
-}
+};
 
 export default ({ films }) => 
     <Container>

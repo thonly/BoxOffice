@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Progress, Grid, Statistic, List, Button, Segment, Icon } from "semantic-ui-react";
+import { Progress, Grid, Button, Icon } from "semantic-ui-react";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import Layout from "../../components/Layout";
+import MovieDetails from "../../components/contents/MovieDetails";
+import MovieStats from "../../components/contents/MovieStats";
+import TokenDetails from "../../components/contents/TokenDetails";
 import BuyTickets from "../../components/forms/BuyTickets";
 import Withdrawals from "../../components/contents/Withdrawals";
-import WithdrawFund from "../../components/forms/WithdrawFund";
-import MovieDetails from "../../components/contents/MovieDetails";
 
 class BoxOfficeMovie extends Component {
     static async getInitialProps(props) {
@@ -17,15 +18,26 @@ class BoxOfficeMovie extends Component {
         const usdPriceOfEth = await oracle.usdPriceOfEth();
 
         const movie = await Movie.at(props.query.movie);
-        const title = await movie.name();  
-        const filmmaker = await movie.filmmaker();  
-        const logline = await movie.logline();  
-        const poster = await movie.poster(); 
+        const film = {
+            filmmaker: await movie.filmmaker(),
+            title: await movie.name(),
+            logline: await movie.logline(),
+            poster: await movie.poster()
+        };
         
         const accounts = await web3.eth.getAccounts();
         const tickets = await movie.balanceOf(accounts[0]);
 
-        return { movie: props.query.movie, title, filmmaker, logline, poster, tickets: tickets.toNumber() };
+        return { movie: props.query.movie, film, tickets: tickets.toNumber() };
+    }
+
+    state = {
+        withdrawals: [],
+    };
+
+    async componentDidMount() {
+        const boxOffice = await BoxOffice.deployed();
+        boxOffice.FundWithdrawn(null, { fromBlock: 0, toBlock: "latest" }, (err, res) => this.setState({ withdrawals: [res.args, ...this.state.withdrawals] }));
     }
 
     render() {
@@ -33,96 +45,25 @@ class BoxOfficeMovie extends Component {
             <Layout page="movie">
                 <Grid style={{ marginTop: "20px" }}>
                     <Grid.Row>
-                        <Grid.Column width={7}>
-                            
-                            <MovieDetails {...this.props} />
-                            
-
-                           
-
+                        <Grid.Column width={7}>   
+                            <MovieDetails movie={this.props.movie} {...this.props.film} />
                         </Grid.Column>
                         <Grid.Column width={9} textAlign="center">
-                            <Statistic.Group size="small" widths={2}>
-                                <Statistic color="blue" size="small">
-                                    <Statistic.Value>$43,000</Statistic.Value>
-                                    <Statistic.Label>Crowd Funded</Statistic.Label>
-                                </Statistic>
-                                <Statistic color="orange">
-                                    <Statistic.Value>1,300</Statistic.Value>
-                                    <Statistic.Label>Tickets Pre-Sold</Statistic.Label>
-                                </Statistic>
-                            </Statistic.Group>
-                            <Statistic.Group size="tiny" widths={2}>
-                                <Statistic color="purple" style={{ marginTop: "20px" }}>
-                                    <Statistic.Value>$2</Statistic.Value>
-                                    <Statistic.Label>Ticket Price</Statistic.Label>
-                                </Statistic>
-                                <Statistic color="olive" style={{ marginTop: "20px" }}>
-                                    <Statistic.Value>425</Statistic.Value>
-                                    <Statistic.Label>Tickets Available</Statistic.Label>
-                                </Statistic>
-                            </Statistic.Group>
-                            <Statistic.Group size="small" widths={1}>
-                                <Statistic color="red" style={{ marginTop: "20px" }}>
-                                    <Statistic.Value>10 Days</Statistic.Value>
-                                    <Statistic.Label>Sales Ends In</Statistic.Label>
-                                </Statistic>
-                            </Statistic.Group>
-
+                            <MovieStats />
                             <Button.Group fluid style={{ marginTop: "30px"}}>
                                 <BuyTickets movie={this.props.movie}/>
                                 <Button color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button>
                             </Button.Group>
-                            
-                            <Segment piled raised style={{ margin: "30px 0" }}>
-                                <List size="small" horizontal relaxed>
-                                    <List.Item>
-                                        <List.Content>
-                                            <List.Header>Token Symbol</List.Header>
-                                            <List.Description>
-                                                CSB
-                                            </List.Description>
-                                        </List.Content>
-                                    </List.Item>
-                                    <List.Item>
-                                        <List.Content>
-                                            <List.Header>Total Available</List.Header>
-                                            <List.Description>
-                                                3,243,234
-                                            </List.Description>
-                                        </List.Content>
-                                    </List.Item>
-                                    <List.Item>
-                                        <List.Content>
-                                            <List.Header>Total Supply</List.Header>
-                                            <List.Description>
-                                                1,000,000
-                                            </List.Description>
-                                        </List.Content>
-                                    </List.Item>
-                                    <List.Item>
-                                        <List.Content>
-                                            <List.Header>Funding Goal</List.Header>
-                                            <List.Description>
-                                                $4,354,235
-                                            </List.Description>
-                                        </List.Content>
-                                    </List.Item>
-                                </List>
-                            </Segment>
+                            <TokenDetails />
                             <Progress color="yellow" percent={34} progress />
-                            
-
                         </Grid.Column>   
-                    </Grid.Row> 
-                   
+                    </Grid.Row>      
                     <Grid.Row>
                         <Grid.Column width={16}>
-                            <Withdrawals movie={this.props.movie} />
+                            <Withdrawals movie={this.props.movie} withdrawals={this.state.withdrawals} />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                
             </Layout>
         );
     }
