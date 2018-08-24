@@ -4,6 +4,11 @@ import Head from "next/head";
 import Header from "./Header";
 import Footer from "./Footer";
 
+// todo: for admin functions use sidebar
+// updateFees() {}  
+// withdrawBoxOffice() {}
+// shutDownBoxOffice() {}
+
 export default props => {
     return (
         <Container>

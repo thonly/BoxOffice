@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Progress, Grid, Button, Icon } from "semantic-ui-react";
+import { Progress, Grid, Button, Icon, Dimmer, Loader } from "semantic-ui-react";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import { Link } from "../../routes";
 import Layout from "../../components/Layout";
@@ -34,7 +34,10 @@ class BoxOfficeMovie extends Component {
 
     state = {
         withdrawals: [],
+        loading: false
     };
+
+    dimPage = () => this.setState({ loading: true });
 
     async componentDidMount() {
         const boxOffice = await BoxOffice.deployed();
@@ -43,29 +46,34 @@ class BoxOfficeMovie extends Component {
 
     render() {
         return (
-            <Layout page="movie" movie={this.props.movie}>
-                <Grid style={{ marginTop: "20px" }}>
-                    <Grid.Row>
-                        <Grid.Column width={7}>   
-                            <MovieDetails movie={this.props.movie} {...this.props.film} />
-                        </Grid.Column>
-                        <Grid.Column width={9} textAlign="center">
-                            <MovieStats />
-                            <Button.Group fluid style={{ marginTop: "30px"}}>
-                                <BuyTickets movie={this.props.movie}/>
-                                <Link route={`/theater/${this.props.movie}`}><Button color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
-                            </Button.Group>
-                            <TokenDetails />
-                            <Progress color="yellow" percent={34} progress />
-                        </Grid.Column>   
-                    </Grid.Row>      
-                    <Grid.Row>
-                        <Grid.Column width={16}>
-                            <Withdrawals movie={this.props.movie} withdrawals={this.state.withdrawals} />
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Layout>
+            <Dimmer.Dimmable blurring={this.state.loading} dimmed>
+                <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage}>
+                    <Dimmer active={this.state.loading} page>
+                        <Loader size="massive" >Page loading</Loader>
+                    </Dimmer>
+                    <Grid style={{ marginTop: "20px" }}>
+                        <Grid.Row>
+                            <Grid.Column width={7}>   
+                                <MovieDetails movie={this.props.movie} {...this.props.film} />
+                            </Grid.Column>
+                            <Grid.Column width={9} textAlign="center">
+                                <MovieStats />
+                                <Button.Group fluid style={{ marginTop: "30px"}}>
+                                    <BuyTickets movie={this.props.movie}/>
+                                    <Link route={`/theater/${this.props.movie}`}><Button onClick={event => this.dimPage()} color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
+                                </Button.Group>
+                                <TokenDetails />
+                                <Progress color="yellow" percent={34} progress />
+                            </Grid.Column>   
+                        </Grid.Row>      
+                        <Grid.Row>
+                            <Grid.Column width={16}>
+                                <Withdrawals movie={this.props.movie} withdrawals={this.state.withdrawals} />
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Layout>
+            </Dimmer.Dimmable>
         );
     }
 }

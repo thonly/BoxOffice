@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Grid, Icon, Sticky } from "semantic-ui-react";
+import { Button, Grid, Icon, Sticky, Dimmer, Loader } from "semantic-ui-react";
 import { currentOracle, Kiitos, BoxOffice } from "../scripts/contracts";
 import { Link } from "../routes";
 import Layout from "../components/Layout";
@@ -24,32 +24,37 @@ class HeartBankStudio extends Component {
 
         return { films };
     }
+    
+    state = {
+        loading: false
+    };
 
-    updateFees() {}
-
-    withdrawBoxOffice() {}
-
-    shutDownBoxOffice() {} 
+    dimPage = () => this.setState({ loading: true });
 
     render() {
         return (
-            <Layout page="studio" movie={null}>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={10}>
-                            <BoxOfficeMovies films={this.props.films} />
-                        </Grid.Column>
-                        <Grid.Column width={6} textAlign="center" style={{ marginTop: "10px" }}>
-                            <BoxOfficeStats />
-                            <Sticky>
-                                <Link route="/movie/make">
-                                    <Button labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Tickets for your Film!</Button>
-                                </Link>
-                            </Sticky>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Layout>
+            <Dimmer.Dimmable blurring={this.state.loading} dimmed>
+                <Layout page="studio" movie={null} dimPage={this.dimPage}>
+                    <Dimmer active={this.state.loading} page>
+                        <Loader size="massive" >Page loading</Loader>
+                    </Dimmer>
+                    <Grid>
+                        <Grid.Row>
+                            <Grid.Column width={10}>
+                                <BoxOfficeMovies films={this.props.films} dimPage={this.dimPage} />
+                            </Grid.Column>
+                            <Grid.Column width={6} textAlign="center" style={{ marginTop: "10px" }}>
+                                <BoxOfficeStats />
+                                <Sticky>
+                                    <Link route="/movie/make">
+                                        <Button onClick={event => this.setState({ loading: true })} labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Tickets for your Film!</Button>
+                                    </Link>
+                                </Sticky>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Layout>
+            </Dimmer.Dimmable>
         );
     }
 }

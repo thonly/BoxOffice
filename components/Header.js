@@ -26,11 +26,9 @@ class Header extends Component {
             return (
                 <Menu.Menu position="right">
                     <Menu.Item color="teal">Spend Ticket</Menu.Item>
-
                     <Modal trigger={<Menu.Item>Watch Movie</Menu.Item>} size="fullscreen" dimmer="blurring" basic centered>
                         <Modal.Content><Embed hd autoplay id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" /></Modal.Content>
                     </Modal>
-
                     <Popup trigger={<Menu.Item><Icon name="users" /> Audience<Label color="purple" floating>22</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address</strong>: 0x0</span>} />
                 </Menu.Menu>
@@ -52,14 +50,14 @@ class Header extends Component {
 
     render() {
         return (
-            <Menu style={{marginTop: "20px"}}>
+            <Menu style={{margin: "20px 0"}}>
                 {this.renderStyle()}
                 <Menu.Menu position="left">
-                    <Popup trigger={<Menu.Item><Icon className="rotate" color="red" name="heart" fitted /></Menu.Item>} content="Help contribute to this open source project on GitHub!" />
-                    <Link route="/"><Menu.Item active title="Go to home page"><h4>HeartBank Studio</h4></Menu.Item></Link>    
+                    <Popup trigger={<Menu.Item onClick={event => {document.location = "https://github.com/HeartBankStudio/BoxOffice"; this.props.dimPage()}}><Icon className="rotate" color="red" name="heart" fitted /></Menu.Item>} content="Help contribute to this open source project on GitHub!" />
+                    <Link route="/"><Menu.Item active title="Go to home page" onClick={event => {if (this.props.page !== "studio") this.props.dimPage()}}><h4>HeartBank Studio</h4></Menu.Item></Link>    
                 </Menu.Menu>
                 {this.renderMenu()}
-            </Menu>                
+            </Menu>
         );
     }
 }

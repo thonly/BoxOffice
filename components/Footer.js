@@ -9,7 +9,7 @@ class Footer extends Component {
         network: null
     };
 
-    async componentDidMount() {
+    async componentDidMount() { // to fix: causes warning 
         if (typeof web3.currentProvider !== "undefined")
             this.setState({ network: await web3.eth.net.getNetworkType() });
     }
