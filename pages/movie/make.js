@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Router } from "../../routes";
-import { Form, Input, Button, Message, Dimmer, Loader, Step, Icon } from "semantic-ui-react";
+import { Form, Input, Button, Message, Dimmer, Loader, Step, Icon, Label } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import ipfs from "../../scripts/ipfs";
@@ -24,24 +24,22 @@ class MakeFilm extends Component {
 
     dimPage = () => this.setState({ dimmed: true });
 
-    captureImage = event => {
+    submitToInfura = event => {
         event.preventDefault();
+        this.setState({ dimmed: true });
         const image = event.target.files[0];
         const reader = new window.FileReader();
         reader.readAsArrayBuffer(image);
-        reader.onloadend = () => this.setState({ buffer: Buffer(reader.result) });
-    };
-
-    submitToInfura = event => {
-        event.preventDefault();
-        ipfs.files.add(this.state.buffer, (err, res) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                this.setState({ ipfsHash: res[0].hash });
-                console.log(this.state.ipfsHash);
-            }
-        });
+        reader.onloadend = () => {
+            ipfs.files.add(Buffer(reader.result), (err, res) => {
+                if (err) {
+                    this.setState({ error: err.message });
+                } else {
+                    this.setState({ ipfsHash: res[0].hash });
+                }
+                this.setState({ dimmed: false });
+            });
+        };     
     };
 
     onSubmit = async event => {
@@ -78,36 +76,39 @@ class MakeFilm extends Component {
                         <Loader size="massive" >Page loading</Loader>
                     </Dimmer>
 
-                    <Step.Group fluid>
-                        <Step active>
-                        <Icon name='truck' />
+                    <Step.Group fluid size="small">
+                        <Step>
+                        <Icon name="heart outline" color="red" />
                         <Step.Content>
-                            <Step.Title>Support HeartBank</Step.Title>
-                            <Step.Description>Get Kiitos Coins</Step.Description>
+                            <Step.Title>Support <span style={{ margin: "0 -2px 0 0" }}>Heart</span><Icon className="rotate" color="green" name="heart" fitted /><span style={{ margin: "0 0 0 1px" }}>ank</span></Step.Title>
+                            <Step.Description>Buy Kiitos Coins</Step.Description>
                         </Step.Content>
                         </Step>
                         <Step>
-                        <Icon name='payment' />
+                        <Icon name="film" color="red" />
                         <Step.Content>
                             <Step.Title>Describe Film Project</Step.Title>
-                            <Step.Description>Enter Film Project Info</Step.Description>
+                            <Step.Description>Enter Movie Details</Step.Description>
                         </Step.Content>
                         </Step>
                         <Step>
-                        <Icon name='info' />
+                        <Icon name="ticket" color="red" />
                         <Step.Content>
                             <Step.Title>Create Movie Tickets</Step.Title>
-                            <Step.Description>Enter ERC20 Token Info</Step.Description>
+                            <Step.Description>Enter ERC20 Token Details</Step.Description>
                         </Step.Content>
                         </Step>
                     </Step.Group>
 
-                    <h3>Create Movie and Tickets!</h3>
-                    <img width={500} src={`https://ipfs.infura.io/ipfs/${this.state.ipfsHash}`} />
-                    <form onSubmit={this.submitToInfura} >
-                        <input type="file" onChange={this.captureImage} />
-                        <input type="submit" />
-                    </form>
+                    
+
+                    <img width={500} src={this.state.ipfsHash && `https://ipfs.infura.io/ipfs/${this.state.ipfsHash}`} />
+                        <Label as="label" htmlFor="file" size="big">
+                            <Icon name="file" />Upload Poster to IPFS
+                        </Label>
+                        <input id="file" hidden type="file" onChange={this.submitToInfura} />
+                        
+
                     <Form onSubmit={this.onSubmit} error={!!this.state.error}>
                         <Form.Field>
                             <label>Ticket Price</label>
