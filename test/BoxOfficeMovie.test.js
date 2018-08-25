@@ -2,7 +2,7 @@ const BoxOffice = artifacts.require("BoxOffice.sol");
 const Movie = artifacts.require("BoxOfficeMovie.sol");
 const SALES_END_TIME = Date.now()/1000 + 28*60*60*24 | 0;
 
-contract('BoxOffice Movie', accounts => {
+contract.skip('BoxOffice Movie', accounts => {
 
   const owner = accounts[0];
   let movie;

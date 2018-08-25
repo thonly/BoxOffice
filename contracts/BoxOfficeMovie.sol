@@ -12,7 +12,8 @@ contract BoxOfficeMovie is StandardToken {
     address public filmmaker;
     
     uint public createdTime;
-    uint public salesEndTime;
+    uint public salesEndDate;
+    uint public availableTickets;
     uint public price;
     uint public sales;
     uint public fund;
@@ -24,7 +25,8 @@ contract BoxOfficeMovie is StandardToken {
     address[] public members;
     
     event FilmUpdated(
-        uint salesEndTime,
+        uint salesEndDate,
+        uint availableTickets,
         uint price,
         string movieName,
         string ticketSymbol,
@@ -54,7 +56,8 @@ contract BoxOfficeMovie is StandardToken {
 
     constructor(
         address _filmmaker,
-        uint _salesEndTime,
+        uint _salesEndDate,
+        uint _availableTickets,
         uint _price,
         uint _ticketSupply, 
         string _movieName, 
@@ -72,7 +75,8 @@ contract BoxOfficeMovie is StandardToken {
         sales = 0;
         fund = 0;
         
-        salesEndTime = _salesEndTime;
+        salesEndDate = _salesEndDate;
+        availableTickets = _availableTickets;
         price = _price;
         totalSupply_ = _ticketSupply;
         name = _movieName;
@@ -86,7 +90,8 @@ contract BoxOfficeMovie is StandardToken {
     }
     
     function updateFilm(
-        uint _salesEndTime,
+        uint _salesEndDate,
+        uint _availableTickets,
         uint _price,
         string _movieName,
         string _ticketSymbol,
@@ -98,7 +103,8 @@ contract BoxOfficeMovie is StandardToken {
         onlyFilmmaker
         returns (bool)
     {
-        if (_salesEndTime > now) salesEndTime = _salesEndTime;
+        if (_salesEndDate > now) salesEndDate = _salesEndDate;
+        if (_availableTickets <= totalSupply_) availableTickets = _availableTickets;
         if (_price > 0) price = _price;
         if (bytes(_movieName).length > 0) name = _movieName;
         if (bytes(_ticketSymbol).length > 0) symbol = _ticketSymbol;
@@ -107,7 +113,8 @@ contract BoxOfficeMovie is StandardToken {
         if (bytes(_trailer).length > 0) trailer = _trailer;
         
         emit FilmUpdated(
-            salesEndTime,
+            salesEndDate,
+            availableTickets,
             price,
             name,
             symbol,
@@ -117,18 +124,6 @@ contract BoxOfficeMovie is StandardToken {
         );
         return true;
     } 
-    
-    function buyTickets(address buyer, uint quantity) external onlyBoxOffice returns (bool) {
-        require(balances[filmmaker] >= quantity);
-        balances[filmmaker] = balances[filmmaker].sub(quantity);
-        balances[buyer] = balances[buyer].add(quantity);
-        
-        sales = sales.add(quantity.mul(price));
-        fund = fund.add(quantity.mul(price));
-        
-        emit Transfer(filmmaker, buyer, quantity);
-        return true;
-    }
     
     function spendTicket() 
         public 
@@ -147,10 +142,59 @@ contract BoxOfficeMovie is StandardToken {
         return true;
     }
     
+    function buyTickets(address buyer, uint quantity) external onlyBoxOffice returns (bool) {
+        require(balances[filmmaker] >= quantity);
+        balances[filmmaker] = balances[filmmaker].sub(quantity);
+        balances[buyer] = balances[buyer].add(quantity);
+        
+        availableTickets = availableTickets.sub(quantity);
+        sales = sales.add(quantity.mul(price));
+        fund = fund.add(quantity.mul(price));
+        
+        emit Transfer(filmmaker, buyer, quantity);
+        return true;
+    }
+    
     function withdrawFund(uint amount) external onlyBoxOffice returns (bool) {
         require(fund >= amount);
         fund = fund.sub(amount);
         return true;
+    }
+    
+    function getFilmSummary() public view returns (
+        address _filmmaker,
+        uint _salesEndDate,
+        uint _availableTickets,
+        uint _price,
+        uint _ticketSupply,
+        string _movieName,
+        string _ticketSymbol,
+        string _logline,
+        string _poster,
+        string _trailer
+    ) {
+        _filmmaker = filmmaker;
+        _salesEndDate = salesEndDate;
+        _availableTickets = availableTickets;
+        _price = price;
+        _ticketSupply = totalSupply_;
+        _movieName = name;
+        _ticketSymbol = symbol;
+        _logline = logline;
+        _poster = poster;
+        _trailer = trailer;
+    }
+    
+    function getFilmStats() public view returns (
+        uint _sales,
+        uint _fund,
+        uint _ticketsSold,
+        uint _availableSupply
+    ) {
+        _sales = sales;
+        _fund = fund;
+        _ticketsSold = balanceOf(boxOffice);
+        _availableSupply = balanceOf(filmmaker);
     }
     
     function getAudienceMembers() public view returns (address[]) {

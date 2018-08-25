@@ -1,7 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import {HeartBankTokenInterface as Kiitos} from "./HeartBankTokenInterface.sol";
+import {HeartBankCoinInterface as Kiitos} from "./HeartBankCoinInterface.sol";
 import {BoxOfficeMovie as Movie} from "./BoxOfficeMovie.sol";
 
 contract BoxOffice {
@@ -13,6 +13,7 @@ contract BoxOffice {
     
     Kiitos public kiitos;
     uint public heartbank;
+    uint public charity;
     uint public listingFee;
     uint public withdrawFee;
     
@@ -20,7 +21,8 @@ contract BoxOffice {
     
     event FilmCreated(
         address movie,
-        uint salesEndTime,
+        uint salesEndDate,
+        uint availableTickets,
         uint price,
         uint ticketSupply, 
         string movieName, 
@@ -37,22 +39,25 @@ contract BoxOffice {
     );
     
     event ExcessPayment(
-        address movie,
-        address buyer,
+        uint indexed date,
+        address indexed movie,
+        address indexed buyer,
         uint excess
     );
     
     event FundWithdrawn(
+        uint indexed date,
         address indexed movie, 
         address recipient, 
         uint amount, 
         string expense
     );
     
-    event BoxOfficeWithdrawn(
+    event CharityDonated(
+        uint indexed date,
         address indexed recipient, 
         uint amount, 
-        string reason
+        string memo
     );
     
     event FeesUpdated(
@@ -61,6 +66,7 @@ contract BoxOffice {
     );
     
     event FallbackTriggered(
+        uint indexed date,
         address indexed sender,
         uint value
     );
@@ -75,23 +81,6 @@ contract BoxOffice {
         _;
     }
     
-    modifier onlyDuringSalesPeriod(address movie) {
-        require(now < Movie(movie).salesEndTime());
-        _;
-    }
-    
-    modifier checkPaymentAmount(address movie, uint quantity) {
-        require(quantity > 0);
-        require(msg.value >= quantity.mul(Movie(movie).price()));
-        _;
-    }
-    
-    modifier checkExcessPayment(address movie, uint quantity) {
-        _;
-        uint excess = msg.value.sub(quantity.mul(Movie(movie).price()));
-        if (excess > 0) emit ExcessPayment(movie, msg.sender, excess);
-    }
-    
     modifier chargeListingFee {
         require(kiitos.balanceOf(msg.sender) >= listingFee);
         kiitos.transferToAdmin(msg.sender, listingFee);
@@ -99,7 +88,9 @@ contract BoxOffice {
     }
     
     modifier chargeWithdrawFee(uint amount) {
-        heartbank = heartbank.add(withdrawFee.div(100).mul(amount));
+        uint fee = withdrawFee.div(100).mul(amount);
+        heartbank = heartbank.add(fee);
+        charity = charity.add(fee);
         _;
     }
     
@@ -124,11 +115,12 @@ contract BoxOffice {
     }
     
     function() public payable {
-        emit FallbackTriggered(msg.sender, msg.value);
+        emit FallbackTriggered(now, msg.sender, msg.value);
     }
     
     function makeFilm(
-        uint salesEndTime,
+        uint salesEndDate,
+        uint availableTickets,
         uint price,
         uint ticketSupply, 
         string movieName, 
@@ -142,7 +134,8 @@ contract BoxOffice {
         chargeListingFee
         returns (bool)
     {
-        require(salesEndTime > now);
+        require(salesEndDate > now);
+        require(availableTickets <= ticketSupply);
         require(price > 0);
         require(ticketSupply > 0);
         require(bytes(movieName).length > 0);
@@ -151,12 +144,13 @@ contract BoxOffice {
         require(bytes(poster).length > 0);
         require(bytes(trailer).length > 0);
         
-        Movie film = new Movie(msg.sender, salesEndTime, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer);
+        Movie film = new Movie(msg.sender, salesEndDate, availableTickets, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer);
         films.push(film);
         
         emit FilmCreated(
             film,
-            salesEndTime,
+            salesEndDate,
+            availableTickets,
             price,
             ticketSupply,
             movieName,
@@ -172,12 +166,25 @@ contract BoxOffice {
         public 
         payable
         stopInEmergency
-        onlyDuringSalesPeriod(movie)
-        checkPaymentAmount(movie, quantity)
-        checkExcessPayment(movie, quantity)
         returns (bool)
     {
-        Movie(movie).buyTickets(msg.sender, quantity);
+        require(quantity > 0);
+        Movie film = Movie(movie);
+        
+        // only during sales period
+        require(now < film.salesEndDate());
+        
+        // check available tickets
+        require(quantity <= film.availableTickets());
+        
+        // check payment amount
+        require(msg.value >= quantity.mul(film.price()));
+        
+        // check excess payment
+        uint excess = msg.value.sub(quantity.mul(film.price()));
+        if (excess > 0) emit ExcessPayment(now, movie, msg.sender, excess);
+        
+        film.buyTickets(msg.sender, quantity);
         emit TicketsBought(movie, msg.sender, quantity);
         return true;
     }
@@ -194,7 +201,7 @@ contract BoxOffice {
         require(bytes(expense).length > 0);
         Movie(movie).withdrawFund(amount.add(withdrawFee.div(100).mul(amount)));
         
-        emit FundWithdrawn(movie, recipient, amount, expense);
+        emit FundWithdrawn(now, movie, recipient, amount, expense);
         recipient.transfer(amount);
         return true;
     }
@@ -215,8 +222,10 @@ contract BoxOffice {
         return true;
     }
     
-    function withdrawBoxOffice(address recipient, uint amount, string reason) public onlyAdmin returns (bool) {
-        emit BoxOfficeWithdrawn(recipient, amount, reason);
+    function donateToCharity(address recipient, uint amount, string memo) public onlyAdmin returns (bool) {
+        require(amount <= heartbank);
+        heartbank = heartbank.sub(amount);
+        emit CharityDonated(now, recipient, amount, memo);
         recipient.transfer(amount);
         return true;
     }
