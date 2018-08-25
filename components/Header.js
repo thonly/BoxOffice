@@ -22,6 +22,8 @@ class Header extends Component {
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address</strong>: 0x0</span>} />
                 </Menu.Menu>
             );
+        } else if (this.props.page === "update") {
+
         } else if (this.props.page === "theater") {
             return (
                 <Menu.Menu position="right">
