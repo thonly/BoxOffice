@@ -72,7 +72,7 @@ class MakeFilm extends Component {
                         <Header inverted size="huge">Uploading to IPFS</Header>
                     </Dimmer>
 
-                    <Step.Group fluid size="small">
+                    <Step.Group fluid size="large">
                         <Step active>
                         <Icon name="heart outline" color="red" />
                         <Step.Content>

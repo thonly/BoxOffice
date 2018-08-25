@@ -53,7 +53,7 @@ class UpdateFilm extends Component {
                         <Form.Field width={4}>
                             <label>Movie Poster</label>
                             <Label as="label" htmlFor="file">
-                                <Icon size="big" name="image" />
+                                <Icon size="big" name="cloud upload" />
                                 <span style={{ fontSize: "10pt" }}>Upload to IPFS</span>
                             </Label>
                             <input id="file" hidden type="file" onChange={this.submitToInfura} />
@@ -128,7 +128,7 @@ class UpdateFilm extends Component {
                     </Form.Group>
                 </Segment>
                 <Message error header="Oops!" content={this.state.error} />
-                <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue" as="a"><Icon name="chain" />Submit your Film Project to the Ethereum Blockchain!</Button>
+                <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue" as="a"><Icon name="chain" />Submit to Ethereum Blockchain</Button>
             </Form>
         );
     }

@@ -1,5 +1,5 @@
 const BoxOffice = artifacts.require("BoxOffice.sol");
-const Kiitos = artifacts.require("HeartBankToken.sol");
+const Kiitos = artifacts.require("HeartBankCoin.sol");
 const SALES_END_TIME = Date.now()/1000 + 28*60*60*24 | 0;
 
 contract('BoxOffice', accounts => {
