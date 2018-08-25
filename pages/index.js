@@ -36,7 +36,7 @@ class HeartBankStudio extends Component {
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
                 <Layout page="studio" movie={null} dimPage={this.dimPage}>
                     <Dimmer active={this.state.dimmed} page>
-                        <Loader size="massive" >Page loading</Loader>
+                        <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>
                     <Grid>
                         <Grid.Row>
@@ -47,7 +47,7 @@ class HeartBankStudio extends Component {
                                 <BoxOfficeStats />
                                 <Sticky>
                                     <Link route="/movie/make">
-                                        <Button onClick={event => this.setState({ loading: true })} labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Tickets for your Film!</Button>
+                                        <Button onClick={event => this.dimPage()} labelPosition="left" icon size="medium" fluid color="green" as="a"><Icon name="video camera" />Create ERC20 Tickets for your Film!</Button>
                                     </Link>
                                 </Sticky>
                             </Grid.Column>

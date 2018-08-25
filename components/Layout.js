@@ -29,7 +29,10 @@ class Layout extends Component {
                         <Icon name="heart outline" />Donate to Charity
                     </Menu.Item>
                     <Menu.Item as='a'>
-                        <Icon name="dollar" />Update Fees
+                        <Icon name="tag" />Update Fees
+                    </Menu.Item>
+                    <Menu.Item as='a'>
+                        <Icon name="payment" />Return Excess Payment
                     </Menu.Item>
                     <Menu.Item as='a'>
                         <Icon name="window close outline" />Shut Down

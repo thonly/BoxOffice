@@ -65,7 +65,7 @@ class MakeFilm extends Component {
             <Dimmer.Dimmable blurring={this.state.dimmed || this.state.percent < 100} dimmed>
                 <Layout page={this.props.movie ? "movie" : "studio"} movie={this.props.movie} dimPage={this.dimPage}>
                     <Dimmer active={this.state.dimmed} page>
-                        <Loader size="massive" >Page loading</Loader>
+                        <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>
                     <Dimmer active={this.state.percent < 100} page>
                         <Progress percent={this.state.percent} indicating inverted color="orange" size="big" />

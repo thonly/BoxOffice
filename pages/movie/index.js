@@ -49,7 +49,7 @@ class BoxOfficeMovie extends Component {
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
                 <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage}>
                     <Dimmer active={this.state.dimmed} page>
-                        <Loader size="massive" >Page loading</Loader>
+                        <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>
                     <Grid style={{ marginTop: "20px" }}>
                         <Grid.Row>

@@ -28,7 +28,7 @@ class BoxOfficeTheater extends Component {
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
                 <Layout page="theater" movie={this.props.movie} dimPage={this.dimPage}>
                     <Dimmer active={this.state.dimmed} page>
-                        <Loader size="massive" >Page loading</Loader>
+                        <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>
                     <Embed hd id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" style={{ marginTop: "30px" }} />
                     <Container style={{ marginTop: "8px" }}>
