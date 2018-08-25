@@ -54,7 +54,7 @@ class UpdateFilm extends Component {
                             <label>Movie Poster</label>
                             <Label as="label" htmlFor="file">
                                 <Icon size="big" name="image" />
-                                <span style={{ fontSize: "12pt" }}>Upload to IPFS</span>
+                                <span style={{ fontSize: "10pt" }}>Upload to IPFS</span>
                             </Label>
                             <input id="file" hidden type="file" onChange={this.submitToInfura} />
                         </Form.Field>
@@ -122,7 +122,7 @@ class UpdateFilm extends Component {
                             <Input placeholder="Year" label={{ icon: "asterisk" }} labelPosition="right corner" />
                         </Form.Field>
                         <Form.Field width={6}>
-                            <label>Quantity Limit</label>
+                            <label>Available Tickets</label>
                             <Input placeholder="Quantity" label={{ icon: "asterisk" }} labelPosition="right corner" />
                         </Form.Field>
                     </Form.Group>

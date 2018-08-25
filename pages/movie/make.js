@@ -96,7 +96,7 @@ class MakeFilm extends Component {
                         </Step>
                     </Step.Group>
                     <Image src={this.state.poster && `https://ipfs.infura.io/ipfs/${this.state.poster}`} size="big" centered style={{ marginTop: "20px" }} />
-                    <UpdateFilm movie={this.props.movie} poster={this.state.poster} ></UpdateFilm>
+                    <UpdateFilm movie={this.props.movie} poster={this.state.poster}></UpdateFilm>
                 </Layout>
             </Dimmer.Dimmable>
         );
