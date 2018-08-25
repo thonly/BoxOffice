@@ -30,7 +30,7 @@ contract TestBoxOfficeFilm {
     function testDonateToCharity() public {
         Assert.isTrue(boxOffice.buyTickets.value(3 finney)(film, 2), "should purchase tickets");
         Assert.isTrue(boxOffice.withdrawFund(film, msg.sender, 1 finney, "to pay screenwriter"), "should withdraw from fund");
-        Assert.isTrue(boxOffice.donateToCharity(msg.sender, 1 wei, "to donate to charity"), "should donate to charity");
+        Assert.isTrue(boxOffice.donateToCharity(msg.sender, 1 wei), "should donate to charity");
     }
 
 }

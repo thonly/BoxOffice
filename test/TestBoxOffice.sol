@@ -40,7 +40,7 @@ contract TestBoxOffice {
         boxOffice = new BoxOffice(address(kiitos));
 
         Assert.isTrue(address(boxOffice).call.value(1 finney)(0x0), "should trigger callback");
-        Assert.isTrue(boxOffice.returnExcessPayment(msg.sender, 1 finney, "return excess payment"), "should return excess payment");
+        Assert.isTrue(boxOffice.returnExcessPayment(msg.sender, 1 finney), "should return excess payment");
     }
 
     function testShutDownBoxOffice() public {

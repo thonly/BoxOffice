@@ -56,14 +56,12 @@ contract BoxOffice {
     event CharityDonated(
         uint indexed date,
         address indexed recipient, 
-        uint amount, 
-        string memo
+        uint amount
     );
     
     event ExcessReturned(
         address recipient, 
-        uint amount, 
-        string memo
+        uint amount
     );
     
     event FeesUpdated(
@@ -229,17 +227,17 @@ contract BoxOffice {
         return true;
     }
     
-    function donateToCharity(address recipient, uint amount, string memo) public onlyAdmin returns (bool) {
+    function donateToCharity(address recipient, uint amount) public onlyAdmin returns (bool) {
         require(amount <= heartbank);
         heartbank = heartbank.sub(amount);
-        emit CharityDonated(now, recipient, amount, memo);
+        emit CharityDonated(now, recipient, amount);
         recipient.transfer(amount);
         return true;
     }
     
-    function returnExcessPayment(address recipient, uint amount, string memo) public onlyAdmin returns (bool) {
+    function returnExcessPayment(address recipient, uint amount) public onlyAdmin returns (bool) {
         require(amount <= address(this).balance);
-        emit ExcessReturned(recipient, amount, memo);
+        emit ExcessReturned(recipient, amount);
         recipient.transfer(amount);
         return true;
     }
