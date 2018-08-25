@@ -34,12 +34,12 @@ contract TestBoxOffice {
         Assert.isTrue(boxOffice.updateFees(3, 2), "should update fees");
     }
 
-    function testWithdrawBoxOffice() public {
+    function testDonateToCharity() public {
         HeartBankCoin kiitos = new HeartBankCoin();
         boxOffice = new BoxOffice(address(kiitos));
 
         Assert.isTrue(address(boxOffice).call.value(1 finney)(0x0), "should trigger callback");
-        Assert.isTrue(boxOffice.withdrawBoxOffice(msg.sender, 1 finney, "return excess payment"), "should return excess payment");
+        Assert.isTrue(boxOffice.donateToCharity(msg.sender, 1 finney, "return excess payment"), "should return excess payment");
     }
 
     function testShutDownBoxOffice() public {
