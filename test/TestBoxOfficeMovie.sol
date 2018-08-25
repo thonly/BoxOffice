@@ -66,4 +66,33 @@ contract TestBoxOfficeMovie {
         Assert.equal(movie.fund(), 1 finney, "should update fund balance");
     }
 
+   /* function testGetFilmSummary() public {
+        address filmmaker;
+        uint salesEndDate;
+        uint availableTickets;
+        uint price;
+        uint ticketSupply;
+        string memory movieName;
+        string memory ticketSymbol;
+        string memory logline;
+        string memory poster;
+        string memory trailer;
+        
+        (filmmaker, salesEndDate, availableTickets, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer) = movie.getFilmSummary(); 
+        
+        Assert.equal(filmmaker, address(this), "should return filmmaker");
+        Assert.isBelow(salesEndDate, now + 28 days, "should return sales end date");
+    } 
+
+    function testGetFilmStats() public {
+        uint sales;
+        uint fund;
+        uint ticketsSold;
+        uint availableSupply;
+
+        (sales, fund, ticketsSold, availableSupply) = movie.getFilmStats();
+
+        Assert.equal(sales, 0, "should return ticket sales");
+    } */
+
 }

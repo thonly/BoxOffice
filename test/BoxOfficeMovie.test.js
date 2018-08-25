@@ -40,6 +40,21 @@ contract('BoxOffice Movie', accounts => {
     assert.equal(await movie.trailer(), trailer);
   });
 
+  it("should get film summary", async () => {
+    const [filmmaker, salesEndDate, availableTickets, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer] = await movie.getFilmSummary();
+    
+    assert.equal(filmmaker, owner);
+    // assert.equal(salesEndDate, SALES_END_DATE);
+    assert.equal(availableTickets, web3.toWei(1, "szabo"));
+    assert.equal(price, web3.toWei(1, "finney"));
+    assert.equal(ticketSupply, web3.toWei(1, "ether"));
+    assert.equal(movieName, "Casablanca");
+    assert.equal(ticketSymbol, "CSBC");
+    assert.equal(logline, "An American expatriate meets a former lover, with unforeseen complications.");
+    assert.equal(poster, "ipfs hash");
+    assert.equal(trailer, "youtube id");
+  });
+
   it("should update film", async () => {   
     movie.FilmUpdated((err, res) => {
       const {salesEndDate, availableTickets, price, movieName, ticketSymbol, logline, poster, trailer} = res.args;
@@ -76,6 +91,15 @@ contract('BoxOffice Movie', accounts => {
 
   it("should authenticate audience member", async () => {
     assert.ok(await movie.isAudienceMember(owner));
+  });
+
+  it("should get film stats", async () => {
+    const [sales, fund, ticketsSold, availableSupply] = await movie.getFilmStats();
+    
+    assert.equal(sales, 0);
+    assert.equal(fund, 0);
+    assert.equal(ticketsSold, 1);
+    assert.equal(availableSupply, web3.toWei(1, "ether") - 1);
   });
 
 });
