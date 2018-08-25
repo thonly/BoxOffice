@@ -38,7 +38,7 @@ contract BoxOffice {
         uint quantity
     );
     
-    event ExcessPayment(
+    event ExcessPaid(
         uint indexed date,
         address indexed movie,
         address indexed buyer,
@@ -56,6 +56,12 @@ contract BoxOffice {
     event CharityDonated(
         uint indexed date,
         address indexed recipient, 
+        uint amount, 
+        string memo
+    );
+    
+    event ExcessReturned(
+        address recipient, 
         uint amount, 
         string memo
     );
@@ -88,7 +94,7 @@ contract BoxOffice {
     }
     
     modifier chargeWithdrawFee(uint amount) {
-        uint fee = withdrawFee.div(100).mul(amount);
+        uint fee = withdrawFee.mul(amount).div(100);
         heartbank = heartbank.add(fee);
         charity = charity.add(fee);
         _;
@@ -110,6 +116,7 @@ contract BoxOffice {
         emergency = false;
         
         heartbank = 0;
+        charity = 0;
         listingFee = 2;
         withdrawFee = 1;
     }
@@ -182,7 +189,7 @@ contract BoxOffice {
         
         // check excess payment
         uint excess = msg.value.sub(quantity.mul(film.price()));
-        if (excess > 0) emit ExcessPayment(now, movie, msg.sender, excess);
+        if (excess > 0) emit ExcessPaid(now, movie, msg.sender, excess);
         
         film.buyTickets(msg.sender, quantity);
         emit TicketsBought(movie, msg.sender, quantity);
@@ -199,7 +206,7 @@ contract BoxOffice {
         require(recipient != address(0));
         require(amount > 0);
         require(bytes(expense).length > 0);
-        Movie(movie).withdrawFund(amount.add(withdrawFee.div(100).mul(amount)));
+        Movie(movie).withdrawFund(amount.add(withdrawFee.mul(amount).div(100)));
         
         emit FundWithdrawn(now, movie, recipient, amount, expense);
         recipient.transfer(amount);
@@ -230,6 +237,13 @@ contract BoxOffice {
         return true;
     }
     
+    function returnExcessPayment(address recipient, uint amount, string memo) public onlyAdmin returns (bool) {
+        require(amount <= address(this).balance);
+        emit ExcessReturned(recipient, amount, memo);
+        recipient.transfer(amount);
+        return true;
+    }
+    
     function toggleEmergency() public onlyAdmin returns (bool) {
         emergency = !emergency;
         return true;
@@ -240,3 +254,4 @@ contract BoxOffice {
     }
     
 }
+
