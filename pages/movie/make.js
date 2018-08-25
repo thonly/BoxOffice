@@ -1,44 +1,50 @@
 import React, { Component } from "react";
 import { Router } from "../../routes";
-import { Form, Input, Button, Message, Dimmer, Loader, Step, Icon, Label } from "semantic-ui-react";
+import { Form, Input, Button, Message, Dimmer, Loader, Step, Icon, Label, Image, Progress, Header, Segment } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import ipfs from "../../scripts/ipfs";
 
 class MakeFilm extends Component {
     state = {
-        salesEndTime: Date.now()/1000 + 28*60*60*24 | 0,
+        poster: "", // IPFS Hash
+        movieName: "",
+        logline: "",
+        trailer: "", // YouTube Video ID
+        
+        ticketSymbol: "",
         price: web3.utils.toWei("1", "finney"),
         ticketSupply: web3.utils.toWei("1", "ether"),
-        movieName: "Casablanca",
-        ticketSymbol: "CSBC",
-        logline: "An American expatriate meets a former lover, with unforeseen complications.",
-        poster: "https://en.wikipedia.org/wiki/Casablanca_(film)#/media/File:CasablancaPoster-Gold.jpg",
-        trailer: "https://www.imdb.com/title/tt0034583",
-        buffer: null,
-        ipfsHash: "",
+        salesEndTime: Date.now()/1000 + 28*60*60*24 | 0,
+
+        percent: 100,
+        dimmed: false,
         loading: false,
-        error: "",
-        dimmed: false
+        error: ""
     };
 
     dimPage = () => this.setState({ dimmed: true });
 
     submitToInfura = event => {
         event.preventDefault();
-        this.setState({ dimmed: true });
+        this.setState({ percent: 35 });
         const image = event.target.files[0];
         const reader = new window.FileReader();
         reader.readAsArrayBuffer(image);
         reader.onloadend = () => {
-            ipfs.files.add(Buffer(reader.result), (err, res) => {
+            const buffer = Buffer(reader.result);
+            ipfs.add(buffer, { progress: progress => this.setState({ percent: progress/buffer.byteLength*100 }) })
+                .then(response => this.setState({ poster: response[0].hash }))
+                .catch(error => this.setState({ error: error.message }));
+
+            /*ipfs.files.add(Buffer(reader.result), (err, res) => {
                 if (err) {
                     this.setState({ error: err.message });
                 } else {
-                    this.setState({ ipfsHash: res[0].hash });
+                    this.setState({ poster: res[0].hash });
                 }
                 this.setState({ dimmed: false });
-            });
+            });*/
         };     
     };
 
@@ -70,57 +76,124 @@ class MakeFilm extends Component {
 
     render() {
         return (
-            <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
+            <Dimmer.Dimmable blurring={this.state.dimmed || this.state.percent < 100} dimmed>
                 <Layout page="studio" movie={null} dimPage={this.dimPage}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Page loading</Loader>
                     </Dimmer>
+                    <Dimmer active={this.state.percent < 100} page>
+                        <Progress percent={this.state.percent} indicating inverted color="orange" size="big" />
+                        <Header inverted size="huge">Uploading to IPFS</Header>
+                    </Dimmer>
 
                     <Step.Group fluid size="small">
-                        <Step>
+                        <Step active>
                         <Icon name="heart outline" color="red" />
                         <Step.Content>
                             <Step.Title>Support <span style={{ margin: "0 -2px 0 0" }}>Heart</span><Icon className="rotate" color="green" name="heart" fitted /><span style={{ margin: "0 0 0 1px" }}>ank</span></Step.Title>
-                            <Step.Description>Buy Kiitos Coins</Step.Description>
+                            <Step.Description>1. Buy Kiitos Coins</Step.Description>
                         </Step.Content>
                         </Step>
-                        <Step>
+                        <Step active>
                         <Icon name="film" color="red" />
                         <Step.Content>
                             <Step.Title>Describe Film Project</Step.Title>
-                            <Step.Description>Enter Movie Details</Step.Description>
+                            <Step.Description>2. Enter Movie Details</Step.Description>
                         </Step.Content>
                         </Step>
-                        <Step>
+                        <Step active>
                         <Icon name="ticket" color="red" />
                         <Step.Content>
                             <Step.Title>Create Movie Tickets</Step.Title>
-                            <Step.Description>Enter ERC20 Token Details</Step.Description>
+                            <Step.Description>3. Enter ERC20 Token Details</Step.Description>
                         </Step.Content>
                         </Step>
                     </Step.Group>
 
-                    
-
-                    <img width={500} src={this.state.ipfsHash && `https://ipfs.infura.io/ipfs/${this.state.ipfsHash}`} />
-                        <Label as="label" htmlFor="file" size="big">
-                            <Icon name="file" />Upload Poster to IPFS
-                        </Label>
-                        <input id="file" hidden type="file" onChange={this.submitToInfura} />
-                        
-
-                    <Form onSubmit={this.onSubmit} error={!!this.state.error}>
-                        <Form.Field>
-                            <label>Ticket Price</label>
-                            <Input 
-                                label="wei" 
-                                labelPosition="right" 
-                                value={this.props.price}
-                                onChange={event => this.setState({ price: event.target.value })}
-                            />
-                            <Message error header="Oops!" content={this.state.error} />
-                            <Button loading={this.state.loading} primary >Create!</Button>
-                        </Form.Field>
+                    <Image src={this.state.poster && `https://ipfs.infura.io/ipfs/${this.state.poster}`} size="big" centered style={{ marginTop: "20px" }} />
+                       
+                    <Form onSubmit={this.onSubmit} error={!!this.state.error} style={{ marginTop: "30px" }}>
+                        <Segment raised padded>
+                            <Form.Group>
+                                <Form.Field width={4}>
+                                    <label>Movie Poster</label>
+                                    <Label as="label" htmlFor="file">
+                                        <Icon size="big" name="image" />
+                                        <span style={{ fontSize: "12pt" }}>Upload to IPFS</span>
+                                    </Label>
+                                    <input id="file" hidden type="file" onChange={this.submitToInfura} />
+                                </Form.Field>
+                                <Form.Field width={6}>
+                                    <label>IPFS Hash</label>
+                                    <Input iconPosition="left" loading placeholder="IPFS Hash of Poster" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                                <Form.Field width={6}>
+                                    <label>Movie Trailer</label>
+                                    <Input icon="youtube" iconPosition="left" placeholder="YouTube Video ID" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                            </Form.Group>
+                        </Segment>
+                        <Header>Movie Details</Header>
+                        <Segment raised padded>
+                            <Form.Group>
+                                <Form.Field width={16}>
+                                    <label>Movie Title</label>
+                                    <Input placeholder="Title of Movie" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Field width={16}>
+                                    <label>Movie Logline</label>
+                                    <Form.TextArea placeholder="Logline of Movie"></Form.TextArea>
+                                </Form.Field>
+                            </Form.Group>
+                        </Segment>
+                        <Header>Token Details</Header>
+                        <Segment raised padded>
+                            <Form.Group>
+                                <Form.Field width={5}>
+                                    <label>Ticket Symbol</label>
+                                    <Input placeholder="Token Symbol" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                                <Form.Field width={5}>
+                                    <label>Ticket Price</label>
+                                    <Input 
+                                        placeholder="Token Price"
+                                        label="wei" 
+                                        labelPosition="right" 
+                                        value={this.props.price}
+                                        onChange={event => this.setState({ price: event.target.value })}
+                                    />
+                                </Form.Field>
+                                <Form.Field width={6}>
+                                    <label>Ticket Supply</label>
+                                    <Input placeholder="Token Supply" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                            </Form.Group>
+                        </Segment>
+                        <Header>Sales Campaign</Header>
+                        <Segment raised padded>
+                            <Form.Group>
+                                <Form.Field width={3}>
+                                    <label>Ending Day</label>
+                                    <Input placeholder="Day" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                                <Form.Field width={3}>
+                                    <label>Ending Month</label>
+                                    <Input placeholder="Month" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                                <Form.Field width={4}>
+                                    <label>Ending Year</label>
+                                    <Input placeholder="Year" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                                <Form.Field width={6}>
+                                    <label>Quantity Limit</label>
+                                    <Input placeholder="Quantity" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                </Form.Field>
+                            </Form.Group>
+                        </Segment>
+                        <Message error header="Oops!" content={this.state.error} />
+                        <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue" as="a"><Icon name="chain" />Submit your Film Project to the Ethereum Blockchain!</Button>
                     </Form>
                 </Layout>
             </Dimmer.Dimmable>
