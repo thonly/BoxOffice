@@ -1,5 +1,3 @@
-# BoxOffice
-
 ## What does your project do?
 Be sure to clearly explain what your dApp is, why you are building it and what the evaluator needs to do to in order to successfully evaluate it in the project README.md.
 
