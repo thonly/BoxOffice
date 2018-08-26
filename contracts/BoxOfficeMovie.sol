@@ -185,16 +185,8 @@ contract BoxOfficeMovie is StandardToken {
         _trailer = trailer;
     }
     
-    function getFilmStats() public view returns (
-        uint _sales,
-        uint _fund,
-        uint _ticketsSold,
-        uint _availableSupply
-    ) {
-        _sales = sales;
-        _fund = fund;
-        _ticketsSold = balanceOf(boxOffice);
-        _availableSupply = balanceOf(filmmaker);
+    function getFilmStats() public view returns (uint, uint, uint, uint) {
+        return (sales, fund, balanceOf(boxOffice), balanceOf(filmmaker));
     }
     
     function getAudienceMembers() public view returns (address[]) {

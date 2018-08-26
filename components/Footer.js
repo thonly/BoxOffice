@@ -30,7 +30,7 @@ class Footer extends Component {
                         <small>HeartBank &copy; 2018</small>
                     </Grid.Column>
                     <Grid.Column textAlign="right">
-                        <Label size="mini" color="grey" as="a" horizontal onClick={event => this.props.toggleSidebar()}><Icon name="user outline" /> Admin</Label>
+                        <Label size="mini" color="grey" as="a" horizontal onClick={event => this.props.toggleSidebar()}><Icon name="user outline" /> Admin: {this.props.feesCollected}</Label>
                     </Grid.Column>
                 </Grid>    
             </Container>

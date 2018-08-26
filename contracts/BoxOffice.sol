@@ -35,6 +35,7 @@ contract BoxOffice {
     event TicketsBought(
         address movie, 
         address buyer, 
+        uint price,
         uint quantity
     );
     
@@ -175,6 +176,7 @@ contract BoxOffice {
     {
         require(quantity > 0);
         Movie film = Movie(movie);
+        uint price = film.price();
         
         // only during sales period
         require(now < film.salesEndDate());
@@ -183,14 +185,14 @@ contract BoxOffice {
         require(quantity <= film.availableTickets());
         
         // check payment amount
-        require(msg.value >= quantity.mul(film.price()));
+        require(msg.value >= quantity.mul(price));
         
         // check excess payment
-        uint excess = msg.value.sub(quantity.mul(film.price()));
+        uint excess = msg.value.sub(quantity.mul(price));
         if (excess > 0) emit ExcessPaid(now, movie, msg.sender, excess);
         
         film.buyTickets(msg.sender, quantity);
-        emit TicketsBought(movie, msg.sender, quantity);
+        emit TicketsBought(movie, msg.sender, price, quantity);
         return true;
     }
     
@@ -240,6 +242,10 @@ contract BoxOffice {
         emit ExcessReturned(recipient, amount);
         recipient.transfer(amount);
         return true;
+    }
+
+    function getBoxOfficeStats() public view returns (uint, uint, uint, uint) {
+        return (listingFee, withdrawFee, heartbank, charity);
     }
     
     function toggleEmergency() public onlyAdmin returns (bool) {

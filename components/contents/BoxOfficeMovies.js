@@ -22,6 +22,6 @@ const renderFilms = (films, dimPage) =>
 
 export default ({ films, dimPage }) => 
     <Container>
-        <Header>Film Projects in Development<Label color="brown" horizontal>2</Label></Header>  
+        <Header>Film Projects in Development<Label color="brown" horizontal>{films.length}</Label></Header>  
         <Card.Group>{renderFilms(films, dimPage)}</Card.Group>
     </Container>;

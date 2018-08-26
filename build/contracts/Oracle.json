@@ -2764,12 +2764,12 @@
     "4447": {
       "events": {},
       "links": {
-        "OracleLibrary": "0xf12b5dd4ead5f743c6baa640b0216200e89b60da"
+        "OracleLibrary": "0x84a1497dc35e335b6451e51a994db946b8293721"
       },
-      "address": "0x8f0483125fcb9aaaefa9209d8e9d7b9c8b9fb90f",
-      "transactionHash": "0x084400bad91a67ffe605254c8f998a2657c5b66d0d4457d2385d37042728c844"
+      "address": "0x4b82cba416523e015da051eb5066c844a591f9a2",
+      "transactionHash": "0x638b12eb2c12e276e8a2a6e41e9e6b25b834b69594fc863298d4e62c618582fb"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-25T18:17:47.283Z"
+  "updatedAt": "2018-08-26T02:21:27.980Z"
 }

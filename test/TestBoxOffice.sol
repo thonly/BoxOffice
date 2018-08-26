@@ -43,6 +43,8 @@ contract TestBoxOffice {
         Assert.isTrue(boxOffice.returnExcessPayment(msg.sender, 1 finney), "should return excess payment");
     }
 
+    function testGetBoxOfficeStats() public {}
+
     function testShutDownBoxOffice() public {
         HeartBankCoin kiitos = new HeartBankCoin();
         boxOffice = new BoxOffice(address(kiitos));

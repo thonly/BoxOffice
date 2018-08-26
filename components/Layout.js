@@ -21,7 +21,7 @@ class Layout extends Component {
                         </Head>
                         <Header {...this.props} />
                         {this.props.children}
-                        <Footer toggleSidebar={this.toggleSidebar} />
+                        <Footer toggleSidebar={this.toggleSidebar} feesCollected={this.props.feesCollected}/>
                     </Container>
                 </Sidebar.Pusher>
                 <Sidebar direction="top" as={Menu} animation="overlay" icon="labeled" size="massive" color="red" inverted vertical visible={this.state.visible}>

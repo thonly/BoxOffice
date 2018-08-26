@@ -94,6 +94,8 @@ contract('BoxOffice', accounts => {
     assert.equal(balance, web3.toWei(1, "finney"));
   });
 
+  it("should get box office stats");
+
   it("should shut down box office and self-destruct", async () => {
     assert.ok(await boxOffice.toggleEmergency());
     assert.ok(await boxOffice.shutDownBoxOffice());

@@ -24,10 +24,11 @@ contract('BoxOffice Film', accounts => {
 
   it("should purchase movie tickets with excess payment", async () => {
     boxOffice.TicketsBought((err, res) => {
-      const {movie, buyer, quantity} = res.args;
+      const {movie, buyer, price, quantity} = res.args;
       
       assert.equal(movie, film);
       assert.equal(buyer, owner);
+      assert.equal(price, web3.toWei(1, "finney"));
       assert.equal(quantity, 2);
     });
 
