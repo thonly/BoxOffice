@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Grid, Icon, Sticky, Dimmer, Loader } from "semantic-ui-react";
-import { currentOracle, Kiitos, BoxOffice } from "../scripts/contracts";
+import web3, { Kiitos, BoxOffice } from "../scripts/contracts";
 import { Link } from "../routes";
 import Layout from "../components/Layout";
 import BoxOfficeMovies from "../components/contents/BoxOfficeMovies";
@@ -12,10 +12,24 @@ class HeartBankStudio extends Component {
         const supply = await kiitos.totalSupply();
         const boxOffice = await BoxOffice.deployed();
 
-        const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
+        const accounts = await web3.eth.getAccounts();
+        const balance = await kiitos.balanceOf(accounts[0]);
         const films = await boxOffice.getFilms();
+        const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 
-        return { films, feesCollected: feesCollected.toNumber(), stats: { listingFee: listingFee.toNumber(), withdrawFee: withdrawFee.toNumber(), feesDonated: feesDonated.toNumber() } };
+        return { 
+            films, 
+            feesCollected: feesCollected.toNumber(), 
+            wallet: { 
+                account: accounts[0], 
+                balance: balance.toNumber() 
+            }, 
+            stats: { 
+                listingFee: listingFee.toNumber(), 
+                withdrawFee: withdrawFee.toNumber(), 
+                feesDonated: feesDonated.toNumber() 
+            } 
+        };
     }
     
     state = {
@@ -34,7 +48,7 @@ class HeartBankStudio extends Component {
     render() {
         return (
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
-                <Layout page="studio" movie={null} dimPage={this.dimPage} feesCollected={this.props.feesCollected}>
+                <Layout page="studio" movie={null} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>

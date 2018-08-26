@@ -8,9 +8,9 @@ class Header extends Component {
         if (this.props.page === "studio") {
             return (
                 <Menu.Menu position="right">
-                    <Popup trigger={<Menu.Item><strong>1,000 Kiitos</strong></Menu.Item>} content={<span><strong>Your Kiitos coin balance</strong>: 1,000</span>} />
+                    <Popup trigger={<Menu.Item><strong>{this.props.balance} Kiitos</strong></Menu.Item>} content="Your Kiitos coin balance!" />
                     <Popup trigger={<Menu.Item><Icon name="fly" /> FREE Airdrop<Label color="purple" floating>100</Label></Menu.Item>} content="Get 100 Kiitos coins for FREE from HeartBank!" />
-                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address</strong>: 0x0</span>} />
+                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your account address</strong>: {this.props.account}</span>} />
                 </Menu.Menu>
             );
         } else if (this.props.page === "movie") {
