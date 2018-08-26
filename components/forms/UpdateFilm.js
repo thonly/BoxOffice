@@ -2,32 +2,62 @@ import React, { Component } from "react";
 import { Form, Input, Button, Message, Icon, Label, Header, Segment, Image, Progress, Modal, Container } from "semantic-ui-react";
 import { Router } from "../../routes";
 import ipfs from "../../scripts/ipfs";
-import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import { BoxOffice, Movie } from "../../scripts/contracts";
 
 class UpdateFilm extends Component {
 
     state = {
-        movieName: "",
-        logline: "",
         poster: "", // IPFS Hash
         trailer: "", // YouTube Video ID
+
+        movieName: "",
+        logline: "",
         
         ticketSymbol: "",
-        price: web3.utils.toWei("1", "finney"),
-        ticketSupply: web3.utils.toWei("1", "ether"),
-        salesEndTime: Date.now()/1000 + 28*60*60*24 | 0,
+        price: "",
+        ticketSupply: "",
+
+        day: "",
+        month: "",
+        year: "",
+        availableTickets: "",
 
         percent: 100,
         loading: false,
         error: ""
     };
 
+    async componentDidMount() {
+        if (this.props.movie) {
+            const movie = await Movie.at(this.props.movie);
+            const [ filmmaker, createdTime, salesEndDate, availableTickets, price, movieName, ticketSymbol, logline, poster, trailer ] = await movie.getFilmSummary();
+            const [ sales, fund, ticketsSold, availableSupply, ticketSupply ] = await movie.getFilmStats();
+            const date = new Date(salesEndDate*1000);
+
+            this.setState({
+                poster,
+                trailer,
+                movieName,
+                logline,
+                ticketSymbol,
+                price,
+                ticketSupply,
+                day: date.getDate(),
+                month: date.getMonth() + 1,
+                year: date.getFullYear(),
+                availableTickets
+            });
+        }
+    }
+
     submitToInfura = event => {
         event.preventDefault();
         this.setState({ percent: 20 });
+
         const image = event.target.files[0];
         const reader = new window.FileReader();
         reader.readAsArrayBuffer(image);
+
         reader.onloadend = () => {
             const buffer = Buffer(reader.result);
             ipfs.add(buffer, { progress: progress => this.setState({ percent: progress/buffer.byteLength*100 }) })
@@ -44,24 +74,22 @@ class UpdateFilm extends Component {
         };     
     };
 
-    onSubmit = async event => {
+    submitToBoxOffice = async event => {
         event.preventDefault();
         this.setState({ loading: true, error: "" });
 
         try {
             const accounts = await web3.eth.getAccounts();
-            const oracle = await currentOracle;
-            const boxOffice = await BoxOffice.deployed();
-            const kiitos = await Kiitos.deployed();
+            const salesEndDate = new Date(this.state.year, this.state.month - 1, this.state.day);
 
-            // await oracle.setPrice(400, {from: accounts[0]});
-            // await boxOffice.updateFees(2, 3, {from: accounts[0]});
-
-            // const film = await boxOffice.films(0);
-            // const movie = await Movie.at(film);
-            // await movie.updateFilm(this.state.salesEndTime, this.state.price, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+            if (this.props.movie) {
+                const movie = await Movie.at(this.props.movie);
+                await movie.updateFilm(salesEndDate, this.state.availableTickets, this.state.price, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+            } else {
+                const boxOffice = await BoxOffice.deployed();
+                await boxOffice.makeFilm(salesEndDate, this.state.availableTickets, this.state.price, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+            }            
             
-            await boxOffice.makeFilm(this.state.salesEndTime, this.state.price, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
             Router.pushRoute("/");
         } catch (error) {
             this.setState({ error: error.message });
@@ -77,8 +105,8 @@ class UpdateFilm extends Component {
                     <Progress percent={this.state.percent} indicating inverted color="orange" size="big" />
                     <Header inverted size="huge" textAlign="center">Uploading to IPFS</Header>
                 </Modal>
-                <Image src={this.state.poster && `https://ipfs.infura.io/ipfs/${this.state.poster}`} size="big" centered />
-                <Form onSubmit={this.onSubmit} error={!!this.state.error} style={{ marginTop: "30px" }}>
+                <Image src={this.state.poster && `https://ipfs.infura.io/ipfs/${this.state.poster}`} size="large" centered />
+                <Form onSubmit={this.onSubmit} loading={this.state.loading} error={!!this.state.error} style={{ marginTop: "30px" }}>
                     <Segment raised padded>
                         <Form.Group>
                             <Form.Field width={4}>
@@ -91,11 +119,26 @@ class UpdateFilm extends Component {
                             </Form.Field>
                             <Form.Field width={6}>
                                 <label>IPFS Hash</label>
-                                <Input value={this.state.poster} iconPosition="left" loading placeholder="IPFS Hash of Poster" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    value={this.state.poster} 
+                                    iconPosition="left" 
+                                    loading={!this.state.poster} 
+                                    placeholder="IPFS Hash of Poster" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                />
                             </Form.Field>
                             <Form.Field width={6}>
                                 <label>Movie Trailer</label>
-                                <Input icon="youtube" iconPosition="left" placeholder="YouTube Video ID" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    icon="youtube" 
+                                    iconPosition="left" 
+                                    placeholder="YouTube Video ID" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.trailer}
+                                    onChange={event => this.setState({ trailer: event.target.value })}
+                                />
                             </Form.Field>
                         </Form.Group>
                     </Segment>
@@ -104,13 +147,23 @@ class UpdateFilm extends Component {
                         <Form.Group>
                             <Form.Field width={16}>
                                 <label>Movie Title</label>
-                                <Input placeholder="Title of Movie" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    placeholder="What's the title of your movie?" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.movieName}
+                                    onChange={event => this.setState({ movieName: event.target.value })}
+                                />
                             </Form.Field>
                         </Form.Group>
                         <Form.Group>
                             <Form.Field width={16}>
                                 <label>Movie Logline</label>
-                                <Form.TextArea placeholder="Logline of Movie"></Form.TextArea>
+                                <Form.TextArea 
+                                    placeholder="In a sentence or two, what's your movie about?"
+                                    value={this.state.logline}
+                                    onChange={event => this.setState({ logline: event.target.value })}
+                                ></Form.TextArea>
                             </Form.Field>
                         </Form.Group>
                     </Segment>
@@ -119,21 +172,34 @@ class UpdateFilm extends Component {
                         <Form.Group>
                             <Form.Field width={5}>
                                 <label>Ticket Symbol</label>
-                                <Input placeholder="Token Symbol" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    placeholder="What symbol would you like for your tickets?" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.ticketSymbol}
+                                    onChange={event => this.setState({ ticketSymbol: event.target.value })}
+                                />
                             </Form.Field>
                             <Form.Field width={5}>
                                 <label>Ticket Price</label>
                                 <Input 
-                                    placeholder="Token Price"
+                                    placeholder="How much does each ticket cost?"
                                     label="wei" 
                                     labelPosition="right" 
-                                    value={this.props.price}
+                                    value={this.state.price}
                                     onChange={event => this.setState({ price: event.target.value })}
                                 />
                             </Form.Field>
                             <Form.Field width={6}>
                                 <label>Ticket Supply</label>
-                                <Input placeholder="Token Supply" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    disabled={!!this.props.movie}
+                                    placeholder="How many tickets would you like to create?" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.ticketSupply}
+                                    onChange={event => this.setState({ ticketSupply: event.target.value })}
+                                />
                             </Form.Field>
                         </Form.Group>
                     </Segment>
@@ -142,24 +208,48 @@ class UpdateFilm extends Component {
                         <Form.Group>
                             <Form.Field width={3}>
                                 <label>Ending Day</label>
-                                <Input placeholder="Day" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    placeholder="Day (1 to 31)" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner"
+                                    value={this.state.day}
+                                    onChange={event => this.setState({ day: event.target.value })}
+                                />
                             </Form.Field>
                             <Form.Field width={3}>
                                 <label>Ending Month</label>
-                                <Input placeholder="Month" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    placeholder="Month (1 to 12)" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.month}
+                                    onChange={event => this.setState({ month: event.target.value })}
+                                />
                             </Form.Field>
                             <Form.Field width={4}>
                                 <label>Ending Year</label>
-                                <Input placeholder="Year" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    placeholder="Year (4 digits)" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.year}
+                                    onChange={event => this.setState({ year: event.target.value })}
+                                />
                             </Form.Field>
                             <Form.Field width={6}>
                                 <label>Available Tickets</label>
-                                <Input placeholder="Quantity" label={{ icon: "asterisk" }} labelPosition="right corner" />
+                                <Input 
+                                    placeholder="How many should be available for sale?" 
+                                    label={{ icon: "asterisk" }} 
+                                    labelPosition="right corner" 
+                                    value={this.state.availableTickets}
+                                    onChange={event => this.setState({ availableTickets: event.target.value })}
+                                />
                             </Form.Field>
                         </Form.Group>
                     </Segment>
-                    <Message error header="Oops!" content={this.state.error} />
-                    <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue" as="a"><Icon name="chain" />Submit to Ethereum Blockchain</Button>
+                    <Message error header="Every field is required! All can be changed except the total supply of tickets." content={this.state.error} />
+                    <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue" as="a"><Icon name="chain" />Submit to Ethereum</Button>
                 </Form>
             </Container>
         );
