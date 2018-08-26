@@ -5,10 +5,10 @@ import web3 from "../scripts/contracts";
 class Footer extends Component {
 
     state = { 
-        network: null
+        network: "rinkeby"
     };
 
-    async componentDidMount() { // to fix: causes warning 
+    async componentDidMountX() { 
         if (typeof web3.currentProvider !== "undefined")
             this.setState({ network: await web3.eth.net.getNetworkType() });
     }

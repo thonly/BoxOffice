@@ -1,15 +1,22 @@
 import React, { Component } from "react";
-import { Container, Sidebar, Menu, Icon } from "semantic-ui-react";
+import { Container, Sidebar, Menu, Icon, Message } from "semantic-ui-react";
 import Head from "next/head";
 import Header from "./Header";
 import Footer from "./Footer";
+import web3 from "../scripts/contracts";
 
 class Layout extends Component {
     state = {
+        network: null,
         visible: false
     };
 
     toggleSidebar = () => this.setState({ visible: !this.state.visible });
+
+    async componentDidMount() { // to fix: causes warning 
+        if (typeof web3.currentProvider !== "undefined")
+            this.setState({ network: await web3.eth.net.getNetworkType() });
+    }
 
     render() {
         return (
@@ -19,6 +26,9 @@ class Layout extends Component {
                         <Head>
                             <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css"></link>
                         </Head>
+                        <Message style={{ marginTop: "20px", textAlign: "center" }} color="orange" hidden={this.state.network === "private" || this.state.network === "rinkeby"}>
+                            <p>Please <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">install Metamask</a> and connect to the <strong>Rinkeby network</strong>.</p>
+                        </Message>
                         <Header {...this.props} />
                         {this.props.children}
                         <Footer toggleSidebar={this.toggleSidebar} feesCollected={this.props.feesCollected}/>
