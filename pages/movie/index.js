@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Progress, Grid, Button, Icon, Dimmer, Loader } from "semantic-ui-react";
-import web3, { currentOracle, Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import web3, { Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import { Link } from "../../routes";
 import Layout from "../../components/Layout";
 import MovieDetails from "../../components/contents/MovieDetails";
@@ -12,24 +12,48 @@ import Withdrawals from "../../components/contents/Withdrawals";
 class BoxOfficeMovie extends Component {
     static async getInitialProps(props) {
         const kiitos = await Kiitos.deployed();
-        const supply = await kiitos.totalSupply();
         const boxOffice = await BoxOffice.deployed();
-        const listingFee = await boxOffice.listingFee();
-        const oracle = await currentOracle;
-        const usdPriceOfEth = await oracle.usdPriceOfEth();
+
+        const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 
         const movie = await Movie.at(props.query.movie);
-        const film = {
-            filmmaker: await movie.filmmaker(),
-            title: await movie.name(),
-            logline: await movie.logline(),
-            poster: await movie.poster()
-        };
+        const [ filmmaker, createdTime, salesEndDate, availableTickets, price, movieName, ticketSymbol, logline, poster, trailer ] = await movie.getFilmSummary();
+        const [ sales, fund, ticketsSold, availableSupply, ticketSupply ] = await movie.getFilmStats();
         
         const accounts = await web3.eth.getAccounts();
-        const tickets = await movie.balanceOf(accounts[0]);
+        const balance = await movie.balanceOf(accounts[0]);
 
-        return { movie: props.query.movie, film, tickets: tickets.toNumber() };
+        return { 
+            feesCollected: feesCollected.toNumber(),
+            movie: props.query.movie, 
+            fund: fund.toNumber(),
+            film: {
+                createdTime: createdTime*1000,
+                filmmaker,
+                movieName,
+                logline,
+                poster,
+                trailer
+            },
+            token: {
+                ticketSymbol,
+                availableSupply: availableSupply.toNumber(),
+                ticketSupply: ticketSupply.toNumber(),
+                fundingGoal: price*ticketSupply
+            },
+            wallet: { 
+                ticketSymbol,
+                account: accounts[0], 
+                balance: balance.toNumber() 
+            }, 
+            stats: {
+                salesEndDate: salesEndDate*1000,
+                price: price.toNumber(),
+                availableTickets: availableTickets.toNumber(),
+                ticketsSold: ticketsSold.toNumber(),
+                sales: sales.toNumber()
+            }
+        };
     }
 
     state = {
@@ -47,7 +71,7 @@ class BoxOfficeMovie extends Component {
     render() {
         return (
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
-                <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage}>
+                <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage} feesCollected={this.props.feesCollected} {...this.props.wallet}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>
@@ -57,18 +81,18 @@ class BoxOfficeMovie extends Component {
                                 <MovieDetails movie={this.props.movie} {...this.props.film} />
                             </Grid.Column>
                             <Grid.Column width={9} textAlign="center">
-                                <MovieStats />
+                                <MovieStats {...this.props.stats} />
                                 <Button.Group fluid style={{ marginTop: "30px"}}>
                                     <BuyTickets movie={this.props.movie}/>
                                     <Link route={`/theater/${this.props.movie}`}><Button onClick={event => this.dimPage()} color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
                                 </Button.Group>
-                                <TokenDetails />
-                                <Progress color="yellow" percent={34} progress />
+                                <TokenDetails {...this.props.token} />
+                                <Progress color="yellow" percent={this.props.stats.ticketsSold/this.props.token.ticketSupply} progress />
                             </Grid.Column>   
                         </Grid.Row>      
                         <Grid.Row>
                             <Grid.Column width={16}>
-                                <Withdrawals movie={this.props.movie} withdrawals={this.state.withdrawals} />
+                                <Withdrawals movie={this.props.movie} fund={this.props.fund} withdrawals={this.state.withdrawals} />
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

@@ -18,12 +18,10 @@ class Header extends Component {
                 <Menu.Menu position="right">
                     <Link route={`/movie/${this.props.movie}/update`}><Menu.Item>Update Movie</Menu.Item></Link>
                     <Menu.Item>Withdraw Fund</Menu.Item>
-                    <Popup trigger={<Menu.Item><Icon name="ticket" /> CSB Tickets<Label color="purple" floating>22</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
-                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address</strong>: 0x0</span>} />
+                    <Popup trigger={<Menu.Item><Icon name="ticket" /> {this.props.ticketSymbol} Tickets<Label color="purple" floating>{this.props.balance}</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
+                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your account address</strong>: {this.props.account}</span>} />
                 </Menu.Menu>
             );
-        } else if (this.props.page === "update") {
-
         } else if (this.props.page === "theater") {
             return (
                 <Menu.Menu position="right">

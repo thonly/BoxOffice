@@ -163,10 +163,10 @@ contract BoxOfficeMovie is StandardToken {
     
     function getFilmSummary() public view returns (
         address _filmmaker,
+        uint _createdTime,
         uint _salesEndDate,
         uint _availableTickets,
         uint _price,
-        uint _ticketSupply,
         string _movieName,
         string _ticketSymbol,
         string _logline,
@@ -174,10 +174,10 @@ contract BoxOfficeMovie is StandardToken {
         string _trailer
     ) {
         _filmmaker = filmmaker;
+        _createdTime = createdTime;
         _salesEndDate = salesEndDate;
         _availableTickets = availableTickets;
         _price = price;
-        _ticketSupply = totalSupply_;
         _movieName = name;
         _ticketSymbol = symbol;
         _logline = logline;
@@ -185,8 +185,8 @@ contract BoxOfficeMovie is StandardToken {
         _trailer = trailer;
     }
     
-    function getFilmStats() public view returns (uint, uint, uint, uint) {
-        return (sales, fund, balanceOf(boxOffice), balanceOf(filmmaker));
+    function getFilmStats() public view returns (uint, uint, uint, uint, uint) {
+        return (sales, fund, balanceOf(boxOffice), balanceOf(filmmaker), totalSupply_);
     }
     
     function getAudienceMembers() public view returns (address[]) {

@@ -6,15 +6,15 @@ const renderWithdrawals = (movie, withdrawals) =>
     withdrawals.filter(withdrawal => withdrawal.movie === movie)
         .map((withdrawal, index) => 
             <Table.Row key={index}>
-                <Table.Cell>{index}</Table.Cell>
+                <Table.Cell>{withdrawal.date}</Table.Cell>
                 <Table.Cell>{withdrawal.recipient}</Table.Cell>
                 <Table.Cell>{web3.utils.fromWei(withdrawal.amount.toString(), "ether")}</Table.Cell>
                 <Table.Cell>{withdrawal.expense}</Table.Cell>
             </Table.Row>);
 
-export default ({movie, withdrawals}) => 
+export default ({ movie, fund, withdrawals }) => 
     <Container>
-        <Button content="Fund Balance" active label={{ content: "$34,234" }} labelPosition="right" floated="right" style={{ marginTop: "-10px" }} />
+        <Button content="Fund Balance" active label={{ content: fund }} labelPosition="right" floated="right" style={{ marginTop: "-10px" }} />
         <Header>Withdrawal History</Header>
         <Table celled>
             <Table.Header>

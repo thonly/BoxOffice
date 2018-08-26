@@ -9,11 +9,11 @@ import BoxOfficeStats from "../components/contents/BoxOfficeStats";
 class HeartBankStudio extends Component {
     static async getInitialProps() {
         const kiitos = await Kiitos.deployed();
-        const supply = await kiitos.totalSupply();
         const boxOffice = await BoxOffice.deployed();
 
         const accounts = await web3.eth.getAccounts();
         const balance = await kiitos.balanceOf(accounts[0]);
+        
         const films = await boxOffice.getFilms();
         const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 

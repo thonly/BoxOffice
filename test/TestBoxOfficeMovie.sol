@@ -68,17 +68,17 @@ contract TestBoxOfficeMovie {
 
    /* function testGetFilmSummary() public {
         address filmmaker;
+        uint createdtime;
         uint salesEndDate;
         uint availableTickets;
         uint price;
-        uint ticketSupply;
         string memory movieName;
         string memory ticketSymbol;
         string memory logline;
         string memory poster;
         string memory trailer;
         
-        (filmmaker, salesEndDate, availableTickets, price, ticketSupply, movieName, ticketSymbol, logline, poster, trailer) = movie.getFilmSummary(); 
+        (filmmaker, createdTime, salesEndDate, availableTickets, price, movieName, ticketSymbol, logline, poster, trailer) = movie.getFilmSummary(); 
         
         Assert.equal(filmmaker, address(this), "should return filmmaker");
         Assert.isBelow(salesEndDate, now + 28 days, "should return sales end date");
@@ -89,8 +89,9 @@ contract TestBoxOfficeMovie {
         uint fund;
         uint ticketsSold;
         uint availableSupply;
+        uint ticketSupply;
 
-        (sales, fund, ticketsSold, availableSupply) = movie.getFilmStats();
+        (sales, fund, ticketsSold, availableSupply, ticketSupply) = movie.getFilmStats();
 
         Assert.equal(sales, 0, "should return ticket sales");
     } */
