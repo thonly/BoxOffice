@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Progress, Grid, Button, Icon, Dimmer, Loader } from "semantic-ui-react";
-import web3, { Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
+import web3, { BoxOffice, Movie } from "../../scripts/contracts";
 import { Link } from "../../routes";
 import Layout from "../../components/Layout";
 import MovieDetails from "../../components/contents/MovieDetails";
@@ -11,9 +11,7 @@ import Withdrawals from "../../components/contents/Withdrawals";
 
 class BoxOfficeMovie extends Component {
     static async getInitialProps(props) {
-        const kiitos = await Kiitos.deployed();
         const boxOffice = await BoxOffice.deployed();
-
         const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 
         const movie = await Movie.at(props.query.movie);

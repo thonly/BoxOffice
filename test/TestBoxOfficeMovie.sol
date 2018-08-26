@@ -57,7 +57,6 @@ contract TestBoxOfficeMovie {
         Assert.equal(movie.balanceOf(address(this)), 1 ether, "should update box office's and holder's balance");
         Assert.equal(movie.members(0), address(this), "should add new audience member");
         Assert.equal(movie.getAudienceMembers()[0], address(this), "should get audience members");
-        Assert.isTrue(movie.isAudienceMember(address(this)), "should authenticate audience member");
     }
 
     function testWithdrawFund() public {

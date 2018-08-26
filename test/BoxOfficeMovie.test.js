@@ -84,13 +84,9 @@ contract('BoxOffice Movie', accounts => {
 
   it("should get audience members", async () => {
     const members = await movie.getAudienceMembers();
-    const member = await movie.members(0);
+    const member = await movie.audienceMembers(0);
     assert.equal(members[0], owner);
     assert.equal(member, owner);
-  });
-
-  it("should authenticate audience member", async () => {
-    assert.ok(await movie.isAudienceMember(owner));
   });
 
   it("should get film stats", async () => {

@@ -10,6 +10,7 @@ contract BoxOfficeMovie is StandardToken {
     
     address public boxOffice;
     address public filmmaker;
+    address[] public audienceMembers;
     
     uint public createdTime;
     uint public salesEndDate;
@@ -20,9 +21,6 @@ contract BoxOfficeMovie is StandardToken {
     string public logline; 
     string public poster; 
     string public trailer;
-
-    mapping (address => bool) public isAudienceMember;
-    address[] public members;
     
     event FilmUpdated(
         uint salesEndDate,
@@ -133,9 +131,7 @@ contract BoxOfficeMovie is StandardToken {
         require(balances[msg.sender] >= 1);
         balances[msg.sender] = balances[msg.sender].sub(1);
         balances[boxOffice] = balances[boxOffice].add(1);
-        
-        members.push(msg.sender);
-        isAudienceMember[msg.sender] = true;
+        audienceMembers.push(msg.sender);
         
         emit TicketSpent(msg.sender);
         emit Transfer(msg.sender, boxOffice, 1);
@@ -190,7 +186,7 @@ contract BoxOfficeMovie is StandardToken {
     }
     
     function getAudienceMembers() public view returns (address[]) {
-        return members;
+        return audienceMembers;
     }
 
 }

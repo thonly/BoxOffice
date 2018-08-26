@@ -29,8 +29,8 @@ class Header extends Component {
                     <Modal trigger={<Menu.Item>Watch Movie</Menu.Item>} size="fullscreen" dimmer="blurring" basic centered>
                         <Modal.Content><Embed hd autoplay id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" /></Modal.Content>
                     </Modal>
-                    <Popup trigger={<Menu.Item><Icon name="users" /> Audience<Label color="purple" floating>22</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
-                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your Account address</strong>: 0x0</span>} />
+                    <Popup trigger={<Menu.Item><Icon name="users" /> Audience<Label color="purple" floating>{this.props.audience}</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
+                    <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your account address</strong>: {this.props.account}</span>} />
                 </Menu.Menu>
             );
         }
