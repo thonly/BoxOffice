@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Table, Button, Header } from "semantic-ui-react";
-import web3 from "../../scripts/contracts";
+import { toEther } from "../../scripts/offchainwork";
 
 const returnDate = time => {
     const date = new Date(time);
@@ -16,7 +16,7 @@ const renderWithdrawals = (movie, withdrawals) =>
             <Table.Row key={index}>
                 <Table.Cell>{returnDate(withdrawal.date)}</Table.Cell>
                 <Table.Cell>{withdrawal.recipient}</Table.Cell>
-                <Table.Cell>{web3.utils.fromWei(withdrawal.amount.toString(), "ether")}</Table.Cell>
+                <Table.Cell>{toEther(withdrawal.amount)}</Table.Cell>
                 <Table.Cell>{withdrawal.expense}</Table.Cell>
             </Table.Row>);
 

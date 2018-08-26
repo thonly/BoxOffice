@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Card, Icon, Header, Label, Button } from "semantic-ui-react";
 import { Link } from "../../routes";
+import makeShorter from "../../scripts/offchainwork";
     
 const renderFilms = (films, dimPage) => 
      films.map((address, index) => 
@@ -22,6 +23,6 @@ const renderFilms = (films, dimPage) =>
 
 export default ({ films, dimPage }) => 
     <Container>
-        <Header>Film Projects in Development<Label color="brown" horizontal>{films.length}</Label></Header>  
+        <Header>Film Projects in Development<Label color="brown" horizontal>{makeShorter(films.length)}</Label></Header>  
         <Card.Group>{renderFilms(films, dimPage)}</Card.Group>
     </Container>;

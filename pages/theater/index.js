@@ -4,6 +4,7 @@ import web3, { BoxOffice, Movie } from "../../scripts/contracts";
 import { Link } from "../../routes";
 import Layout from "../../components/Layout";
 import AudienceMembers from "../../components/contents/AudienceMembers";
+import makeShorter, { toDollars } from "../../scripts/offchainwork";
 
 class BoxOfficeTheater extends Component {
     static async getInitialProps(props) {
@@ -18,7 +19,7 @@ class BoxOfficeTheater extends Component {
 
         return {
             movie: props.query.movie, 
-            feesCollected: feesCollected.toNumber(),
+            feesCollected: await toDollars(feesCollected),
             film: {
                 movieName,
                 poster,
@@ -28,7 +29,7 @@ class BoxOfficeTheater extends Component {
             },
             wallet: {
                 account: accounts[0],
-                audience: members.length
+                audience: makeShorter(members.length)
             }
         };
     }
@@ -42,7 +43,7 @@ class BoxOfficeTheater extends Component {
     render() {
         return (
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
-                <Layout page="theater" movie={this.props.movie} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected}>
+                <Layout page="theater" movie={this.props.movie} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected} {...this.props.film}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>

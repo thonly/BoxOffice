@@ -27,7 +27,7 @@ class Header extends Component {
                 <Menu.Menu position="right">
                     <Menu.Item color="teal">Spend Ticket</Menu.Item>
                     <Modal trigger={<Menu.Item>Watch Movie</Menu.Item>} size="fullscreen" dimmer="blurring" basic centered>
-                        <Modal.Content><Embed hd autoplay id="-j1VYBvQnxE" placeholder="https://react.semantic-ui.com/images/wireframe/image.png" source="youtube" /></Modal.Content>
+                        <Modal.Content><Embed hd autoplay id={this.props.trailer} placeholder={`https://ipfs.infura.io/ipfs/${this.props.poster}`} source="youtube" /></Modal.Content>
                     </Modal>
                     <Popup trigger={<Menu.Item><Icon name="users" /> Audience<Label color="purple" floating>{this.props.audience}</Label></Menu.Item>} content={<span><strong>Your CSGS ticket balance</strong>: 32</span>} />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your account address</strong>: {this.props.account}</span>} />

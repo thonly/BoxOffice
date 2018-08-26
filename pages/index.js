@@ -5,6 +5,7 @@ import { Link } from "../routes";
 import Layout from "../components/Layout";
 import BoxOfficeMovies from "../components/contents/BoxOfficeMovies";
 import BoxOfficeStats from "../components/contents/BoxOfficeStats";
+import makeShorter, { toDollars } from "../scripts/offchainwork";
 
 class HeartBankStudio extends Component {
     static async getInitialProps() {
@@ -19,15 +20,15 @@ class HeartBankStudio extends Component {
 
         return { 
             films, 
-            feesCollected: feesCollected.toNumber(), 
+            feesCollected: await toDollars(feesCollected), 
             wallet: { 
                 account: accounts[0], 
-                balance: balance.toNumber() 
+                balance: makeShorter(balance) 
             }, 
             stats: { 
-                listingFee: listingFee.toNumber(), 
+                listingFee: makeShorter(listingFee), 
                 withdrawFee: withdrawFee.toNumber(), 
-                feesDonated: feesDonated.toNumber() 
+                feesDonated: await toDollars(feesDonated) 
             } 
         };
     }
