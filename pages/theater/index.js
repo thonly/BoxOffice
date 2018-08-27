@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Embed, List, Label, Breadcrumb, Dimmer, Loader, Message } from "semantic-ui-react";
-import web3, { BoxOffice, Movie } from "../../scripts/contracts";
+import getAccount, { BoxOffice, Movie } from "../../scripts/contracts";
 import { Link } from "../../routes";
 import Layout from "../../components/Layout";
 import AudienceMembers from "../../components/contents/AudienceMembers";
@@ -8,18 +8,18 @@ import makeShorter, { toDollars } from "../../scripts/offchainwork";
 
 class BoxOfficeTheater extends Component {
     static async getInitialProps(props) {
-        const accounts = await web3.eth.getAccounts();
+        const account = await getAccount();
         const boxOffice = await BoxOffice.deployed();
         const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 
         const movie = await Movie.at(props.query.movie);
         const [ filmmaker, createdTime, salesEndDate, availableTickets, price, movieName, ticketSymbol, logline, poster, trailer ] = await movie.getFilmSummary();
         const members = await movie.getAudienceMembers();
-        const isMember = members.includes(accounts[0]);
+        const isMember = members.includes(account);
 
         return {
             movie: props.query.movie, 
-            feesCollected: await toDollars(feesCollected),
+            feesCollected: [ feesCollected.toNumber(), await toDollars(feesCollected) ],
             film: {
                 movieName,
                 poster,
@@ -28,8 +28,8 @@ class BoxOfficeTheater extends Component {
                 isMember
             },
             wallet: {
-                account: accounts[0],
-                audience: makeShorter(members.length)
+                account,
+                audience: [ members.length, makeShorter(members.length) ]
             }
         };
     }

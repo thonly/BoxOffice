@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Grid, Icon, Sticky, Dimmer, Loader } from "semantic-ui-react";
-import web3, { Kiitos, BoxOffice } from "../scripts/contracts";
+import getAccount, { Kiitos, BoxOffice } from "../scripts/contracts";
 import { Link } from "../routes";
 import Layout from "../components/Layout";
 import BoxOfficeMovies from "../components/contents/BoxOfficeMovies";
@@ -12,23 +12,23 @@ class HeartBankStudio extends Component {
         const kiitos = await Kiitos.deployed();
         const boxOffice = await BoxOffice.deployed();
 
-        const accounts = await web3.eth.getAccounts();
-        const kiitosBalance = await kiitos.balanceOf(accounts[0]);
+        const account = await getAccount();
+        const kiitosBalance = await kiitos.balanceOf(account);
         
         const films = await boxOffice.getFilms();
-        const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
+        const [ listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 
         return { 
             films, 
-            feesCollected: await toDollars(feesCollected), 
+            feesCollected: [ feesCollected.toNumber(), await toDollars(feesCollected) ], 
             wallet: { 
-                account: accounts[0], 
-                kiitosBalance: makeShorter(kiitosBalance) 
+                account, 
+                kiitosBalance:[ kiitosBalance.toNumber(), makeShorter(kiitosBalance) ]
             }, 
             stats: { 
-                listingFee: makeShorter(listingFee), 
+                listingFee: [ listingFee.toNumber(), makeShorter(listingFee) ], 
                 withdrawFee: withdrawFee.toNumber(), 
-                feesDonated: await toDollars(feesDonated) 
+                feesDonated: [ feesDonated.toNumber(), await toDollars(feesDonated) ]
             } 
         };
     }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Divider, Modal, Button, Label, Icon, Grid } from "semantic-ui-react";
-import web3 from "../scripts/contracts";
+import { clientWeb3 as web3 } from "../scripts/web3";
 
 class Footer extends Component {
 
@@ -30,7 +30,7 @@ class Footer extends Component {
                         <small>HeartBank &copy; 2018</small>
                     </Grid.Column>
                     <Grid.Column textAlign="right">
-                        <Label size="mini" color="grey" as="a" horizontal onClick={event => this.props.toggleSidebar()}><Icon name="user outline" /> Admin: {this.props.feesCollected}</Label>
+                        <Label size="mini" color="grey" as="a" horizontal onClick={event => this.props.toggleSidebar()}><Icon name="user outline" title={this.props.feesCollected[0]} /> Admin: {this.props.feesCollected[1]}</Label>
                     </Grid.Column>
                 </Grid>    
             </Container>

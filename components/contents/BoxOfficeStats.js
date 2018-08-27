@@ -5,12 +5,12 @@ import makeShorter, { toDollars } from "../../scripts/offchainwork";
 class BoxOfficeStats extends Component {
 
     state = {
-        ticketsSold: "0",
-        fundsCollected: "$0"
+        ticketsSold: [0, "0"],
+        fundsCollected: [0, "$0"]
     };
 
     async componentWillUpdate() {
-        this.setState({ ticketsSold: makeShorter(this.props.ticketsSold), fundsCollected: await toDollars(this.props.fundsCollected) });
+        this.setState({ ticketsSold: [this.props.ticketsSold, makeShorter(this.props.ticketsSold)], fundsCollected: [this.props.fundsCollected, await toDollars(this.props.fundsCollected)] });
     }
 
     render() {
@@ -19,19 +19,19 @@ class BoxOfficeStats extends Component {
             <Container>
                 <Statistic.Group widths={1}>
                     <Statistic color="blue">
-                        <Statistic.Value>{this.state.fundsCollected}</Statistic.Value>
+                        <Statistic.Value title={this.state.fundsCollected[0]}>{this.state.fundsCollected[1]}</Statistic.Value>
                         <Statistic.Label>Crowd Funded</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
                 <Statistic.Group widths={1} style={{ marginTop: "20px" }}>
                     <Statistic color="orange">
-                        <Statistic.Value>{this.state.ticketsSold}</Statistic.Value>
+                        <Statistic.Value title={this.state.ticketsSold[0]}>{this.state.ticketsSold[1]}</Statistic.Value>
                         <Statistic.Label>Tickets Pre-Sold</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
                 <Statistic.Group widths={1} size="small" style={{ marginTop: "20px" }}>
                     <Statistic color="pink">
-                        <Statistic.Value>{feesDonated}</Statistic.Value>
+                        <Statistic.Value title={feesDonated[0]}>{feesDonated[1]}</Statistic.Value>
                         <Statistic.Label>Donated to Charity</Statistic.Label>
                     </Statistic>
                 </Statistic.Group>
@@ -40,8 +40,8 @@ class BoxOfficeStats extends Component {
                         <List.Item>
                             <List.Content>
                                 <List.Header>Listing Fee</List.Header>
-                                <List.Description>
-                                    {listingFee} Kiitos
+                                <List.Description title={listingFee[0]}>
+                                    {listingFee[1]} Kiitos
                                 </List.Description>
                             </List.Content>
                         </List.Item>

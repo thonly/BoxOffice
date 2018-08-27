@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Progress, Grid, Button, Icon, Dimmer, Loader } from "semantic-ui-react";
-import web3, { BoxOffice, Movie } from "../../scripts/contracts";
+import getAccount, { BoxOffice, Movie } from "../../scripts/contracts";
 import { Link } from "../../routes";
 import Layout from "../../components/Layout";
 import MovieDetails from "../../components/contents/MovieDetails";
@@ -19,13 +19,13 @@ class BoxOfficeMovie extends Component {
         const [ filmmaker, createdTime, salesEndDate, availableTickets, price, movieName, ticketSymbol, logline, poster, trailer ] = await movie.getFilmSummary();
         const [ sales, fund, ticketsSold, availableSupply, ticketSupply ] = await movie.getFilmStats();
         
-        const accounts = await web3.eth.getAccounts();
-        const ticketBalance = await movie.balanceOf(accounts[0]);
+        const account = await getAccount();
+        const ticketBalance = await movie.balanceOf(account);
 
         return { 
-            feesCollected: await toDollars(feesCollected),
+            feesCollected: [ feesCollected.toNumber(), await toDollars(feesCollected) ],
             movie: props.query.movie, 
-            fund: await toDollars(fund),
+            fund: [ fund.toNumber(), await toDollars(fund) ],
             film: {
                 createdTime: createdTime*1000,
                 filmmaker,
@@ -36,21 +36,21 @@ class BoxOfficeMovie extends Component {
             },
             token: {
                 ticketSymbol,
-                availableSupply: makeShorter(availableSupply),
-                ticketSupply: makeShorter(ticketSupply),
-                fundingGoal: await toDollars(price*ticketSupply)
+                availableSupply: [ availableSupply.toNumber(), makeShorter(availableSupply) ],
+                ticketSupply: [ ticketSupply.toNumber(), makeShorter(ticketSupply) ],
+                fundingGoal: [ price*ticketSupply, await toDollars(price*ticketSupply) ]
             },
             wallet: { 
                 ticketSymbol,
-                account: accounts[0], 
-                ticketBalance: makeShorter(ticketBalance) 
+                account, 
+                ticketBalance: [ ticketBalance.toNumber(), makeShorter(ticketBalance) ]
             }, 
             stats: {
                 salesEndDate: salesEndDate*1000,
-                price: await toDollars(price),
-                availableTickets: makeShorter(availableTickets),
-                ticketsSold: makeShorter(ticketsSold),
-                sales: await toDollars(sales)
+                price: [ price.toNumber(), await toDollars(price) ],
+                availableTickets: [availableTickets.toNumber(), makeShorter(availableTickets) ],
+                ticketsSold: [ ticketsSold.toNumber(), makeShorter(ticketsSold) ],
+                sales: [ sales.toNumber(), await toDollars(sales) ]
             }
         };
     }
@@ -86,7 +86,7 @@ class BoxOfficeMovie extends Component {
                                     <Link route={`/theater/${this.props.movie}`}><Button onClick={event => this.dimPage()} color="teal" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
                                 </Button.Group>
                                 <TokenDetails {...this.props.token} />
-                                <Progress color="yellow" percent={this.props.stats.ticketsSold/this.props.token.ticketSupply*100} progress />
+                                <Progress color="yellow" percent={this.props.stats.ticketsSold[0]/this.props.token.ticketSupply[0]*100} progress />
                             </Grid.Column>   
                         </Grid.Row>      
                         <Grid.Row>

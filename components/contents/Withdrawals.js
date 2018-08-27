@@ -16,13 +16,13 @@ const renderWithdrawals = (movie, withdrawals) =>
             <Table.Row key={index}>
                 <Table.Cell>{returnDate(withdrawal.date)}</Table.Cell>
                 <Table.Cell>{withdrawal.recipient}</Table.Cell>
-                <Table.Cell>{toEther(withdrawal.amount)}</Table.Cell>
+                <Table.Cell title={withdrawal.amount}>{toEther(withdrawal.amount)}</Table.Cell>
                 <Table.Cell>{withdrawal.expense}</Table.Cell>
             </Table.Row>);
 
 export default ({ movie, fund, withdrawals }) => 
     <Container>
-        <Button content="Fund Balance" active label={{ content: fund }} labelPosition="right" floated="right" style={{ marginTop: "-10px" }} />
+        <Button content="Fund Balance" active title={fund[0]} label={{ content: fund[1] }} labelPosition="right" floated="right" style={{ marginTop: "-10px" }} />
         <Header>Withdrawal History</Header>
         <Table celled>
             <Table.Header>

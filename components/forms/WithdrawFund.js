@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Form, Button, Message, Input, Icon } from "semantic-ui-react";
 import { Router } from "../../routes";
-import web3, { BoxOffice } from "../../scripts/contracts";
+import getAccount, { BoxOffice } from "../../scripts/contracts";
 
 class WithdrawFund extends Component {
     state = {
@@ -21,10 +21,10 @@ class WithdrawFund extends Component {
         this.setState({ loading: true, error: "" });
 
         try {
-            const accounts = await web3.eth.getAccounts();
+            const account = await getAccount();
             const boxOffice = await BoxOffice.deployed();
 
-            await boxOffice.withdrawFund(this.props.movie, recipient, web3.utils.toWei(ether, "ether"), expense, {from: accounts[0]});
+            await boxOffice.withdrawFund(this.props.movie, recipient, web3.utils.toWei(ether, "ether"), expense, {from: account});
             this.setState({ open: false });
             Router.replaceRoute(`/movie/${this.props.movie}`);
         } catch(error) {

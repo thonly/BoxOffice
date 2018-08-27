@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Dimmer, Loader, Step, Icon } from "semantic-ui-react";
-import web3, { Kiitos, BoxOffice } from "../../scripts/contracts";
+import getAccount, { Kiitos, BoxOffice, Movie } from "../../scripts/contracts";
 import Layout from "../../components/Layout";
 import UpdateFilm from "../../components/forms/UpdateFilm";
 import makeShorter, { toDollars } from "../../scripts/offchainwork";
@@ -10,23 +10,26 @@ class MakeFilm extends Component {
         const kiitos = await Kiitos.deployed();
         const boxOffice = await BoxOffice.deployed();
 
-        const accounts = await web3.eth.getAccounts();
-        const kiitosBalance = await kiitos.balanceOf(accounts[0]);
+        const account = await getAccount();
+        const kiitosBalance = await kiitos.balanceOf(account);
         const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
 
+        let movieName = "";
         let ticketBalance = 0;
         if (props.query.movie) {
             const movie = await Movie.at(props.query.movie);
-            ticketBalance = await movie.balanceOf(accounts[0]);
+            movieName = await movie.name();
+            ticketBalance = await movie.balanceOf(account);
         }
 
         return { 
             movie: props.query.movie,
-            feesCollected: await toDollars(feesCollected), 
+            movieName,
+            feesCollected: [ feesCollected.toNumber(), await toDollars(feesCollected) ], 
             wallet: { 
-                account: accounts[0], 
-                kiitosBalance: makeShorter(kiitosBalance),
-                ticketBalance: makeShorter(ticketBalance)
+                account, 
+                kiitosBalance: [ kiitosBalance.toNumber(), makeShorter(kiitosBalance) ],
+                ticketBalance: [ ticketBalance.toNumber(), makeShorter(ticketBalance) ]
             }
         };
     }
@@ -40,7 +43,7 @@ class MakeFilm extends Component {
     render() {
         return (
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
-                <Layout page={this.props.movie ? "update" : "studio"} movie={this.props.movie} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected}>
+                <Layout page={this.props.movie ? "update" : "studio"} movie={this.props.movie} movieName={this.props.movieName} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>

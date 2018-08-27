@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Form, Input, Message, Button, Icon } from "semantic-ui-react";
 import { Router } from "../../routes";
-import web3, { BoxOffice } from "../../scripts/contracts";
+import getAccount, { BoxOffice } from "../../scripts/contracts";
 
 class BuyTickets extends Component {
     state = {
@@ -17,9 +17,9 @@ class BuyTickets extends Component {
         this.setState({ loading: true, error: "" });
 
         try {
-            const accounts = await web3.eth.getAccounts();
+            const account = await getAccount();
             const boxOffice = await BoxOffice.deployed();
-            await boxOffice.buyTickets(this.props.movie, this.state.tickets, { from: accounts[0], value: web3.utils.toWei(this.state.ether, "ether") });
+            await boxOffice.buyTickets(this.props.movie, this.state.tickets, { from: account, value: web3.utils.toWei(this.state.ether, "ether") });
             this.setState({ open: false });
             Router.replaceRoute(`/movie/${this.props.movie}`);
         } catch(error) {

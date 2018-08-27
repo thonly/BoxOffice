@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Form, Input, Button, Message, Icon, Label, Header, Segment, Image, Progress, Modal, Container } from "semantic-ui-react";
 import { Router } from "../../routes";
 import ipfs from "../../scripts/ipfs";
-import web3, { BoxOffice, Movie } from "../../scripts/contracts";
+import getAccount, { BoxOffice, Movie } from "../../scripts/contracts";
 
 class UpdateFilm extends Component {
 
@@ -80,17 +80,17 @@ class UpdateFilm extends Component {
         this.setState({ loading: true, error: "" });
 
         try {
-            const accounts = await web3.eth.getAccounts();
+            const account = await getAccount();
             const salesEndDate = (new Date(this.state.year, parseInt(this.state.month) - 1, this.state.day)) / 1000 | 0;
 
             if (this.props.movie) {
                 const movie = await Movie.at(this.props.movie);
-                await movie.updateFilm(salesEndDate, this.state.availableTickets, this.state.price*10**15, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+                await movie.updateFilm(salesEndDate, this.state.availableTickets, this.state.price*10**15, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: account});
                 Router.pushRoute(`/movie/${movie.address}`);
             } else {
                 const boxOffice = await BoxOffice.deployed();
                 boxOffice.FilmCreated((err, res) => this.setState({ movie: res.args.movie }));
-                await boxOffice.makeFilm(salesEndDate, this.state.availableTickets, this.state.price*10**15, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+                await boxOffice.makeFilm(salesEndDate, this.state.availableTickets, this.state.price*10**15, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: account});
                 Router.pushRoute(`/movie/${this.state.movie}`)
             }            
         } catch (error) {

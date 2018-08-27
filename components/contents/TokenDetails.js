@@ -15,24 +15,24 @@ export default ({ ticketSymbol, availableSupply, ticketSupply, fundingGoal }) =>
             <List.Item>
                 <List.Content>
                     <List.Header>Total Available</List.Header>
-                    <List.Description>
-                        {availableSupply}
+                    <List.Description title={availableSupply[0]}>
+                        {availableSupply[1]}
                     </List.Description>
                 </List.Content>
             </List.Item>
             <List.Item>
                 <List.Content>
                     <List.Header>Total Supply</List.Header>
-                    <List.Description>
-                        {ticketSupply}
+                    <List.Description title={ticketSupply[0]}>
+                        {ticketSupply[1]}
                     </List.Description>
                 </List.Content>
             </List.Item>
             <List.Item>
                 <List.Content>
                     <List.Header>Funding Goal</List.Header>
-                    <List.Description>
-                        {fundingGoal}
+                    <List.Description title={fundingGoal[0]}>
+                        {fundingGoal[1]}
                     </List.Description>
                 </List.Content>
             </List.Item>
