@@ -13,7 +13,7 @@ class HeartBankStudio extends Component {
         const boxOffice = await BoxOffice.deployed();
 
         const accounts = await web3.eth.getAccounts();
-        const balance = await kiitos.balanceOf(accounts[0]);
+        const kiitosBalance = await kiitos.balanceOf(accounts[0]);
         
         const films = await boxOffice.getFilms();
         const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
@@ -23,7 +23,7 @@ class HeartBankStudio extends Component {
             feesCollected: await toDollars(feesCollected), 
             wallet: { 
                 account: accounts[0], 
-                balance: makeShorter(balance) 
+                kiitosBalance: makeShorter(kiitosBalance) 
             }, 
             stats: { 
                 listingFee: makeShorter(listingFee), 

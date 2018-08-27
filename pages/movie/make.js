@@ -11,15 +11,22 @@ class MakeFilm extends Component {
         const boxOffice = await BoxOffice.deployed();
 
         const accounts = await web3.eth.getAccounts();
-        const balance = await kiitos.balanceOf(accounts[0]);
+        const kiitosBalance = await kiitos.balanceOf(accounts[0]);
         const [listingFee, withdrawFee, feesCollected, feesDonated ] = await boxOffice.getBoxOfficeStats();
+
+        let ticketBalance = 0;
+        if (props.query.movie) {
+            const movie = await Movie.at(props.query.movie);
+            ticketBalance = await movie.balanceOf(accounts[0]);
+        }
 
         return { 
             movie: props.query.movie,
             feesCollected: await toDollars(feesCollected), 
             wallet: { 
                 account: accounts[0], 
-                balance: makeShorter(balance) 
+                kiitosBalance: makeShorter(kiitosBalance),
+                ticketBalance: makeShorter(ticketBalance)
             }
         };
     }

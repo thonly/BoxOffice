@@ -37,7 +37,7 @@ class WithdrawFund extends Component {
 
     render() {
         return (
-            <Modal open={this.state.open} trigger={<Button icon labelPosition="left" color="green" onClick={event => this.setState({open: true})}><Icon name="dollar sign" />Withdraw Fund</Button>}>
+            <Modal open={this.state.open} trigger={<Button icon labelPosition="left" color="grey" onClick={event => this.setState({open: true})}><Icon name="dollar sign" />Withdraw Fund</Button>}>
                 <Modal.Header>Withdraw Fund!</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
@@ -65,8 +65,8 @@ class WithdrawFund extends Component {
                                     onChange={event => this.setState({ expense: event.target.value })}
                                 />
                             </Form.Field>
-                            <Message error header="Oophs!" content={this.state.error} />
-                            <Button primary loading={this.state.loading}>Withdraw from Fund!</Button>
+                            <Message error header="All fields are required." content={this.state.error} />
+                            <Button color="yellow" loading={this.state.loading}>Withdraw from Fund!</Button>
                         </Form>
                     </Modal.Description>
                 </Modal.Content>

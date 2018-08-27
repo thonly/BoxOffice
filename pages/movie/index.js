@@ -20,7 +20,7 @@ class BoxOfficeMovie extends Component {
         const [ sales, fund, ticketsSold, availableSupply, ticketSupply ] = await movie.getFilmStats();
         
         const accounts = await web3.eth.getAccounts();
-        const balance = await movie.balanceOf(accounts[0]);
+        const ticketBalance = await movie.balanceOf(accounts[0]);
 
         return { 
             feesCollected: await toDollars(feesCollected),
@@ -43,7 +43,7 @@ class BoxOfficeMovie extends Component {
             wallet: { 
                 ticketSymbol,
                 account: accounts[0], 
-                balance: makeShorter(balance) 
+                ticketBalance: makeShorter(ticketBalance) 
             }, 
             stats: {
                 salesEndDate: salesEndDate*1000,
@@ -83,7 +83,7 @@ class BoxOfficeMovie extends Component {
                                 <MovieStats {...this.props.stats} />
                                 <Button.Group fluid style={{ marginTop: "30px"}}>
                                     <BuyTickets movie={this.props.movie}/>
-                                    <Link route={`/theater/${this.props.movie}`}><Button onClick={event => this.dimPage()} color="green" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
+                                    <Link route={`/theater/${this.props.movie}`}><Button onClick={event => this.dimPage()} color="teal" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
                                 </Button.Group>
                                 <TokenDetails {...this.props.token} />
                                 <Progress color="yellow" percent={this.props.stats.ticketsSold/this.props.token.ticketSupply*100} progress />

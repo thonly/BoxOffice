@@ -26,7 +26,7 @@ class Layout extends Component {
                         <Head>
                             <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.3/semantic.min.css"></link>
                         </Head>
-                        <Message style={{ marginTop: "20px", textAlign: "center" }} color="orange" hidden={this.state.network === "private" || this.state.network === "rinkeby"}>
+                        <Message style={{ marginTop: "20px", textAlign: "center" }} color="orange" hidden={this.state.network === null || this.state.network === "private" || this.state.network === "rinkeby"}>
                             <p>Please <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">install Metamask</a> and connect to the <strong>Rinkeby network</strong>.</p>
                         </Message>
                         <Header {...this.props} />
