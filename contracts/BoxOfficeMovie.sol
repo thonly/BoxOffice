@@ -132,7 +132,7 @@ contract BoxOfficeMovie is StandardToken {
         balances[msg.sender] = balances[msg.sender].sub(1);
         balances[boxOffice] = balances[boxOffice].add(1);
         audienceMembers.push(msg.sender);
-        
+
         emit TicketSpent(msg.sender);
         emit Transfer(msg.sender, boxOffice, 1);
         return true;

@@ -33,7 +33,7 @@ class MakeFilm extends Component {
     render() {
         return (
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
-                <Layout page={this.props.movie ? "movie" : "studio"} movie={this.props.movie} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected}>
+                <Layout page={this.props.movie ? "update" : "studio"} movie={this.props.movie} dimPage={this.dimPage} {...this.props.wallet} feesCollected={this.props.feesCollected}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>

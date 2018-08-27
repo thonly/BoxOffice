@@ -7,6 +7,7 @@ import {BoxOfficeMovie as Movie} from "./BoxOfficeMovie.sol";
 contract BoxOffice {
     
     using SafeMath for uint;
+    using SafeMath for uint8;
     
     address public admin;
     bool private emergency;
@@ -15,7 +16,7 @@ contract BoxOffice {
     uint public heartbank;
     uint public charity;
     uint public listingFee;
-    uint public withdrawFee;
+    uint8 public withdrawFee;
     
     address[] public films;
     
@@ -34,7 +35,7 @@ contract BoxOffice {
     
     event TicketsBought(
         address movie, 
-        address buyer, 
+        address buyer,
         uint price,
         uint quantity
     );
@@ -217,7 +218,7 @@ contract BoxOffice {
         return films;
     }
     
-    function updateFees(uint listing, uint withdraw)
+    function updateFees(uint listing, uint8 withdraw)
         public
         stopInEmergency
         onlyAdmin
@@ -243,7 +244,7 @@ contract BoxOffice {
         recipient.transfer(amount);
         return true;
     }
-
+    
     function getBoxOfficeStats() public view returns (uint, uint, uint, uint) {
         return (listingFee, withdrawFee, heartbank, charity);
     }

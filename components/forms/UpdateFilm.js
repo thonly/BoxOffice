@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Form, Input, Button, Message, Icon, Label, Header, Segment, Image, Progress, Modal, Container } from "semantic-ui-react";
 import { Router } from "../../routes";
 import ipfs from "../../scripts/ipfs";
-import { BoxOffice, Movie } from "../../scripts/contracts";
+import web3, { BoxOffice, Movie } from "../../scripts/contracts";
 
 class UpdateFilm extends Component {
 
@@ -24,7 +24,8 @@ class UpdateFilm extends Component {
 
         percent: 100,
         loading: false,
-        error: ""
+        error: "",
+        movie: ""
     };
 
     async componentDidMount() {
@@ -40,7 +41,7 @@ class UpdateFilm extends Component {
                 movieName,
                 logline,
                 ticketSymbol,
-                price,
+                price: price/10**15,
                 ticketSupply,
                 day: date.getDate(),
                 month: date.getMonth() + 1,
@@ -80,22 +81,21 @@ class UpdateFilm extends Component {
 
         try {
             const accounts = await web3.eth.getAccounts();
-            const salesEndDate = new Date(this.state.year, this.state.month - 1, this.state.day);
+            const salesEndDate = (new Date(this.state.year, parseInt(this.state.month) - 1, this.state.day)) / 1000 | 0;
 
             if (this.props.movie) {
                 const movie = await Movie.at(this.props.movie);
-                await movie.updateFilm(salesEndDate, this.state.availableTickets, this.state.price, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+                await movie.updateFilm(salesEndDate, this.state.availableTickets, this.state.price*10**15, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+                Router.pushRoute(`/movie/${movie.address}`);
             } else {
                 const boxOffice = await BoxOffice.deployed();
-                await boxOffice.makeFilm(salesEndDate, this.state.availableTickets, this.state.price, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+                boxOffice.FilmCreated((err, res) => this.setState({ movie: res.args.movie }));
+                await boxOffice.makeFilm(salesEndDate, this.state.availableTickets, this.state.price*10**15, this.state.ticketSupply, this.state.movieName, this.state.ticketSymbol, this.state.logline, this.state.poster, this.state.trailer, {from: accounts[0]});
+                Router.pushRoute(`/movie/${this.state.movie}`)
             }            
-            
-            Router.pushRoute("/");
         } catch (error) {
-            this.setState({ error: error.message });
+            this.setState({ error: error.message, loading: false });
         }
-
-        this.setState({ loading: false });
     };
 
     render() {
@@ -106,7 +106,7 @@ class UpdateFilm extends Component {
                     <Header inverted size="huge" textAlign="center">Uploading to IPFS</Header>
                 </Modal>
                 <Image src={this.state.poster && `https://ipfs.infura.io/ipfs/${this.state.poster}`} size="large" centered />
-                <Form onSubmit={this.onSubmit} loading={this.state.loading} error={!!this.state.error} style={{ marginTop: "30px" }}>
+                <Form onSubmit={this.submitToBoxOffice} loading={this.state.loading} error={!!this.state.error} style={{ marginTop: "30px" }}>
                     <Segment raised padded>
                         <Form.Group>
                             <Form.Field width={4}>
@@ -126,6 +126,8 @@ class UpdateFilm extends Component {
                                     placeholder="IPFS Hash of Poster" 
                                     label={{ icon: "asterisk" }} 
                                     labelPosition="right corner" 
+                                    value={this.state.poster}
+                                    onChange={event => this.setState({ poster: event.target.value })}
                                 />
                             </Form.Field>
                             <Form.Field width={6}>
@@ -184,7 +186,7 @@ class UpdateFilm extends Component {
                                 <label>Ticket Price</label>
                                 <Input 
                                     placeholder="How much does each ticket cost?"
-                                    label="wei" 
+                                    label="finney" 
                                     labelPosition="right" 
                                     value={this.state.price}
                                     onChange={event => this.setState({ price: event.target.value })}
@@ -193,12 +195,11 @@ class UpdateFilm extends Component {
                             <Form.Field width={6}>
                                 <label>Ticket Supply</label>
                                 <Input 
-                                    disabled={!!this.props.movie}
                                     placeholder="How many tickets would you like to create?" 
                                     label={{ icon: "asterisk" }} 
                                     labelPosition="right corner" 
                                     value={this.state.ticketSupply}
-                                    onChange={event => this.setState({ ticketSupply: event.target.value })}
+                                    onChange={event => { if (!this.props.movie) this.setState({ ticketSupply: event.target.value })}}
                                 />
                             </Form.Field>
                         </Form.Group>
@@ -248,8 +249,12 @@ class UpdateFilm extends Component {
                             </Form.Field>
                         </Form.Group>
                     </Segment>
-                    <Message error header="Every field is required! All can be changed except the total supply of tickets." content={this.state.error} />
-                    <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue" as="a"><Icon name="chain" />Submit to Ethereum</Button>
+                    <Message error style={{ marginTop: "30px" }}>
+                        <Message.Header>Every field is required!</Message.Header>
+                        <Message.Content>All can be changed later except the total supply of tickets.</Message.Content>
+                        <Message.Content><em>{this.state.error}</em></Message.Content>
+                    </Message>
+                    <Button style={{ marginTop: "35px" }} loading={this.state.loading} labelPosition="left" icon size="large" fluid color="blue"><Icon name="chain" />Submit to Ethereum</Button>
                 </Form>
             </Container>
         );
