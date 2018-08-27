@@ -7,6 +7,7 @@ import WithdrawFund from "../components/forms/WithdrawFund";
 class Header extends Component {
 
     state = {
+        theater: false,
         pending: false,
         error: ""
     };
@@ -36,7 +37,7 @@ class Header extends Component {
             return (
                 <Menu.Menu position="right">
                     <Link route={`/movie/${this.props.movie}/update`}><Menu.Item onClick={event => this.props.dimPage()}><Icon name="edit outline" /> Update Movie</Menu.Item></Link>
-                    <Menu.Item><WithdrawFund movie={this.props.movie} /></Menu.Item>
+                    <Menu.Item><WithdrawFund movie={this.props.movie} dimPage={this.props.dimPage} fund={this.props.fund} /></Menu.Item>
                     <Popup trigger={<Menu.Item><Icon name="ticket" /> {this.props.ticketSymbol} Tickets<Label color="purple" floating>{this.props.ticketBalance[1]}</Label></Menu.Item>} content={`You have ${this.props.ticketBalance[0]} ${this.props.ticketSymbol} tickets!`} />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your account address</strong>: {this.props.account}</span>} />
                 </Menu.Menu>
@@ -45,7 +46,7 @@ class Header extends Component {
             return (
                 <Menu.Menu position="right">
                     <Link route={`/movie/${this.props.movie}`}><Menu.Item onClick={event => this.props.dimPage()}><Icon name="arrow left" /> {this.props.movieName}</Menu.Item></Link>
-                    <Menu.Item><WithdrawFund movie={this.props.movie} /></Menu.Item>
+                    <Menu.Item><WithdrawFund movie={this.props.movie} dimPage={this.props.dimPage} fund={this.props.fund} /></Menu.Item>
                     <Popup trigger={<Menu.Item><Icon name="ticket" /> {this.props.ticketSymbol} Tickets<Label color="purple" floating>{this.props.ticketBalance[1]}</Label></Menu.Item>} content={`You have ${this.props.ticketBalance[0]} ${this.props.ticketSymbol} tickets!`} />
                     <Popup trigger={<Menu.Item active><Icon color="grey" name="address book outline" fitted /></Menu.Item>} content={<span><strong>Your account address</strong>: {this.props.account}</span>} />
                 </Menu.Menu>
@@ -54,7 +55,7 @@ class Header extends Component {
             return (
                 <Menu.Menu position="right">
                     <Menu.Item onClick={this.spendTicket} color="teal"><Icon name="ticket" /> Spend Ticket</Menu.Item>
-                    <Modal trigger={<Menu.Item><Icon name="video camera" /> Watch Movie</Menu.Item>} size="fullscreen" dimmer="blurring" basic centered>
+                    <Modal closeIcon onClose={event => this.setState({ theater: false })} open={this.state.theater} trigger={<Menu.Item onClick={event => this.setState({ theater: true })}><Icon name="video camera" /> Watch Movie</Menu.Item>} size="fullscreen" dimmer="blurring" basic centered>
                         <Modal.Content><Embed hd autoplay id={this.props.trailer} placeholder={`https://ipfs.infura.io/ipfs/${this.props.poster}`} source="youtube" /></Modal.Content>
                     </Modal>
                     <Popup trigger={<Menu.Item><Icon name="users" /> Audience<Label color="purple" floating>{this.props.audience[1]}</Label></Menu.Item>} content={`There are ${this.props.audience[0]} audience members watching with you!`} />
@@ -70,7 +71,8 @@ class Header extends Component {
             const account = await getAccount();
             const kiitos = await Kiitos.deployed();
             await kiitos.airDrop({ from: account });
-            Router.pushRoute(this.props.page === "studio" ? "/" : "/movie/make");
+            this.props.dimPage();
+            Router.replaceRoute(this.props.page === "studio" ? "/" : "/movie/make");
         } catch(error) {
             this.setState({ error: error.message });
         }
@@ -81,8 +83,10 @@ class Header extends Component {
         try {
             const account = await getAccount();
             const movie = await Movie.at(this.props.movie);
-            await movie.spendTicket({ from: account })
-            Router.pushRoute(`/theater/${movie.address}`);
+            await movie.spendTicket({ from: account });
+            // this.props.dimPage();
+            // Router.replaceRoute(`/theater/${movie.address}`);
+            this.setState({ theater: true });
         } catch(error) {
             this.setState({ error: error.message });
         }

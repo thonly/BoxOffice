@@ -30,4 +30,4 @@ const toDollars = async wei => {
 }
 
 export default makeShorter;
-export { toEther, toDollars };
+export { toEther, toDollars, round, addCommas };

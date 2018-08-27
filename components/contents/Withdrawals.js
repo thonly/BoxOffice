@@ -14,7 +14,7 @@ const renderWithdrawals = (movie, withdrawals) =>
     withdrawals.filter(withdrawal => withdrawal.movie === movie)
         .map((withdrawal, index) => 
             <Table.Row key={index}>
-                <Table.Cell>{returnDate(withdrawal.date)}</Table.Cell>
+                <Table.Cell>{returnDate(withdrawal.date*1000)}</Table.Cell>
                 <Table.Cell>{withdrawal.recipient}</Table.Cell>
                 <Table.Cell title={withdrawal.amount}>{toEther(withdrawal.amount)}</Table.Cell>
                 <Table.Cell>{withdrawal.expense}</Table.Cell>

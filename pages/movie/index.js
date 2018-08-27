@@ -70,7 +70,7 @@ class BoxOfficeMovie extends Component {
     render() {
         return (
             <Dimmer.Dimmable blurring={this.state.dimmed} dimmed>
-                <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage} feesCollected={this.props.feesCollected} {...this.props.wallet}>
+                <Layout page="movie" movie={this.props.movie} dimPage={this.dimPage} feesCollected={this.props.feesCollected} fund={this.props.fund} {...this.props.wallet}>
                     <Dimmer active={this.state.dimmed} page>
                         <Loader size="massive" >Connecting to Ethereum</Loader>
                     </Dimmer>
@@ -82,11 +82,11 @@ class BoxOfficeMovie extends Component {
                             <Grid.Column width={9} textAlign="center">
                                 <MovieStats {...this.props.stats} />
                                 <Button.Group fluid style={{ marginTop: "30px"}}>
-                                    <BuyTickets movie={this.props.movie}/>
+                                    <BuyTickets dimPage={this.dimPage} movie={this.props.movie} {...this.props.film} {...this.props.token} {...this.props.stats} />
                                     <Link route={`/theater/${this.props.movie}`}><Button onClick={event => this.dimPage()} color="teal" icon labelPosition="left"><Icon name="image" />Watch Movie</Button></Link>
                                 </Button.Group>
                                 <TokenDetails {...this.props.token} />
-                                <Progress color="yellow" percent={this.props.stats.ticketsSold[0]/this.props.token.ticketSupply[0]*100} progress />
+                                <Progress color="yellow" title={`${this.props.stats.ticketsSold[0]/this.props.token.ticketSupply[0]*100}%`} percent={this.props.stats.ticketsSold[0]/this.props.token.ticketSupply[0]*100|0} progress />
                             </Grid.Column>   
                         </Grid.Row>      
                         <Grid.Row>
