@@ -9,10 +9,10 @@ url, deployed addresses, links to etherscan; live on heroku
 ### Studio Home Page
 
 screenshot of live page later
-![Studio Home Page](https://github.com/thonly/BoxOffice/blob/master/static/studio.png)
+[[https://github.com/thonly/BoxOffice/blob/master/static/studio.png]]
 
 ### Make Movie Page
-dsfdds
+ds
 ### Movie Token Page
 
 ### Movie Theater Page
