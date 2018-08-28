@@ -9,15 +9,21 @@ url, deployed addresses, links to etherscan; live on heroku
 ### Studio Home Page
 
 screenshot of live page later
-[[https://github.com/thonly/BoxOffice/blob/master/static/studio.png]]
+
+![Studio Home Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/studio.png)
+
 
 ### Make Movie Page
-ds
+
+![Make Movie Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/make.png)
+
 ### Movie Token Page
+
+![Movie Token Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/movie.png)
 
 ### Movie Theater Page
 
-
+![Movie Theater Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/theater.png)
 
 ## How to Install
 
