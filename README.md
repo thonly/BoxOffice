@@ -4,17 +4,20 @@ overview, link to article to learn about product functionalities, design decisio
 
 ## Rinkeby Testnet
 
-url, deployed addresses, links to etherscan
+url, deployed addresses, links to etherscan; live on heroku
 
-### Home Page
+### Studio Home Page
 
 screenshot of live page later
+![Studio Home Page](/static/studio.png)
 
-### Movie Page
+### Make Movie Page
 
-### Theater Page
+### Movie Token Page
 
-### Create Token
+### Movie Theater Page
+
+
 
 ## How to Install
 
@@ -48,6 +51,7 @@ npm install -g ganache-cli@6.1.6
 2. Visit url: `http://localhost:3000`
 
 ### Playground
+tested on chrome
 
 install metamask extension
 
