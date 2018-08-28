@@ -2,9 +2,20 @@
 
 overview, link to article to learn about product functionalities, design decisions, and security vulnerabilities
 
+https://medium.com/heartbankstudio/an-ethereum-dapp-to-decentralize-the-film-industry-and-empower-indie-filmmakers-82ad7e41a879
+
 ## Rinkeby Testnet
 
-url, deployed addresses, links to etherscan; live on heroku
+url, deployed addresses, links to etherscan; live on heroku 
+
+### Deployed Contracts on Rinkeby
+1. HeartBankCoin.sol: [0x7e4b1d67ffb30d45f46c33e40c60c77b0cd255aa](https://rinkeby.etherscan.io/address/0x7e4b1d67ffb30d45f46c33e40c60c77b0cd255aa)
+2. BoxOffice.sol: [0x0b54d5f632b7e1f0ccf96842263d4750560b9147](https://rinkeby.etherscan.io/address/0x0b54d5f632b7e1f0ccf96842263d4750560b9147)
+3. Oracle.sol: [0xa8bbbe439fa8cabe6a163d014e0e29c7697024c3](https://rinkeby.etherscan.io/address/0xa8bbbe439fa8cabe6a163d014e0e29c7697024c3)
+4. OracleLibrary.sol: [0x55a52c2e16c0b28443d3814fa607c9158e3a92ba](https://rinkeby.etherscan.io/address/0x55a52c2e16c0b28443d3814fa607c9158e3a92ba)
+5. OracleStorage.sol: [0xf4b186b23e3278144ed578d0627cfdc6181e9ee7](https://rinkeby.etherscan.io/address/0xf4b186b23e3278144ed578d0627cfdc6181e9ee7)
+6. OracleRegistry.sol: [0x3dbdf868f9bb14b83b83c82c74710865f6262326](https://rinkeby.etherscan.io/address/0x3dbdf868f9bb14b83b83c82c74710865f6262326)
+
 
 ### Studio Home Page
 
