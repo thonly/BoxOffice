@@ -1,12 +1,12 @@
 # An Ethereum dApp to Decentralize the Film Industry and Empower Independent Filmmakers
 
-To learn about the product functionalities, design decisions, and security measures of this open source project, read this accompanying article:
+To learn about the product features, design decisions, and security measures of this open source project in detail, read this accompanying article:
 
 https://medium.com/heartbankstudio/an-ethereum-dapp-to-decentralize-the-film-industry-and-empower-indie-filmmakers-82ad7e41a879
 
 ## Rinkeby Testnet
 
-The alpha release is availabl at the URL [boxoffice.heartbank.studio](https://boxoffice.heartbank.studio). The underlying smart contracts reside on the Rinkeby Testnet and can be viewed on Etherscan. 
+The alpha release is available at the URL [boxoffice.heartbank.studio](https://boxoffice.heartbank.studio). The underlying smart contracts reside on the Rinkeby Testnet and can be viewed on Etherscan. 
 
 ### Deployed Contracts
 
@@ -37,13 +37,13 @@ Here, filmmakers of any background can customize movie details to create ERC20 c
 
 ![Movie Token Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/movie.png)
 
-After successful creation, anyone with an Ethereum wallet can visit this page to learn more about a film project and purchase tickets. Project-specific stats are also collected and displayed to elicit excitement. 
+After successful creation, anyone with an Ethereum wallet can visit this page to learn about a film project and pre-buy tickets. Project-specific stats are also collected and displayed to elicit excitement. 
 
 ### Movie Theater Page
 
 ![Movie Theater Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/theater.png)
 
-When the film is ready for commercial release, those with movie tickets can validate their ticket ownership to access protected content. This page exemplifies how the blockchain can be used to securely verify ticket possession.
+When the film is ready for commercial release, those with movie tickets can validate their ownership to access protected content. This page exemplifies how the blockchain securely verifies ticket possession.
 
 ## How to Install
 
@@ -82,11 +82,10 @@ $ npm install
 To compile the smart contracts and deploy them to a local blockchain, install `truffle` and `ganache-cli` globally:
 
 ```
-$ npm install -g truffle@4.1.13
-$ npm install -g ganache-cli@6.1.4
+$ npm install -g truffle@4.1.13 ganache-cli@6.1.4
 ```
 
-It's possible to simply use the default blockchain that comes with `truffle` or the `ganache` **desktop version**. You just need to change the `PORT` number to match the correct network in the `/config.js` file. Then:
+It's possible to simply use the default blockchain that comes with `truffle` or the `ganache` *desktop version*. You just need to change the `PORT` number to match the correct network in the `/config.js` file. Then:
 
 1. Start up local blockchain: 
 
@@ -130,7 +129,7 @@ npm run dev
 http://localhost:3000
 ```
 
-For convenience, the `/scripts/oracle.js` script can be used to mimic the functionality of an oracle. To tell the `Oracle` contract to emit an event to update its `price` of ether in USD, execute:
+For convenience, the `/scripts/oracle.js` script can be used to mimic the functionality of an oracle. To tell the `Oracle` contract to emit an event that updates its `price` of ether in USD to the one currently at Coinbase, execute:
 
 ```
 $ npm run oracle
@@ -144,13 +143,13 @@ $ npm run boxoffice
 
 ## How to Deploy to Rinkeby
 
-This project comes with a custom `Provider` that enables you to deploy to the Rinkeby Testnet. Execute:
+This project comes with a custom `Provider` that enables you to deploy to the Rinkeby Testnet yourself. Execute:
 
 ```
 $ truffle migrate --network rinkeby
 ```
 
-After successful execution, you can get the deployed addresses by executing:
+After successful migration, you can get the deployed addresses by executing:
 
 ```
 $ truffle networks
