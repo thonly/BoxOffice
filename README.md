@@ -37,7 +37,7 @@ Here, filmmakers of any background can customize movie details to create ERC20 c
 
 ![Movie Token Page](https://raw.githubusercontent.com/thonly/BoxOffice/master/static/movie.png)
 
-After successful creation, anyone with an Ethereum wallet can visit this page to learn about a film project and pre-buy tickets. Project-specific stats are also collected and displayed to elicit excitement. 
+After successful creation, the public can visit this page to learn about a film project and pre-buy tickets. Project-specific stats are also collected and displayed to elicit excitement. 
 
 ### Movie Theater Page
 
@@ -135,7 +135,7 @@ For convenience, the `/scripts/oracle.js` script can be used to mimic the functi
 $ npm run oracle
 ```
 
-Another useful script is `/scripts/boxoffice.js`, which automatically populates the `BoxOffice` contract with dummy data:
+Another useful script is `/scripts/boxoffice.js`, which populates the `BoxOffice` contract with dummy data:
 
 ```
 $ npm run boxoffice
